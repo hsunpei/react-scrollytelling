@@ -1,0 +1,9 @@
+{
+  "extends": "@hsunpei/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@hsunpei/*": ["packages/*/src"]
+    }
+  }
+}
