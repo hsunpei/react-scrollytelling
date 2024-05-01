@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "name": "docs",
+  "scripts": {
+    "dev": "next dev -p 3600",
+    "build": "next build",
+    "prod": "next start -p 3800",
+    "start": "next start",
+    "clean": "rimraf .next"
+  },
+  "dependencies": {
+    "next": "^14.2.3",
+    "nextra": "^2.13.4",
+    "nextra-theme-docs": "^2.13.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
