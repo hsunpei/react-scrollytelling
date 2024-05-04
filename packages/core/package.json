@@ -1,0 +1,35 @@
+{
+  "name": "@react-scrollytelling/core",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Hsun-Pei Wang <garfieldduck@gmail.com>",
+  "homepage": "https://github.com/hsunpei/react-scrollytelling#readme",
+  "license": "ISC",
+  "main": "lib/core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hsunpei/react-scrollytelling.git"
+  },
+  "scripts": {
+    "dev": "BUILD_MODE=dev yarn dev:dist",
+    "dev:dist": "yarn build:dist --watch",
+    "dev:declarations": "tsc -p . --emitDeclarationOnly --watch --outDir dist_types",
+    "build": "run-s build:dist build:declarations",
+    "build:dist": "vite build",
+    "build:declarations": "tsc -p . --emitDeclarationOnly --outDir dist_types",
+    "clean": "rimraf -rf ./dist && rimraf -rf ./dist_types"
+  },
+  "bugs": {
+    "url": "https://github.com/hsunpei/react-scrollytelling/issues"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
+  }
+}

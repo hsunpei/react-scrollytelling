@@ -1,23 +1,12 @@
 import { resolve } from 'path';
 
-import linariaRollup from '@linaria/rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import react from '@vitejs/plugin-react';
 import analyze from 'rollup-plugin-analyzer';
-import externals from 'rollup-plugin-node-externals';
 import { mergeConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
-
-const LINARIA_OPTIONS = {
-  exclude: ['node_modules/**'],
-  evaluate: true,
-  sourceMap: true,
-  babelOptions: {
-    presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
-  },
-};
 
 export const defaultViteConfig = {
   build: {
@@ -49,7 +38,6 @@ export function getDefaultViteConfig(pkg, command) {
   return mergeConfig(defaultViteConfig, {
     plugins: [
       react(),
-      externals(),
       nodeResolve(),
       svgr({
         svgrOptions: {
@@ -62,11 +50,6 @@ export function getDefaultViteConfig(pkg, command) {
         },
       }),
       tsconfigPaths(),
-      /**
-       * TODO: use linariaVite(LINARIA_OPTIONS) to replace linariaRollup(LINARIA_OPTIONS)
-       * once it doesn't give us flaky compiled results and support hot reloading
-       */
-      linariaRollup(LINARIA_OPTIONS),
       dts(),
       analyze({
         hideDeps: true,
