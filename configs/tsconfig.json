@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@hsunpei/*": ["packages/*/src"]
+      "@react-scrollytelling/*": ["packages/*/src"]
     }
   }
 }

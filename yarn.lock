@@ -3084,7 +3084,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-scrollytelling/core@workspace:packages/core":
+"@react-scrollytelling/core@workspace:^, @react-scrollytelling/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@react-scrollytelling/core@workspace:packages/core"
   dependencies:
@@ -6340,6 +6340,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "docs@workspace:apps/docs"
   dependencies:
+    "@react-scrollytelling/core": "workspace:^"
     next: ^14.2.3
     nextra: ^2.13.4
     nextra-theme-docs: ^2.13.4
