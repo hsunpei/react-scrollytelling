@@ -7,7 +7,7 @@ export const IntersectionSection = () => {
   const { isIntersecting } = useIntersectionObserver(sectionRef);
 
   return (
-    <section ref={sectionRef} style={{ height: '100vh', backgroundColor: 'lightblue' }}>
+    <section ref={sectionRef} className="h-3/4 bg-cyan-100 dark:bg-cyan-800">
       <h1>Intersection Observer</h1>
       <p>isIntersecting: {isIntersecting}</p>
     </section>
