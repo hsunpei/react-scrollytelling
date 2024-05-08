@@ -16,7 +16,8 @@ const DEFAULT_OPTIONS: IntersectionObserverOptions = {};
 export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
   options: IntersectionObserverOptions = DEFAULT_OPTIONS,
-  shouldObserve = true
+  shouldObserve = true,
+  onObserve?: (isIntersecting: IntersectionObserverEntry) => void
 ) {
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
@@ -27,19 +28,24 @@ export function useIntersectionObserver(
     if (window && IntersectionObserver && shouldObserve) {
       observerRef.current = new IntersectionObserver(([entry]) => {
         setIsIntersecting(entry.isIntersecting);
+        if (onObserve) {
+          onObserve(entry);
+        }
       }, options);
 
-      if (sectionRef.current) {
+      const sectionElement = sectionRef.current;
+
+      if (sectionElement) {
         observerRef.current.observe(sectionRef.current);
       }
 
       return () => {
-        if (observerRef.current && sectionRef.current) {
-          observerRef.current.unobserve(sectionRef.current);
+        if (observerRef.current && sectionElement) {
+          observerRef.current.unobserve(sectionElement);
         }
       };
     }
-  }, [sectionRef, options, shouldObserve]);
+  }, [sectionRef, options, shouldObserve, onObserve]);
 
   const disconnect = useCallback(() => {
     if (observerRef.current) {

@@ -30,10 +30,12 @@ The `useIntersectionObserver` hook accepts the following parameters:
 export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
   options: IntersectionObserverOptions,
-  shouldObserve: boolean
+  shouldObserve: boolean,
+  onObserve?: (isIntersecting: IntersectionObserverEntry) => void
 ) // ...
 ```
 
 - `sectionRef`: A reference to the element to observe.
 - `options`: Allow customizing the observer. You can pass an `IntersectionObserverOptions` [object to configure the observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#instance_properties).
 - `shouldObserve`: A boolean that determines whether to observe the element. You can disable the observer by setting this value to `false`. Default value: `true`.
+- `onObserve`: A callback function that is called when the element is intersecting. The callback receives an `IntersectionObserverEntry` object as an argument.
