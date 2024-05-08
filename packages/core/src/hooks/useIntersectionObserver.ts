@@ -13,11 +13,11 @@ const DEFAULT_OPTIONS: IntersectionObserverOptions = {};
  * A hook which uses the IntersectionObserver API
  * to detect when the section is visible in the viewport.
  */
-export const useIntersectionObserver = (
+export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
   options: IntersectionObserverOptions = DEFAULT_OPTIONS,
   shouldObserve = true
-) => {
+) {
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -48,4 +48,4 @@ export const useIntersectionObserver = (
   }, []);
 
   return { isIntersecting, disconnect };
-};
+}
