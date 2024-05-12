@@ -17,7 +17,7 @@ export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
   options: IntersectionObserverOptions = DEFAULT_OPTIONS,
   shouldObserve = true,
-  onObserve?: (isIntersecting: IntersectionObserverEntry) => void
+  onObserve?: (entry: IntersectionObserverEntry) => void
 ) {
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
