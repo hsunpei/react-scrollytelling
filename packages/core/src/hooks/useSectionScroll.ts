@@ -1,40 +1,28 @@
-import { useMemo } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
-import { useIntersectionObserver } from './useIntersectionObserver';
+import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
+import { getCappedScrolledRatio, getScrollPosition } from '../utils';
 
-/**
- * Returns the current window `scrollTop`, `windowHeight` (height of the window),
- * and the `scrollBottom` (`scrollTop` + `windowHeight`)
- */
-export function getScrollPosition() {
-  // detect window object to prevent issues in SSR
-  if (typeof window === 'undefined') {
-    return {
-      scrollTop: 0,
-      scrollBottom: 0,
-      windowHeight: 10,
-    };
-  }
-
-  const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const windowHeight = window.outerHeight || document.documentElement.clientHeight;
-  const scrollBottom = scrollTop + windowHeight;
-
-  return {
-    scrollTop,
-    scrollBottom,
-    windowHeight,
-  };
+export interface SectionScrollInfo {
+  scrolledRatio: number;
+  scrollBottom: number;
+  distance: number;
 }
 
-export function getCappedScrolledRatio(ratio: number) {
-  if (ratio < 0) {
-    return 0;
+export function getSectionScrollInfo(sectionRef: React.RefObject<Element>): SectionScrollInfo {
+  // TODO: can possibly reduce the measurement by using resizeObserver
+  const sectionRect = sectionRef.current?.getBoundingClientRect();
+  if (!sectionRect) {
+    return { scrolledRatio: 0, scrollBottom: 0, distance: Infinity };
   }
-  if (ratio > 1) {
-    return 1;
-  }
-  return ratio;
+
+  const { scrollTop, scrollBottom } = getScrollPosition();
+  const sectionTop = sectionRect.top + scrollTop;
+
+  const distance = scrollBottom - sectionTop;
+  const ratio = getCappedScrolledRatio(distance / sectionRect.height);
+
+  return { scrolledRatio: ratio, scrollBottom, distance };
 }
 
 /**
@@ -42,47 +30,47 @@ export function getCappedScrolledRatio(ratio: number) {
  * his hook will pass the ratio of the section that is above the bottom of the viewport
  * through the `onScroll` callback.
  * @param sectionRef - The reference to the section element
- * @param steps - The number of steps to divide the section into. It will have an impact on the granularity of the tracked scroll ratio.
  * @param shouldObserve - Whether the underlying IntersectionObserver should be active
  * @param onScroll - The callback to track the scroll ratio
  */
 export function useSectionScroll(
   sectionRef: React.RefObject<Element>,
-  steps = 100,
+  onScroll: (scrollInfo: SectionScrollInfo) => void,
   shouldObserve = true,
-  onScroll: (ratio: number) => void
+  options: IntersectionObserverOptions
 ) {
-  const threshold = useMemo(() => Array.from({ length: steps + 1 }, (_, i) => i / steps), [steps]);
+  const { isIntersecting } = useIntersectionObserver(sectionRef, options, shouldObserve);
 
-  const { isIntersecting, disconnect } = useIntersectionObserver(
-    sectionRef,
-    { threshold },
-    shouldObserve,
-    (entry) => {
-      if (entry.isIntersecting) {
-        // we cannot use the entry.intersectionRatio directly
-        // because it is the ratio of the section that is visible in the viewport
-        // and we need the ratio of the section that is above the bottom of the viewport
-        const sectionRect = entry.boundingClientRect;
+  /** Help us throttle scroll events by using rAF */
+  const animationFrameScheduledRef = useRef<boolean>(false);
 
-        const { scrollTop, scrollBottom } = getScrollPosition();
-        const sectionTop = sectionRect.top + scrollTop;
+  const handleScroll = useCallback(() => {
+    const scrollInfo = getSectionScrollInfo(sectionRef);
+    onScroll(scrollInfo);
 
-        const distance = scrollBottom - sectionTop;
-        const ratio = getCappedScrolledRatio(distance / sectionRect.height);
-        console.log('Section is at', {
-          sectionRect,
-          sectionTop,
-          scrollBottom,
-          distance,
-          height: sectionRect.height,
-          ratio,
-        });
+    // allow scheduling next rAF callback
+    animationFrameScheduledRef.current = false;
+  }, [onScroll, sectionRef]);
 
-        onScroll(ratio);
-      }
+  const onPageScroll = useCallback(() => {
+    // prevent multiple rAF callbacks
+    if (animationFrameScheduledRef.current) {
+      return;
     }
-  );
 
-  return { isIntersecting, disconnect };
+    animationFrameScheduledRef.current = true;
+    requestAnimationFrame(handleScroll);
+  }, [handleScroll]);
+
+  // track scrolling only when the section is visible in viewport
+  useEffect(() => {
+    if (window && isIntersecting) {
+      window.addEventListener('scroll', onPageScroll);
+      return () => {
+        window.removeEventListener('scroll', onPageScroll);
+      };
+    }
+  }, [onPageScroll, isIntersecting]);
+
+  return { isIntersecting };
 }
