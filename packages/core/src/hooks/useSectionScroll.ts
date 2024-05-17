@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useRef } from 'react';
 
 import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
-import { getCappedScrolledRatio, getScrollPosition } from '../utils';
+import { clampScrolledRatio, getScrollPosition } from '../utils';
 
 export interface SectionScrollInfo {
   scrolledRatio: number;
@@ -20,7 +20,7 @@ export function getSectionScrollInfo(sectionRef: React.RefObject<Element>): Sect
   const sectionTop = sectionRect.top + scrollTop;
 
   const distance = scrollBottom - sectionTop;
-  const ratio = getCappedScrolledRatio(distance / sectionRect.height);
+  const ratio = clampScrolledRatio(distance / sectionRect.height);
 
   return { scrolledRatio: ratio, scrollBottom, distance };
 }

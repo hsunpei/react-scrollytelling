@@ -23,7 +23,7 @@ export function getScrollPosition() {
   };
 }
 
-export function getCappedScrolledRatio(ratio: number) {
+export function clampScrolledRatio(ratio: number) {
   if (ratio < 0) {
     return 0;
   }

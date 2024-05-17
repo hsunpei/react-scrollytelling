@@ -12,7 +12,7 @@ export interface ActiveSectionInfo {
 
 export interface ActiveSectionTracker {
   /** For a tracked section to notify the provider that the section is being scrolled  */
-  onSectionScroll: (trackingId: string, viewportBtmDistance: number) => void;
+  onSectionScroll: (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => void;
 
   // /**
   //  * When the active section (section closest to the bottom of the viewport) changes,
