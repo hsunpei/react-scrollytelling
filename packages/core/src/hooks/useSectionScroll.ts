@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 
+import { useRafThrottle } from './performance/useRafThrottle';
 import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
 import { clampScrolledRatio, getScrollPosition } from '../utils';
 
@@ -41,26 +42,11 @@ export function useSectionScroll(
 ) {
   const { isIntersecting } = useIntersectionObserver(sectionRef, options, shouldObserve);
 
-  /** Help us throttle scroll events by using rAF */
-  const animationFrameScheduledRef = useRef<boolean>(false);
-
   const handleScroll = useCallback(() => {
     const scrollInfo = getSectionScrollInfo(sectionRef);
     onScroll(scrollInfo);
-
-    // allow scheduling next rAF callback
-    animationFrameScheduledRef.current = false;
-  }, [onScroll, sectionRef]);
-
-  const onPageScroll = useCallback(() => {
-    // prevent multiple rAF callbacks
-    if (animationFrameScheduledRef.current) {
-      return;
-    }
-
-    animationFrameScheduledRef.current = true;
-    requestAnimationFrame(handleScroll);
-  }, [handleScroll]);
+  }, [sectionRef, onScroll]);
+  const onPageScroll = useRafThrottle(handleScroll);
 
   // track scrolling only when the section is visible in viewport
   useEffect(() => {
