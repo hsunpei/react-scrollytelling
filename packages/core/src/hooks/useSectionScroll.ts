@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 
 import { useRafThrottle } from './performance/useRafThrottle';
 import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';

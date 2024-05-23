@@ -1,6 +1,7 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 
 import { ActiveSectionTracker, ScrollytellingContext } from './ScrollyTellingContext';
+import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 
 export interface PageProps {
   children: React.ReactNode;
@@ -14,9 +15,6 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
 
   /** Record the distance to the bottom of the viewport */
   const activeSectionBtmDistRef = useRef<number>(Infinity);
-
-  /** Help us throttle the callback by using rAF */
-  const animationFrameScheduledRef = useRef<boolean>(false);
 
   const onActiveSectionUpdate = useCallback(
     (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
@@ -43,14 +41,15 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
     },
     [onActiveSectionUpdate]
   );
+  const onSectionScrollThrottled = useRafThrottle(onSectionScroll);
 
   const context: ActiveSectionTracker = useMemo(
     () => ({
-      onSectionScroll,
+      onSectionScroll: onSectionScrollThrottled,
       activeSectionIdRef,
       activeSectionRatioRef,
     }),
-    [onSectionScroll]
+    [onSectionScrollThrottled]
   );
 
   // TODO: maybe use subscribe & notify pattern to update active section watcher

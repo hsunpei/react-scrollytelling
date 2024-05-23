@@ -5,13 +5,16 @@ import { useCallback, useEffect, useRef } from 'react';
  * @param callback - The callback to throttle by rAF
  * @returns A throttled callback
  */
-export function useRafThrottle(callback: () => void) {
+export function useRafThrottle<T extends unknown[]>(callback: (...params: T) => void) {
   const rafRef = useRef<number | null>(null);
 
-  const rafCallback = useCallback(() => {
-    callback();
-    rafRef.current = null;
-  }, [callback]);
+  const rafCallback = useCallback(
+    (...params: T) => {
+      callback(...params);
+      rafRef.current = null;
+    },
+    [callback]
+  );
 
   useEffect(() => {
     return () => {
@@ -21,9 +24,14 @@ export function useRafThrottle(callback: () => void) {
     };
   }, []);
 
-  return useCallback(() => {
-    if (!rafRef.current) {
-      rafRef.current = requestAnimationFrame(rafCallback);
-    }
-  }, [rafCallback]);
+  return useCallback(
+    (...params: T) => {
+      const funcToCall = () => rafCallback(...params);
+
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(funcToCall);
+      }
+    },
+    [rafCallback]
+  );
 }
