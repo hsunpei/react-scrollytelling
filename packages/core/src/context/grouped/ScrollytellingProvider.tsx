@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 
-import { ActiveSectionTracker, ScrollytellingContext } from './ScrollyTellingContext';
+import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 
 export interface PageProps {
