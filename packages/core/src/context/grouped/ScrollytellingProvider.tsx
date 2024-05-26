@@ -1,11 +1,38 @@
 import React, { useRef, useCallback, useMemo } from 'react';
 
-import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
+import {
+  ActiveSectionObserver,
+  ActiveSectionScrollInfo,
+  ActiveSectionTracker,
+  ScrollytellingContext,
+} from './ScrollytellingContext';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 
 export interface PageProps {
   children: React.ReactNode;
 }
+
+class ActiveSectionObservable {
+  private observers: ActiveSectionObserver[];
+
+  constructor() {
+    this.observers = [];
+  }
+
+  subscribe(obs: ActiveSectionObserver) {
+    this.observers.push(obs);
+  }
+
+  unsubscribe(obs: ActiveSectionObserver) {
+    this.observers = this.observers.filter((observer) => observer !== obs);
+  }
+
+  notify(data: ActiveSectionScrollInfo) {
+    this.observers.forEach((observer) => observer(data));
+  }
+}
+
+const activeSectionObservable = new ActiveSectionObservable();
 
 export const ScrollytellingProvider = ({ children }: PageProps) => {
   const { Provider } = ScrollytellingContext;
@@ -22,6 +49,8 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
       activeSectionIdRef.current = trackingId;
       activeSectionRatioRef.current = scrolledRatio;
       activeSectionBtmDistRef.current = viewportBtmDistance;
+
+      activeSectionObservable.notify({ trackingId, scrolledRatio, viewportBtmDistance });
     },
     []
   );
@@ -48,6 +77,8 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
       onSectionScroll: onSectionScrollThrottled,
       activeSectionIdRef,
       activeSectionRatioRef,
+      subscribe: activeSectionObservable.subscribe,
+      unsubscribe: activeSectionObservable.unsubscribe,
     }),
     [onSectionScrollThrottled]
   );
