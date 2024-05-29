@@ -19,6 +19,7 @@ export function useIntersectionObserver(
   shouldObserve = true,
   onObserve?: (entry: IntersectionObserverEntry) => void
 ) {
+  // TODO: remove the state and use a callback instead
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
