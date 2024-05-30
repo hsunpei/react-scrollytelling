@@ -58,5 +58,12 @@ export function useSectionScroll(
     }
   }, [onPageScroll, isIntersecting]);
 
+  // initialize the scroll info when the section is mounted
+  useEffect(() => {
+    if (window) {
+      handleScroll();
+    }
+  }, [handleScroll]);
+
   return { isIntersecting };
 }

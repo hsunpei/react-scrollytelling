@@ -45,7 +45,6 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
 
   const onActiveSectionUpdate = useCallback(
     (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
-      // TODO: throttle this callback with rAF
       activeSectionIdRef.current = trackingId;
       activeSectionRatioRef.current = scrolledRatio;
       activeSectionBtmDistRef.current = viewportBtmDistance;
@@ -54,6 +53,7 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
     },
     []
   );
+  const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
 
   const onSectionScroll = useCallback(
     (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
@@ -65,10 +65,10 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
           preActiveSectionBtmDist < 0 &&
           viewportBtmDistance > preActiveSectionBtmDist)
       ) {
-        onActiveSectionUpdate(trackingId, scrolledRatio, viewportBtmDistance);
+        onActiveSectionUpdateThrottled(trackingId, scrolledRatio, viewportBtmDistance);
       }
     },
-    [onActiveSectionUpdate]
+    [onActiveSectionUpdateThrottled]
   );
   const onSectionScrollThrottled = useRafThrottle(onSectionScroll);
 
@@ -82,8 +82,6 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
     }),
     [onSectionScrollThrottled]
   );
-
-  // TODO: maybe use subscribe & notify pattern to update active section watcher
 
   return <Provider value={context}>{children}</Provider>;
 };

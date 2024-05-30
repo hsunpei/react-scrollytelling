@@ -1,10 +1,25 @@
-import { useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
-import { useSectionScrollState } from '@react-scrollytelling/core';
+import { useTrackedSectionScroll, SectionScrollInfo } from '@react-scrollytelling/core';
 
-export const TrackedSection = ({ className }: { className: string }) => {
+interface TrackedSectionProps {
+  className: string;
+  sectionID: string;
+}
+
+export const TrackedSection = ({ className, sectionID }: TrackedSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
+
+  const [scrolledInfo, setScrolledInfo] = useState<SectionScrollInfo>({
+    scrolledRatio: 0,
+    distance: 0,
+  });
+
+  const handleScroll = useCallback((scrollInfo: SectionScrollInfo) => {
+    setScrolledInfo(scrollInfo);
+  }, []);
+
+  const { isIntersecting } = useTrackedSectionScroll(sectionRef, sectionID, handleScroll);
 
   return (
     <div>
@@ -13,7 +28,7 @@ export const TrackedSection = ({ className }: { className: string }) => {
           isIntersecting: <b>{`${isIntersecting}`}</b>
         </p>
         <p>
-          scrolledRatio: <b>{`${scrolledRatio}`}</b>
+          scrolledRatio: <b>{`${scrolledInfo.scrolledRatio}`}</b>
         </p>
       </section>
     </div>
