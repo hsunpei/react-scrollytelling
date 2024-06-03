@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useCallback, useMemo } from 'react';
 
 import {
@@ -13,29 +15,29 @@ export interface PageProps {
 }
 
 class ActiveSectionObservable {
-  private observers: ActiveSectionObserver[];
+  private observers: Set<ActiveSectionObserver>;
 
   constructor() {
-    this.observers = [];
+    this.observers = new Set();
   }
 
-  subscribe(obs: ActiveSectionObserver) {
-    this.observers.push(obs);
-  }
+  subscribe = (obs: ActiveSectionObserver) => {
+    this.observers.add(obs);
+  };
 
-  unsubscribe(obs: ActiveSectionObserver) {
-    this.observers = this.observers.filter((observer) => observer !== obs);
-  }
+  unsubscribe = (obs: ActiveSectionObserver) => {
+    this.observers.delete(obs);
+  };
 
-  notify(data: ActiveSectionScrollInfo) {
+  notify = (data: ActiveSectionScrollInfo) => {
     this.observers.forEach((observer) => observer(data));
-  }
+  };
 }
-
-const activeSectionObservable = new ActiveSectionObservable();
 
 export const ScrollytellingProvider = ({ children }: PageProps) => {
   const { Provider } = ScrollytellingContext;
+
+  const { current: activeSectionObservable } = useRef(new ActiveSectionObservable());
 
   const activeSectionIdRef = useRef<string | null>(null);
   const activeSectionRatioRef = useRef<number | null>(null);
@@ -51,12 +53,13 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
 
       activeSectionObservable.notify({ trackingId, scrolledRatio, viewportBtmDistance });
     },
-    []
+    [activeSectionObservable]
   );
   const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
 
   const onSectionScroll = useCallback(
     (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
+      console.log('onSectionScroll', trackingId, scrolledRatio, viewportBtmDistance);
       const preActiveSectionBtmDist = activeSectionBtmDistRef.current;
       if (
         activeSectionIdRef.current === trackingId ||
@@ -72,6 +75,8 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
   );
   const onSectionScrollThrottled = useRafThrottle(onSectionScroll);
 
+  // TODO: reset the distance when the section is not in the viewport
+
   const context: ActiveSectionTracker = useMemo(
     () => ({
       onSectionScroll: onSectionScrollThrottled,
@@ -80,7 +85,11 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
       subscribe: activeSectionObservable.subscribe,
       unsubscribe: activeSectionObservable.unsubscribe,
     }),
-    [onSectionScrollThrottled]
+    [
+      activeSectionObservable.subscribe,
+      activeSectionObservable.unsubscribe,
+      onSectionScrollThrottled,
+    ]
   );
 
   return <Provider value={context}>{children}</Provider>;

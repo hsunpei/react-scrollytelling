@@ -1,5 +1,6 @@
 import { TrackedSection } from './TrackedSection';
 import { StickyContainer } from './StickyContainer';
+import { ActiveSectionInfo } from './ActiveSectionInfo';
 
 import { ScrollytellingProvider } from '@react-scrollytelling/core';
 
@@ -58,7 +59,9 @@ export function useIntersectionObserver(
     }
   >
     <div className="absolute left-0 right-0 top-0 h-screen">
-      <div className="flex h-screen items-center justify-center">test</div>
+      <div className="flex h-screen items-center justify-center">
+        <ActiveSectionInfo />
+      </div>
     </div>
   </StickyContainer>
 </ScrollytellingProvider>
