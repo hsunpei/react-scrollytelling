@@ -1,20 +1,24 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { useRafThrottle } from './performance/useRafThrottle';
 import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
 import { clampScrolledRatio, getScrollPosition } from '../utils';
 
 export interface SectionScrollInfo {
+  isIntersecting: boolean;
   scrolledRatio: number;
   scrollBottom: number;
   distance: number;
 }
 
-export function getSectionScrollInfo(sectionRef: React.RefObject<Element>): SectionScrollInfo {
+export function getSectionScrollInfo(
+  sectionRef: React.RefObject<Element>,
+  isIntersecting: boolean
+): SectionScrollInfo {
   // TODO: can possibly reduce the measurement by using resizeObserver
   const sectionRect = sectionRef.current?.getBoundingClientRect();
   if (!sectionRect) {
-    return { scrolledRatio: 0, scrollBottom: 0, distance: Infinity };
+    return { scrolledRatio: 0, scrollBottom: 0, distance: Infinity, isIntersecting };
   }
 
   const { scrollTop, scrollBottom } = getScrollPosition();
@@ -23,7 +27,7 @@ export function getSectionScrollInfo(sectionRef: React.RefObject<Element>): Sect
   const distance = scrollBottom - sectionTop;
   const ratio = clampScrolledRatio(distance / sectionRect.height);
 
-  return { scrolledRatio: ratio, scrollBottom, distance };
+  return { scrolledRatio: ratio, scrollBottom, distance, isIntersecting };
 }
 
 /**
@@ -40,30 +44,28 @@ export function useSectionScroll(
   shouldObserve = true,
   options: IntersectionObserverOptions
 ) {
-  const { isIntersecting } = useIntersectionObserver(sectionRef, options, shouldObserve);
-
-  const handleScroll = useCallback(() => {
-    const scrollInfo = getSectionScrollInfo(sectionRef);
-    onScroll(scrollInfo);
-  }, [sectionRef, onScroll]);
+  const handleScroll = useCallback(
+    (isIntersecting: boolean) => {
+      const scrollInfo = getSectionScrollInfo(sectionRef, isIntersecting);
+      onScroll(scrollInfo);
+    },
+    [sectionRef, onScroll]
+  );
   const onPageScroll = useRafThrottle(handleScroll);
 
-  // track scrolling only when the section is visible in viewport
-  useEffect(() => {
-    if (window && isIntersecting) {
-      window.addEventListener('scroll', onPageScroll);
-      return () => {
-        window.removeEventListener('scroll', onPageScroll);
-      };
-    }
-  }, [onPageScroll, isIntersecting]);
+  const onObserve = useCallback(
+    ({ isIntersecting }: IntersectionObserverEntry) => {
+      onPageScroll(isIntersecting);
 
-  // initialize the scroll info when the section is mounted
-  useEffect(() => {
-    if (window) {
-      handleScroll();
-    }
-  }, [handleScroll]);
+      // track scrolling only when the section is visible in viewport
+      if (isIntersecting) {
+        window.addEventListener('scroll', onPageScroll.bind(null, isIntersecting));
+      } else {
+        window.removeEventListener('scroll', onPageScroll.bind(null, isIntersecting));
+      }
+    },
+    [onPageScroll]
+  );
 
-  return { isIntersecting };
+  useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
 }

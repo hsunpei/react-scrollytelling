@@ -7,7 +7,7 @@ export interface IntersectionObserverOptions {
 }
 
 // extracted the default options to avoid re-rendering
-const DEFAULT_OPTIONS: IntersectionObserverOptions = {};
+export const DEFAULT_INTERSECTION_OBS_OPTIONS: IntersectionObserverOptions = {};
 
 /**
  * A hook which uses the IntersectionObserver API
@@ -15,7 +15,7 @@ const DEFAULT_OPTIONS: IntersectionObserverOptions = {};
  */
 export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
-  options: IntersectionObserverOptions = DEFAULT_OPTIONS,
+  options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS,
   shouldObserve = true,
   onObserve?: (entry: IntersectionObserverEntry) => void
 ) {

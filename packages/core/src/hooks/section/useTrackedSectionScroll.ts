@@ -30,7 +30,5 @@ export function useTrackedSectionScroll(
     [onSectionScroll, sectionID, onScroll]
   );
 
-  const { isIntersecting } = useSectionScroll(sectionRef, handleScroll, shouldObserve, options);
-
-  return { isIntersecting };
+  useSectionScroll(sectionRef, handleScroll, shouldObserve, options);
 }

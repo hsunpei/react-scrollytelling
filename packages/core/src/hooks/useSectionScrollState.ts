@@ -15,12 +15,17 @@ export function useSectionScrollState(
   options: IntersectionObserverOptions
 ) {
   const [scrolledRatio, setScrolledRatio] = useState<number>(0);
+  const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
-  const onScroll = useCallback(({ scrolledRatio: ratio }: SectionScrollInfo) => {
-    setScrolledRatio(ratio);
-  }, []);
+  const onScroll = useCallback(
+    ({ scrolledRatio: ratio, isIntersecting: intersecting }: SectionScrollInfo) => {
+      setScrolledRatio(ratio);
+      setIsIntersecting(intersecting);
+    },
+    []
+  );
 
-  const { isIntersecting } = useSectionScroll(sectionRef, onScroll, shouldObserve, options);
+  useSectionScroll(sectionRef, onScroll, shouldObserve, options);
 
   return { scrolledRatio, isIntersecting };
 }

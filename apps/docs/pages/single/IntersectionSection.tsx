@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 
-import { useIntersectionObserver } from '@react-scrollytelling/core';
+import { useIntersectionObserverState } from '@react-scrollytelling/core';
 
 export const IntersectionSection = ({ className }: { className: string }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting } = useIntersectionObserver(sectionRef);
+  const { isIntersecting } = useIntersectionObserverState(sectionRef);
 
   return (
     <div>
