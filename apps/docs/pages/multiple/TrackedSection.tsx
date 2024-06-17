@@ -19,13 +19,13 @@ export const TrackedSection = ({ className, sectionID }: TrackedSectionProps) =>
     setScrolledInfo(scrollInfo);
   }, []);
 
-  const { isIntersecting } = useTrackedSectionScroll(sectionRef, sectionID, handleScroll);
+  useTrackedSectionScroll(sectionRef, sectionID, handleScroll);
 
   return (
     <div>
       <section ref={sectionRef} className={`border-4 p-10 pb-[50vh] ${className}`}>
         <p>
-          isIntersecting: <b>{`${isIntersecting}`}</b>
+          isIntersecting: <b>{`${scrolledInfo.isIntersecting}`}</b>
         </p>
         <p>
           scrolledRatio: <b>{`${scrolledInfo.scrolledRatio}`}</b>

@@ -8,6 +8,7 @@ import {
   ActiveSectionTracker,
   ScrollytellingContext,
 } from './ScrollytellingContext';
+import { SectionScrollInfo } from '../../hooks';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 
 export interface PageProps {
@@ -58,38 +59,58 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
   const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
 
   const onSectionScroll = useCallback(
-    (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
+    (
+      trackingId: string,
+      { scrolledRatio, distance: viewportBtmDistance, isIntersecting }: SectionScrollInfo
+    ) => {
       console.log('onSectionScroll', trackingId, scrolledRatio, viewportBtmDistance);
       const preActiveSectionBtmDist = activeSectionBtmDistRef.current;
-      if (
-        activeSectionIdRef.current === trackingId ||
-        (viewportBtmDistance > 0 && viewportBtmDistance < preActiveSectionBtmDist) ||
-        (viewportBtmDistance <= 0 &&
-          preActiveSectionBtmDist < 0 &&
-          viewportBtmDistance > preActiveSectionBtmDist)
-      ) {
-        onActiveSectionUpdateThrottled(trackingId, scrolledRatio, viewportBtmDistance);
+      if (!isIntersecting) {
+        if (activeSectionIdRef.current === trackingId) {
+          activeSectionBtmDistRef.current = Infinity;
+        }
+      } else {
+        // intersecting
+        console.log('onActiveSectionUpdate', {
+          trackingId,
+          currentSecId: activeSectionIdRef.current,
+          scrolledRatio,
+          preActiveSectionBtmDist,
+          viewportBtmDistance,
+        });
+
+        if (
+          activeSectionIdRef.current === trackingId ||
+          (viewportBtmDistance > 0 && viewportBtmDistance < preActiveSectionBtmDist) ||
+          (viewportBtmDistance <= 0 &&
+            preActiveSectionBtmDist < 0 &&
+            viewportBtmDistance > preActiveSectionBtmDist)
+        ) {
+          console.log('onActiveSectionUpdate > updating', {
+            trackingId,
+            currentSecId: activeSectionIdRef.current,
+            scrolledRatio,
+            preActiveSectionBtmDist,
+            viewportBtmDistance,
+          });
+          onActiveSectionUpdate(trackingId, scrolledRatio, viewportBtmDistance);
+        }
       }
     },
-    [onActiveSectionUpdateThrottled]
+    [onActiveSectionUpdate]
   );
-  const onSectionScrollThrottled = useRafThrottle(onSectionScroll);
 
   // TODO: reset the distance when the section is not in the viewport
 
   const context: ActiveSectionTracker = useMemo(
     () => ({
-      onSectionScroll: onSectionScrollThrottled,
+      onSectionScroll: onSectionScroll,
       activeSectionIdRef,
       activeSectionRatioRef,
       subscribe: activeSectionObservable.subscribe,
       unsubscribe: activeSectionObservable.unsubscribe,
     }),
-    [
-      activeSectionObservable.subscribe,
-      activeSectionObservable.unsubscribe,
-      onSectionScrollThrottled,
-    ]
+    [activeSectionObservable.subscribe, activeSectionObservable.unsubscribe, onSectionScroll]
   );
 
   return <Provider value={context}>{children}</Provider>;

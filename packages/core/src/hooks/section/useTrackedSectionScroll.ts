@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 
 import { useScrollytelling } from '../grouped/useScrollytelling';
-import { IntersectionObserverOptions } from '../useIntersectionObserver';
+import {
+  DEFAULT_INTERSECTION_OBS_OPTIONS,
+  IntersectionObserverOptions,
+} from '../useIntersectionObserver';
 import { SectionScrollInfo, useSectionScroll } from '../useSectionScroll';
 
 /**
@@ -16,15 +19,18 @@ import { SectionScrollInfo, useSectionScroll } from '../useSectionScroll';
 export function useTrackedSectionScroll(
   sectionRef: React.RefObject<Element>,
   sectionID: string,
-  onScroll: (scrollInfo: SectionScrollInfo) => void,
+  onScroll: (scrollInfo: SectionScrollInfo) => void = () => {
+    return void 0;
+  },
   shouldObserve = true,
-  options: IntersectionObserverOptions
+  options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS
 ) {
   const { onSectionScroll } = useScrollytelling();
 
   const handleScroll = useCallback(
     (scrollInfo: SectionScrollInfo) => {
-      onSectionScroll(sectionID, scrollInfo.scrolledRatio, scrollInfo.distance);
+      console.log('useTrackedSectionScroll', sectionID, scrollInfo);
+      onSectionScroll(sectionID, scrollInfo);
       onScroll(scrollInfo);
     },
     [onSectionScroll, sectionID, onScroll]
