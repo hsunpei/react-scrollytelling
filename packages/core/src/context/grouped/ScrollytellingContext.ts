@@ -17,6 +17,14 @@ export interface ActiveSectionScrollInfo {
 
 export type ActiveSectionObserver = (info: ActiveSectionScrollInfo) => void;
 
+export interface TrackedSectionInfo {
+  /** Absolute position of the section's top */
+  sectionTop: number;
+
+  /** Absolute position of the section's bottom */
+  sectionBottom: number;
+}
+
 export interface ActiveSectionTracker {
   /** For a tracked section to notify the provider that the section is being scrolled  */
   onSectionScroll: (trackingId: string, scrollInfo: SectionScrollInfo) => void;
@@ -32,6 +40,9 @@ export interface ActiveSectionTracker {
 
   /** For useActiveSection to unsubscribe */
   unsubscribe: (obs: ActiveSectionObserver) => void;
+
+  /** Tracked sections in the viewport */
+  trackedSections: TrackedSections;
 }
 
 export const ScrollytellingContext = createContext<ActiveSectionTracker | null>(null);

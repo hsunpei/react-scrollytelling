@@ -1,13 +1,10 @@
 'use client';
 
-import React, { useRef, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
-import {
-  ActiveSectionObserver,
-  ActiveSectionScrollInfo,
-  ActiveSectionTracker,
-  ScrollytellingContext,
-} from './ScrollytellingContext';
+import { ActiveSectionObservable } from './ActiveSectionObservable';
+import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
+import { TrackedSections } from './TrackedSections';
 import { SectionScrollInfo } from '../../hooks';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 
@@ -15,30 +12,21 @@ export interface PageProps {
   children: React.ReactNode;
 }
 
-class ActiveSectionObservable {
-  private observers: Set<ActiveSectionObserver>;
-
-  constructor() {
-    this.observers = new Set();
-  }
-
-  subscribe = (obs: ActiveSectionObserver) => {
-    this.observers.add(obs);
-  };
-
-  unsubscribe = (obs: ActiveSectionObserver) => {
-    this.observers.delete(obs);
-  };
-
-  notify = (data: ActiveSectionScrollInfo) => {
-    this.observers.forEach((observer) => observer(data));
-  };
-}
-
 export const ScrollytellingProvider = ({ children }: PageProps) => {
   const { Provider } = ScrollytellingContext;
 
-  const { current: activeSectionObservable } = useRef(new ActiveSectionObservable());
+  const activeSectionObservableRef = useRef<ActiveSectionObservable | null>(null);
+  // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
+  if (!activeSectionObservableRef.current) {
+    activeSectionObservableRef.current = new ActiveSectionObservable();
+  }
+  const { current: activeSectionObservable } = activeSectionObservableRef;
+
+  const trackedSectionsRef = useRef<TrackedSections | null>(null);
+  // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
+  if (!trackedSectionsRef.current) {
+    trackedSectionsRef.current = new TrackedSections();
+  }
 
   const activeSectionIdRef = useRef<string | null>(null);
   const activeSectionRatioRef = useRef<number | null>(null);
@@ -109,6 +97,7 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
       activeSectionRatioRef,
       subscribe: activeSectionObservable.subscribe,
       unsubscribe: activeSectionObservable.unsubscribe,
+      trackedSections: trackedSectionsRef.current!,
     }),
     [activeSectionObservable.subscribe, activeSectionObservable.unsubscribe, onSectionScroll]
   );

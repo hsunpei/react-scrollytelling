@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useScrollytelling } from '../grouped/useScrollytelling';
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
-  IntersectionObserverOptions,
+  IntersectionObserverOptions, useIntersectionObserver,
 } from '../useIntersectionObserver';
 import { SectionScrollInfo, useSectionScroll } from '../useSectionScroll';
 
@@ -36,5 +36,5 @@ export function useTrackedSectionScroll(
     [onSectionScroll, sectionID, onScroll]
   );
 
-  useSectionScroll(sectionRef, handleScroll, shouldObserve, options);
+  useIntersectionObserver(sectionRef, options, shouldObserve, handleScroll);
 }
