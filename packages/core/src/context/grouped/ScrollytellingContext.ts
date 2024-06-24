@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 
+import { TrackedSections } from './TrackedSections';
 import { SectionScrollInfo } from '../../hooks';
 
 export type sectionID = string | null;
@@ -23,6 +24,9 @@ export interface TrackedSectionInfo {
 
   /** Absolute position of the section's bottom */
   sectionBottom: number;
+
+  /** Getting notified when the section is active & being scrolled */
+  onActiveScroll?: (scrollInfo: SectionScrollInfo) => void;
 }
 
 export interface ActiveSectionTracker {

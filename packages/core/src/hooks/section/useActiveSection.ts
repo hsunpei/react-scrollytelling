@@ -4,8 +4,8 @@ import { ActiveSectionObserver } from '../../context/grouped/ScrollytellingConte
 import { useScrollytelling } from '../grouped/useScrollytelling';
 
 /**
- * Watches for all tracked sections through ScrollytellingProvider
- * to find the section closet to the bottom of the viewport.
+ * Watches for all tracked sections to find the section closet to the bottom of the viewport
+ * through ScrollytellingProvider.
  * It invokes the onActiveSectionChange when the active section changes
  * @param onActiveSectionChange - The callback needs to be memoized
  */

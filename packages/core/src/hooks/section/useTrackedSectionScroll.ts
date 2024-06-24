@@ -3,9 +3,10 @@ import { useCallback } from 'react';
 import { useScrollytelling } from '../grouped/useScrollytelling';
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
-  IntersectionObserverOptions, useIntersectionObserver,
+  IntersectionObserverOptions,
+  useIntersectionObserver,
 } from '../useIntersectionObserver';
-import { SectionScrollInfo, useSectionScroll } from '../useSectionScroll';
+import { SectionScrollInfo } from '../useSectionScroll';
 
 /**
  * Notify ScrollytellingProvider to update the active section
@@ -19,22 +20,35 @@ import { SectionScrollInfo, useSectionScroll } from '../useSectionScroll';
 export function useTrackedSectionScroll(
   sectionRef: React.RefObject<Element>,
   sectionID: string,
-  onScroll: (scrollInfo: SectionScrollInfo) => void = () => {
-    return void 0;
-  },
+  onScroll?: (scrollInfo: SectionScrollInfo) => void | undefined,
   shouldObserve = true,
   options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS
 ) {
-  const { onSectionScroll } = useScrollytelling();
+  const { trackedSections } = useScrollytelling();
 
-  const handleScroll = useCallback(
-    (scrollInfo: SectionScrollInfo) => {
-      console.log('useTrackedSectionScroll', sectionID, scrollInfo);
-      onSectionScroll(sectionID, scrollInfo);
-      onScroll(scrollInfo);
+  const onObserve = useCallback(
+    ({ isIntersecting }: IntersectionObserverEntry) => {
+      if (isIntersecting) {
+        trackedSections.setSection(sectionID, {
+          sectionTop: sectionRef.current?.getBoundingClientRect().top || 0,
+          sectionBottom: sectionRef.current?.getBoundingClientRect().bottom || 0,
+          onActiveScroll: onScroll,
+        });
+
+        console.log('useTrackedSectionScroll > onObserve > added', sectionID, {
+          sectionTop: sectionRef.current?.getBoundingClientRect().top || 0,
+          sectionBottom: sectionRef.current?.getBoundingClientRect().bottom || 0,
+          onActiveScroll: onScroll,
+        });
+      } else {
+        console.log('useTrackedSectionScroll > onObserve > removed', sectionID);
+        trackedSections.removeSection(sectionID);
+      }
     },
-    [onSectionScroll, sectionID, onScroll]
+    [trackedSections, sectionID, sectionRef, onScroll]
   );
 
-  useIntersectionObserver(sectionRef, options, shouldObserve, handleScroll);
+  // TODO - setSection when the section is resizing
+
+  useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
 }
