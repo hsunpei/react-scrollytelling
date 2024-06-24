@@ -1,19 +1,26 @@
 'use client';
 
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { ActiveSectionObservable } from './ActiveSectionObservable';
 import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
 import { TrackedSections } from './TrackedSections';
-import { SectionScrollInfo } from '../../hooks';
+import { SectionScrollInfo, useIntersectionObserver } from '../../hooks';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
+import { getScrollPosition } from '../../utils';
 
-export interface PageProps {
+export interface ScrollytellingProviderProps {
   children: React.ReactNode;
 }
 
-export const ScrollytellingProvider = ({ children }: PageProps) => {
+export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps) => {
   const { Provider } = ScrollytellingContext;
+
+  /**
+   * Ref to the outer wrapper which contains all the scrollytelling components.
+   * It only listens to the scroll events when the wrapper is within the viewport.
+   */
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const activeSectionObservableRef = useRef<ActiveSectionObservable | null>(null);
   // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
@@ -46,6 +53,30 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
   );
   const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
 
+  const handleScroll = useCallback(() => {
+    const { scrollTop, windowHeight } = getScrollPosition();
+    const activeSectionId = trackedSectionsRef.current!.findClosestToBottomId(
+      scrollTop,
+      windowHeight
+    );
+    console.log('handleScroll', activeSectionId);
+  }, []);
+  const handleScrollThrottled = useRafThrottle(handleScroll);
+
+  const onObserve = useCallback(
+    ({ isIntersecting }: IntersectionObserverEntry) => {
+      // track scrolling only when the section is visible in viewport
+      if (isIntersecting) {
+        window.addEventListener('scroll', handleScrollThrottled);
+      } else {
+        window.removeEventListener('scroll', handleScrollThrottled);
+      }
+    },
+    [handleScrollThrottled]
+  );
+  useIntersectionObserver(wrapperRef, undefined, undefined, onObserve);
+
+  // TODO: remove the following
   const onSectionScroll = useCallback(
     (
       trackingId: string,
@@ -102,5 +133,9 @@ export const ScrollytellingProvider = ({ children }: PageProps) => {
     [activeSectionObservable.subscribe, activeSectionObservable.unsubscribe, onSectionScroll]
   );
 
-  return <Provider value={context}>{children}</Provider>;
+  return (
+    <Provider value={context}>
+      <div ref={wrapperRef}>{children}</div>
+    </Provider>
+  );
 };
