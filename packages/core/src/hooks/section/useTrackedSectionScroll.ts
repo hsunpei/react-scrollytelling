@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
+import { getScrollPosition } from '../../utils';
 import { useScrollytelling } from '../grouped/useScrollytelling';
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
@@ -26,12 +27,30 @@ export function useTrackedSectionScroll(
 ) {
   const { trackedSections } = useScrollytelling();
 
+  /** Track the scroll progress if onScroll is provided */
+  const scrollInfoRef = useRef<SectionScrollInfo | null>(null);
+
+  // subscribe to the scroll progress,
+  // it will be triggered when the section becomes the active section on screen
+  useEffect(() => {
+    if (onScroll) {
+      const handleScroll = (info: SectionScrollInfo) => {
+        scrollInfoRef.current = info;
+        onScroll(info);
+      };
+
+      trackedSections.subscribeScroll(sectionID, handleScroll);
+    }
+  }, [onScroll, sectionID, trackedSections]);
+
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       if (isIntersecting) {
+        const { scrollTop } = getScrollPosition();
+
         trackedSections.setSection(sectionID, {
-          sectionTop: sectionRef.current?.getBoundingClientRect().top || 0,
-          sectionBottom: sectionRef.current?.getBoundingClientRect().bottom || 0,
+          sectionTop: (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
+          sectionBottom: (sectionRef.current?.getBoundingClientRect().bottom || 0) + scrollTop,
           onActiveScroll: onScroll,
         });
 
@@ -42,6 +61,11 @@ export function useTrackedSectionScroll(
         });
       } else {
         console.log('useTrackedSectionScroll > onObserve > removed', sectionID);
+        if (onScroll) {
+          // notify the scroll progress that isIntersecting = false
+          const { scrolledRatio = 0, scrollBottom = 0, distance = 0 } = scrollInfoRef.current || {};
+          onScroll({ scrolledRatio, scrollBottom, distance, isIntersecting: false });
+        }
         trackedSections.removeSection(sectionID);
       }
     },

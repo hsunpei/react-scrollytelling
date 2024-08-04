@@ -30,9 +30,6 @@ export interface TrackedSectionInfo {
 }
 
 export interface ActiveSectionTracker {
-  /** For a tracked section to notify the provider that the section is being scrolled  */
-  onSectionScroll: (trackingId: string, scrollInfo: SectionScrollInfo) => void;
-
   /** The `trackingId` of the active section */
   activeSectionIdRef: React.MutableRefObject<string | null>;
 

@@ -1,4 +1,5 @@
 import { TrackedSectionInfo } from './ScrollytellingContext';
+import { SectionScrollInfo } from '../../hooks';
 
 /** Stores all the sections in the viewport */
 export class TrackedSections {
@@ -12,8 +13,22 @@ export class TrackedSections {
     this.closetSectionId = null;
   }
 
+  getSection = (sectionID: string) => {
+    return this.trackedSections.get(sectionID);
+  };
+
   setSection = (sectionID: string, sectionInfo: TrackedSectionInfo) => {
     this.trackedSections.set(sectionID, sectionInfo);
+  };
+
+  subscribeScroll = (
+    sectionID: string,
+    onActiveScroll: (scrollInfo: SectionScrollInfo) => void
+  ) => {
+    const section = this.trackedSections.get(sectionID);
+    if (section) {
+      section.onActiveScroll = onActiveScroll;
+    }
   };
 
   removeSection = (sectionID: string) => {
@@ -30,13 +45,13 @@ export class TrackedSections {
 
   findClosestToBottomId = (scrollTop: number, windowHeight: number): string | null => {
     let closestId: string | null = null;
+    let minDistance = Infinity;
 
     this.trackedSections.forEach((sectionInfo, sectionID) => {
       const scrollBottom = scrollTop + windowHeight;
-      const sectionTop = sectionInfo.sectionTop + scrollTop;
+      const sectionTop = sectionInfo.sectionTop;
       const distance = scrollBottom - sectionTop;
 
-      let minDistance = Infinity;
       if (distance >= 0 && distance < minDistance) {
         minDistance = distance;
         closestId = sectionID;
