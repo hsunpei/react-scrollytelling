@@ -130,6 +130,13 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
     [activeSectionObservable.subscribe, activeSectionObservable.unsubscribe]
   );
 
+  useEffect(() => {
+    // prevent listening to scroll events when the component is unmounted
+    return () => {
+      window.removeEventListener('scroll', handleScrollThrottled);
+    };
+  }, [handleScrollThrottled]);
+
   return (
     <Provider value={context}>
       <div ref={wrapperRef}>{children}</div>
