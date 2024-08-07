@@ -13,7 +13,7 @@ export function getScrollPosition() {
   }
 
   const scrollTop = window.scrollY || document.documentElement.scrollTop;
-  const windowHeight = window.outerHeight || document.documentElement.clientHeight;
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
   const scrollBottom = scrollTop + windowHeight;
 
   return {
