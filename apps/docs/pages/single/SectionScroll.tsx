@@ -7,14 +7,19 @@ export const SectionScroll = ({ className }: { className: string }) => {
   const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
 
   return (
-    <div>
-      <section ref={sectionRef} className={`my-2 h-96 border-4 p-10 ${className} `}>
-        <p>
-          isIntersecting: <b>{`${isIntersecting}`}</b>
-        </p>
-        <p>
-          scrolledRatio: <b>{`${scrolledRatio}`}</b>
-        </p>
+    <div className="mx-2 my-12">
+      <section
+        ref={sectionRef}
+        className={`flex h-96 flex-col items-center justify-center rounded-lg border-4 p-10 ${className} `}
+      >
+        <ul className="list-disc text-lg marker:text-slate-400">
+          <li>
+            isIntersecting: <b>{`${isIntersecting}`}</b>
+          </li>
+          <li>
+            scrolledRatio: <b>{`${Math.round(scrolledRatio * 10000) / 10000}`}</b>
+          </li>
+        </ul>
       </section>
     </div>
   );
