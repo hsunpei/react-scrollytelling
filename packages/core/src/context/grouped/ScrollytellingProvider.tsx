@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 
 import { ActiveSectionObservable } from './ActiveSectionObservable';
 import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
@@ -29,11 +29,11 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
   }
   const { current: activeSectionObservable } = activeSectionObservableRef;
 
+  /**
+   * Ref to the tracked sections in the viewport, initialize later to track mounted active sections
+   * (scroll events are not triggered yet for these sections).
+   */
   const trackedSectionsRef = useRef<TrackedSections | null>(null);
-  // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
-  if (!trackedSectionsRef.current) {
-    trackedSectionsRef.current = new TrackedSections();
-  }
 
   const activeSectionIdRef = useRef<string | null>(null);
   const activeSectionRatioRef = useRef<number | null>(null);
@@ -55,12 +55,16 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
 
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();
-    const activeSectionId = trackedSectionsRef.current!.findClosestToBottomId(
+
+    if (!trackedSectionsRef.current) {
+      return;
+    }
+    const activeSectionId = trackedSectionsRef.current.findClosestToBottomId(
       scrollTop,
       windowHeight
     );
 
-    const activeSection = trackedSectionsRef.current!.getSection(activeSectionId || '');
+    const activeSection = trackedSectionsRef.current.getSection(activeSectionId || '');
 
     console.log('handleScroll', {
       activeSectionId,
@@ -92,6 +96,15 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
     }
   }, [onActiveSectionUpdateThrottled]);
   const handleScrollThrottled = useRafThrottle(handleScroll);
+
+  // avoiding recreating the ref contents on every re-renders (instead of using initialValue).
+  // also use this occasion to update the active sections mounted in the viewport,
+  // while no scroll events are being triggered.
+  if (!trackedSectionsRef.current) {
+    trackedSectionsRef.current = new TrackedSections({
+      onNewSectionAdded: handleScrollThrottled,
+    });
+  }
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {

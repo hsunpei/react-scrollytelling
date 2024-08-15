@@ -8,9 +8,12 @@ export class TrackedSections {
   /** The ID of the section that is currently closet to the bottom of the viewport */
   private closetSectionId: string | null;
 
-  constructor() {
+  private onNewSectionAdded?: (sectionID: string) => void;
+
+  constructor({ onNewSectionAdded }: { onNewSectionAdded?: (sectionID: string) => void } = {}) {
     this.trackedSections = new Map();
     this.closetSectionId = null;
+    this.onNewSectionAdded = onNewSectionAdded;
   }
 
   getSection = (sectionID: string) => {
@@ -18,7 +21,12 @@ export class TrackedSections {
   };
 
   setSection = (sectionID: string, sectionInfo: TrackedSectionInfo) => {
-    this.trackedSections.set(sectionID, sectionInfo);
+    if (!this.getSection(sectionID)) {
+      this.trackedSections.set(sectionID, sectionInfo);
+      this.onNewSectionAdded?.(sectionID);
+    } else {
+      this.trackedSections.set(sectionID, sectionInfo);
+    }
   };
 
   subscribeScroll = (

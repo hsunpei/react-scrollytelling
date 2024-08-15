@@ -45,6 +45,8 @@ export function useTrackedSectionScroll(
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
+      console.log('onObserve', isIntersecting, sectionID);
+
       if (isIntersecting) {
         const { scrollTop } = getScrollPosition();
 
