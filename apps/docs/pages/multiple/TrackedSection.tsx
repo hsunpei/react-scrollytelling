@@ -24,15 +24,15 @@ export const TrackedSection = ({ className, sectionID }: TrackedSectionProps) =>
   useTrackedSectionScroll(sectionRef, sectionID, handleScroll);
 
   return (
-    <div>
-      <section ref={sectionRef} className={`border-4 p-10 pb-[50vh] ${className}`}>
-        <p>
-          isIntersecting: <b>{`${scrolledInfo.isIntersecting}`}</b>
-        </p>
-        <p>
-          scrolledRatio: <b>{`${scrolledInfo.scrolledRatio}`}</b>
-        </p>
-      </section>
-    </div>
+    <section
+      ref={sectionRef}
+      className={`relative border-2 bg-opacity-30 p-10 pb-[50vh] drop-shadow-2xl dark:bg-opacity-20 ${className}`}
+    >
+      <div className="absolute left-2 top-3.5">
+        <span className="rounded-lg bg-white bg-opacity-60 p-2 text-slate-500 dark:bg-gray-950">
+          {sectionID}
+        </span>
+      </div>
+    </section>
   );
 };
