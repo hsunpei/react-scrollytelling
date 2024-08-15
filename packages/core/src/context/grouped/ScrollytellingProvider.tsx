@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { ActiveSectionObservable } from './ActiveSectionObservable';
 import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
 import { TrackedSections } from './TrackedSections';
-import { SectionScrollInfo, useIntersectionObserver } from '../../hooks';
+import { useIntersectionObserver } from '../../hooks';
 import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
 import { clampScrolledRatio, getScrollPosition } from '../../utils';
 
@@ -69,7 +69,7 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
     });
 
     // notify the active section about its scroll progress
-    if (activeSection && activeSection.onActiveScroll) {
+    if (activeSection) {
       const { sectionTop, sectionBottom } = activeSection;
       const scrollBottom = scrollTop + windowHeight;
       const distance = scrollBottom - sectionTop;
@@ -77,27 +77,18 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
 
       const ratio = clampScrolledRatio(distance / sectionHeight);
 
-      // notify the active section
-      activeSection.onActiveScroll({
-        isIntersecting: true,
-        scrolledRatio: ratio,
-        scrollBottom,
-        distance,
-      });
+      if (activeSection.onActiveScroll) {
+        // notify the active section
+        activeSection.onActiveScroll({
+          isIntersecting: true,
+          scrolledRatio: ratio,
+          scrollBottom,
+          distance,
+        });
+      }
 
       // notify the sections tracking the active section
       onActiveSectionUpdateThrottled(activeSectionId!, ratio, distance);
-
-      // FIXME: the ratio distance is not correct because of sectionTop/sectionBottom
-      console.log('handleScroll', activeSectionId, activeSection, {
-        isIntersecting: true,
-        scrolledRatio: ratio,
-        sectionTop,
-        sectionBottom,
-        sectionHeight,
-        scrollBottom,
-        distance,
-      });
     }
   }, [onActiveSectionUpdateThrottled]);
   const handleScrollThrottled = useRafThrottle(handleScroll);

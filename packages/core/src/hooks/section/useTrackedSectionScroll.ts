@@ -33,14 +33,14 @@ export function useTrackedSectionScroll(
   // subscribe to the scroll progress,
   // it will be triggered when the section becomes the active section on screen
   useEffect(() => {
-    if (onScroll) {
-      const handleScroll = (info: SectionScrollInfo) => {
-        scrollInfoRef.current = info;
+    const handleScroll = (info: SectionScrollInfo) => {
+      scrollInfoRef.current = info;
+      if (onScroll) {
         onScroll(info);
-      };
+      }
+    };
 
-      trackedSections.subscribeScroll(sectionID, handleScroll);
-    }
+    trackedSections.subscribeScroll(sectionID, handleScroll);
   }, [onScroll, sectionID, trackedSections]);
 
   const onObserve = useCallback(
@@ -61,9 +61,11 @@ export function useTrackedSectionScroll(
         });
       } else {
         console.log('useTrackedSectionScroll > onObserve > removed', sectionID);
+
+        // notify the scroll progress that isIntersecting = false
+        const { scrolledRatio = 0, scrollBottom = 0, distance = 0 } = scrollInfoRef.current || {};
+
         if (onScroll) {
-          // notify the scroll progress that isIntersecting = false
-          const { scrolledRatio = 0, scrollBottom = 0, distance = 0 } = scrollInfoRef.current || {};
           onScroll({ scrolledRatio, scrollBottom, distance, isIntersecting: false });
         }
         trackedSections.removeSection(sectionID);

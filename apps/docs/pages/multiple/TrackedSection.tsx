@@ -1,7 +1,6 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { useTrackedSectionScroll } from '@react-scrollytelling/core';
-import type { SectionScrollInfo } from '@react-scrollytelling/core';
 
 interface TrackedSectionProps {
   className: string;
@@ -11,17 +10,7 @@ interface TrackedSectionProps {
 export const TrackedSection = ({ className, sectionID }: TrackedSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const [scrolledInfo, setScrolledInfo] = useState<SectionScrollInfo>({
-    scrolledRatio: 0,
-    distance: 0,
-  });
-
-  const handleScroll = useCallback((scrollInfo: SectionScrollInfo) => {
-    console.log('TrackedSection > handleScroll', scrollInfo);
-    setScrolledInfo(scrollInfo);
-  }, []);
-
-  useTrackedSectionScroll(sectionRef, sectionID, handleScroll);
+  useTrackedSectionScroll(sectionRef, sectionID);
 
   return (
     <section
