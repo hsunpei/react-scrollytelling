@@ -26,7 +26,7 @@ export const ActiveSectionInfo = () => {
   useActiveSection(onActiveSectionChange);
 
   return (
-    <div className="mt-20">
+    <div className="flex h-screen items-center justify-center">
       <ul className="list-disc text-xl leading-9 marker:text-slate-400">
         <li>
           You are viewing{' '}
