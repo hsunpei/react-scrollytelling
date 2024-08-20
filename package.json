@@ -19,7 +19,9 @@
     "lint:fix": "yarn lint:es --fix",
     "clean": "lerna run clean",
     "postinstall": "husky install",
-    "pre-commit": "lint:fix"
+    "pre-commit": "lint:fix",
+    "test": "lerna run test",
+    "test:watch": "lerna run test:watch"
   },
   "eslintConfig": {
     "root": true,
@@ -41,6 +43,7 @@
     "@hsunpei/stylelint-config": "^0.1.6",
     "@hsunpei/typescript-config": "^1.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@types/jest": "^29.5.12",
     "@types/mdx": "^2.0.10",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
