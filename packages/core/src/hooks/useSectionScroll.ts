@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 
+import {
+  IntersectionObserverOptions,
+  useIntersectionObserver,
+} from './intersection/useIntersectionObserver';
 import { useRafThrottle } from './performance/useRafThrottle';
-import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
 import { clampScrolledRatio, getScrollPosition } from '../utils';
 
 export interface SectionScrollInfo {

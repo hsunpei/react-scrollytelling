@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { IntersectionObserverOptions } from './useIntersectionObserver';
+import { IntersectionObserverOptions } from './intersection/useIntersectionObserver';
 import { SectionScrollInfo, useSectionScroll } from './useSectionScroll';
 
 /**

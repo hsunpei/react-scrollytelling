@@ -6,7 +6,7 @@ import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from '../useIntersectionObserver';
+} from '../intersection/useIntersectionObserver';
 import { SectionScrollInfo } from '../useSectionScroll';
 
 /**
