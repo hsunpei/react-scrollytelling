@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 
-import { useIntersectionObserverState } from '@react-scrollytelling/core';
+import { useIntersectionReveal } from '@react-scrollytelling/core';
 
 import { AnimatedTrail } from './AnimatedTrail';
 
-export const Reveal = () => {
+export const Reveal = ({ trackOnce = false }: { trackOnce?: boolean }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting } = useIntersectionObserverState(sectionRef);
+  const { isIntersecting } = useIntersectionReveal(sectionRef, trackOnce);
 
   return (
     <div className="py-10" ref={sectionRef}>

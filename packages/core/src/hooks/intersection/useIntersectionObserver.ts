@@ -17,12 +17,18 @@ export function useIntersectionObserver(
   sectionRef: React.RefObject<Element>,
   options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS,
   shouldObserve = true,
-  onObserve?: (entry: IntersectionObserverEntry) => void
+  onObserve?: (entry: IntersectionObserverEntry, disconnect: () => void) => void
 ) {
   // TODO: remove the state and use a callback instead
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  const disconnect = useCallback(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+  }, []);
 
   // use IntersectionObserver to detect when the section is visible in the viewport
   useEffect(() => {
@@ -30,7 +36,7 @@ export function useIntersectionObserver(
       observerRef.current = new IntersectionObserver(([entry]) => {
         setIsIntersecting(entry.isIntersecting);
         if (onObserve) {
-          onObserve(entry);
+          onObserve(entry, disconnect);
         }
       }, options);
 
@@ -47,12 +53,6 @@ export function useIntersectionObserver(
       };
     }
   }, [sectionRef, options, shouldObserve, onObserve]);
-
-  const disconnect = useCallback(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-  }, []);
 
   return { isIntersecting, disconnect };
 }
