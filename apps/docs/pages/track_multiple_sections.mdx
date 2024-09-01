@@ -1,13 +1,27 @@
 
-If you want to track multiple sections - to know which section the user is currently paying attention to and the reading progress,
-you can use the
+To tell a story that spans multiple sections, for example, changing the background based on the section in view,
+multiple sections tracking tools of `react-scrollytelling` can help you achieve this.
+
+Instead of tracking every section individually and listening to window scroll events in each section, `react-scrollytelling`
+only tracks the sections that are viewport to minimize the performance impact.
 
 
-```tsx
+## Building a scrollytelling story with multiple sections
 
+Here are some key concepts to keep in mind when building a scrollytelling story with multiple sections:
 
+### Active section
 
-```
+When there are multiple sections in the viewport, the effects to show should be based on the section that the user is currently viewing.
 
+We call the section the user is currently viewing the "active section", and it the section that has just been scrolled into view.
+Therefore, the active section is the section that is closest to the bottom of the viewport.
 
 ![Alt Text](/images/multiple_sections.jpg)
+
+
+### Scroll progress
+
+For the reading/scroll progress of the active section, it is defined as `the height above the bottom of the viewport` divided by `the height of the active section`.
+
+![Alt Text](/images/scroll_progress.jpg)
