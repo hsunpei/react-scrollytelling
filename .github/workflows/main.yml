@@ -67,16 +67,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Git Tag
-        if: steps.tag_check.outputs.exists_tag == 'false'
-        uses: azu/action-package-version-to-git-tag@v1
-        with:
-          version: ${{ env.CURRENT_VERSION }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          github_repo: ${{ github.repository }}
-          git_commit_sha: ${{ github.sha }}
-          git_tag_prefix: 'v'
-
       - name: Create Release
         id: create_release
         if: steps.tag_check.outputs.exists_tag == 'false' && github.event.pull_request.merged == true
