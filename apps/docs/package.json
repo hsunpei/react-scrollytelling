@@ -6,10 +6,11 @@
     "build": "next build",
     "prod": "next start -p 3800",
     "start": "next start",
-    "clean": "rimraf .next"
+    "clean": "rimraf .next && rimraf out"
   },
   "dependencies": {
     "@react-scrollytelling/core": "workspace:^",
+    "@react-scrollytelling/grouped": "workspace:^",
     "@react-spring/web": "^9.7.4",
     "next": "^14.2.3",
     "nextra": "^2.13.4",

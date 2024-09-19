@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { getScrollPosition } from '../../utils';
-import { useScrollytelling } from '../grouped/useScrollytelling';
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from '../intersection/useIntersectionObserver';
-import { SectionScrollInfo } from '../useSectionScroll';
+} from '@react-scrollytelling/core/src/hooks/intersection/useIntersectionObserver';
+import { SectionScrollInfo } from '@react-scrollytelling/core/src/hooks/useSectionScroll';
+import { getScrollPosition } from '@react-scrollytelling/core/src/utils';
+
+import { useScrollytelling } from '../grouped/useScrollytelling';
 
 /**
  * Notify ScrollytellingProvider to update the active section

@@ -2,12 +2,13 @@
 
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
+import { useIntersectionObserver } from '@react-scrollytelling/core';
+import { useRafThrottle } from '@react-scrollytelling/core';
+import { clampScrolledRatio, getScrollPosition } from '@react-scrollytelling/core';
+
 import { ActiveSectionObservable } from './ActiveSectionObservable';
 import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
 import { TrackedSections } from './TrackedSections';
-import { useIntersectionObserver } from '../../hooks';
-import { useRafThrottle } from '../../hooks/performance/useRafThrottle';
-import { clampScrolledRatio, getScrollPosition } from '../../utils';
 
 export interface ScrollytellingProviderProps {
   children: React.ReactNode;

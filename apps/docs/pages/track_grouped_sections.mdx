@@ -1,8 +1,8 @@
-import { TrackedSection } from '../components/multiple/TrackedSection';
-import { StickyContainer } from '../components/multiple/StickyContainer';
-import { ActiveSectionInfo } from '../components/multiple/ActiveSectionInfo';
+import { TrackedSection } from '../components/grouped/TrackedSection';
+import { StickyContainer } from '../components/grouped/StickyContainer';
+import { ActiveSectionInfo } from '../components/grouped/ActiveSectionInfo';
 
-import { ScrollytellingProvider } from '@react-scrollytelling/core';
+import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 
 To tell a story that spans multiple sections, for example, changing the background based on the section in view,
 multiple sections tracking tools of `react-scrollytelling` can help you achieve this.
@@ -41,7 +41,7 @@ For each section you want to track, assign it with a ref and name it with a uniq
 Then, use the `useTrackedSectionScroll` hook to track the active section based on the sectionID.
 
 ```tsx
-import { useTrackedSectionScroll } from '@react-scrollytelling/core';
+import { useTrackedSectionScroll } from '@react-scrollytelling/grouped';
 
 export const TrackedSection = ({sectionID} : {sectionID: string}) => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -59,7 +59,7 @@ export const TrackedSection = ({sectionID} : {sectionID: string}) => {
 ### 2. Wrap the sections with `ScrollytellingProvider`
 
 ```tsx
-import { ScrollytellingProvider } from '@react-scrollytelling/core';
+import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 
 // ...
   <ScrollytellingProvider>
@@ -77,7 +77,7 @@ because `ScrollytellingProvider` is listening to the window scroll events.
 To get the active section information, use the `useActiveSection()` hook.
 
 ```tsx
-import { useActiveSection } from '@react-scrollytelling/core';
+import { useActiveSection } from '@react-scrollytelling/grouped';
 
 export const ActiveSectionInfo = () => {
   const [trackingId, setTrackingId] = useState<string>('');

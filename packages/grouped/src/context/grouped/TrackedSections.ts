@@ -1,5 +1,6 @@
+import { SectionScrollInfo } from '@react-scrollytelling/core';
+
 import { TrackedSectionInfo } from './ScrollytellingContext';
-import { SectionScrollInfo } from '../../hooks';
 
 /** Stores all the sections in the viewport */
 export class TrackedSections {

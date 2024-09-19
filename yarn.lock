@@ -3613,6 +3613,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@react-scrollytelling/grouped@workspace:^, @react-scrollytelling/grouped@workspace:packages/grouped":
+  version: 0.0.0-use.local
+  resolution: "@react-scrollytelling/grouped@workspace:packages/grouped"
+  dependencies:
+    "@testing-library/dom": ^10.4.0
+    "@testing-library/jest-dom": ^6.4.8
+    "@testing-library/react": ^16.0.0
+    jest: ^29.7.0
+    jest-environment-jsdom: ^29.7.0
+    ts-jest: ^29.2.4
+    vite: ^5.2.11
+  peerDependencies:
+    "@react-scrollytelling/core": "workspace:^"
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
+
 "@react-spring/animated@npm:~9.7.4":
   version: 9.7.4
   resolution: "@react-spring/animated@npm:9.7.4"
@@ -7484,6 +7502,7 @@ __metadata:
   resolution: "docs@workspace:apps/docs"
   dependencies:
     "@react-scrollytelling/core": "workspace:^"
+    "@react-scrollytelling/grouped": "workspace:^"
     "@react-spring/web": ^9.7.4
     autoprefixer: ^10.4.19
     next: ^14.2.3

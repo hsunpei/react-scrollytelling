@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { useActiveSection } from '@react-scrollytelling/core';
+import { useActiveSection } from '@react-scrollytelling/grouped';
 
 const TEXT_COLOR = {
   RED: 'text-rose-500',

@@ -1,0 +1,9 @@
+{
+  "extends": "../../configs/tsconfig.libraries.json",
+  "include": ["src/**/*", "src/**/*.json"],
+  "compilerOptions": {
+    // temporarily skip lib check until we can fix the errors from react-three-fiber
+    // https://github.com/pmndrs/react-three-fiber/issues/2501
+    "skipLibCheck": true
+  },
+}

@@ -1,5 +1,5 @@
 {
-  "name": "@react-scrollytelling/core",
+  "name": "@react-scrollytelling/grouped",
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "@hsunpei",
@@ -43,6 +43,7 @@
     "vite": "^5.2.11"
   },
   "peerDependencies": {
+    "@react-scrollytelling/core": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

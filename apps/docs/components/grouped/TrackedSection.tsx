@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { useTrackedSectionScroll } from '@react-scrollytelling/core';
+import { useTrackedSectionScroll } from '@react-scrollytelling/grouped';
 
 interface TrackedSectionProps {
   className: string;

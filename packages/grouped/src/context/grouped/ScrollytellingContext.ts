@@ -1,7 +1,8 @@
 import { createContext } from 'react';
 
+import { SectionScrollInfo } from '@react-scrollytelling/core';
+
 import { TrackedSections } from './TrackedSections';
-import { SectionScrollInfo } from '../../hooks';
 
 export type sectionID = string | null;
 
