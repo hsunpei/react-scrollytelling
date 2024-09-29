@@ -45,7 +45,7 @@ export function useSectionScroll(
   sectionRef: React.RefObject<Element>,
   onScroll: (scrollInfo: SectionScrollInfo) => void,
   shouldObserve = true,
-  options: IntersectionObserverOptions
+  options?: IntersectionObserverOptions
 ) {
   const handleScroll = useCallback(
     (isIntersecting: boolean) => {

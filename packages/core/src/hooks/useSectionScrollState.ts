@@ -12,7 +12,7 @@ import { SectionScrollInfo, useSectionScroll } from './useSectionScroll';
 export function useSectionScrollState(
   sectionRef: React.RefObject<Element>,
   shouldObserve = true,
-  options: IntersectionObserverOptions
+  options?: IntersectionObserverOptions
 ) {
   const [scrolledRatio, setScrolledRatio] = useState<number>(0);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
