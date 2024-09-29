@@ -1,6 +1,10 @@
 import { useCallback, useState, useRef } from 'react';
 
-import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
+import {
+  DEFAULT_INTERSECTION_OBS_OPTIONS,
+  IntersectionObserverOptions,
+  useIntersectionObserver,
+} from './useIntersectionObserver';
 
 /**
  * A function to help track the in viewport state of an element with track once option.
@@ -9,7 +13,7 @@ import { IntersectionObserverOptions, useIntersectionObserver } from './useInter
 export function useIntersectionReveal(
   sectionRef: React.RefObject<Element>,
   trackOnce = false,
-  options: IntersectionObserverOptions
+  options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS
 ) {
   const preIntersecting = useRef(false);
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
