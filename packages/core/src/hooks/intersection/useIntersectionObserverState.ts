@@ -4,8 +4,8 @@ import { IntersectionObserverOptions, useIntersectionObserver } from './useInter
 
 export function useIntersectionObserverState(
   sectionRef: React.RefObject<Element>,
-  options: IntersectionObserverOptions,
-  shouldObserve: boolean
+  options?: IntersectionObserverOptions,
+  shouldObserve?: boolean
 ) {
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
