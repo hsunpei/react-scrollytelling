@@ -1,37 +1,38 @@
 import { useEffect, useRef } from 'react';
 
-import { useIntersectionObserverState } from '@react-scrollytelling/core';
+import { useSectionScrollState } from '@react-scrollytelling/core';
 import { Video } from '@react-scrollytelling/video';
 
 import { StickyContainer } from '../grouped/StickyContainer';
 
 export interface StickyVideoProps {
   src: string;
-  overlay?: React.ReactNode;
 }
 
-export const StickyVideo = ({ src, overlay }: StickyVideoProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+export const StickyVideo = ({ src }: StickyVideoProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting, disconnect } = useIntersectionObserverState(sectionRef, undefined, true);
-
-  useEffect(() => {
-    if (isIntersecting && videoRef.current) {
-      videoRef.current.play();
-    } else {
-      videoRef.current?.pause();
-    }
-  }, [isIntersecting]);
-
-  useEffect(() => {
-    return () => {
-      disconnect();
-    };
-  }, [disconnect]);
+  const {} = useSectionScrollState(sectionRef);
 
   return (
-    <StickyContainer overlay={overlay}>
-      <div ref={sectionRef}>
+    <StickyContainer
+      overlay={
+        <>
+          <section
+            className="border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
+            ref={sectionRef}
+          >
+            Overlay
+          </section>
+          <section
+            className="border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
+            ref={sectionRef}
+          >
+            Overlay
+          </section>
+        </>
+      }
+    >
+      <div className="absolute left-0 right-0 top-0 h-screen">
         <Video width={600} height={500} src={src} />
       </div>
     </StickyContainer>
