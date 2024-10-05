@@ -11,6 +11,7 @@
   "dependencies": {
     "@react-scrollytelling/core": "workspace:^",
     "@react-scrollytelling/grouped": "workspace:^",
+    "@react-scrollytelling/layout": "workspace:^",
     "@react-scrollytelling/video": "workspace:^",
     "@react-spring/web": "^9.7.4",
     "next": "^14.2.3",

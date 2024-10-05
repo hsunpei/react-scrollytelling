@@ -3631,6 +3631,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@react-scrollytelling/layout@workspace:^, @react-scrollytelling/layout@workspace:packages/layout":
+  version: 0.0.0-use.local
+  resolution: "@react-scrollytelling/layout@workspace:packages/layout"
+  dependencies:
+    "@testing-library/dom": ^10.4.0
+    "@testing-library/jest-dom": ^6.4.8
+    "@testing-library/react": ^16.0.0
+    jest: ^29.7.0
+    jest-environment-jsdom: ^29.7.0
+    ts-jest: ^29.2.4
+    vite: ^5.2.11
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
+
 "@react-scrollytelling/video@workspace:^, @react-scrollytelling/video@workspace:packages/video":
   version: 0.0.0-use.local
   resolution: "@react-scrollytelling/video@workspace:packages/video"
@@ -7521,6 +7538,7 @@ __metadata:
   dependencies:
     "@react-scrollytelling/core": "workspace:^"
     "@react-scrollytelling/grouped": "workspace:^"
+    "@react-scrollytelling/layout": "workspace:^"
     "@react-scrollytelling/video": "workspace:^"
     "@react-spring/web": ^9.7.4
     autoprefixer: ^10.4.19
