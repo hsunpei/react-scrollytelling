@@ -25,17 +25,22 @@ export const StickyVideo = ({ src }: StickyVideoProps) => {
             {/* One video height of the empty space */}
           </section>
           <section
-            className="relative border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
+            className="relative border-green-400 dark:border-green-700"
             ref={sectionRef}
             style={{ height }}
           >
-            {Math.round(scrolledRatio * 100)}%
+            <div
+              className="rounded-full bg-emerald-200 bg-opacity-80 px-5 py-1 text-slate-800 backdrop-blur-sm dark:bg-emerald-950 dark:bg-opacity-80 dark:text-slate-200"
+              style={{ width: `${scrolledRatio * 100}%` }}
+            >
+              {Math.round(scrolledRatio * 100)}%
+            </div>
           </section>
         </>
       }
     >
       <div ref={videoContainerRef} className="absolute left-0 right-0 top-14 h-screen">
-        <Video width={width} height={height} src={src} />
+        <Video width={width} height={height} src={src} ratio={scrolledRatio} />
       </div>
     </StickyContainer>
   );

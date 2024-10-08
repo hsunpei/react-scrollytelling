@@ -1,20 +1,19 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export interface VideoProps {
   src: string;
   className?: string;
   width: number;
   height: number;
-  percentage?: number;
+  ratio?: number;
 }
 
 // TODO:
-// - Play by percentage
 // - thumbnail
 // - preload
-// - use imperative handle to play
+// - use imperative handle to play instead of changing through props
 
-export const Video = ({ src, width, height, percentage = 0, className }: VideoProps) => {
+export const Video = React.memo(({ src, width, height, ratio = 0, className }: VideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -23,7 +22,7 @@ export const Video = ({ src, width, height, percentage = 0, className }: VideoPr
       const updateCurrentTime = () => {
         const duration = videoElement.duration;
         if (!isNaN(duration)) {
-          videoElement.currentTime = (percentage / 100) * duration;
+          videoElement.currentTime = ratio * duration;
         }
       };
 
@@ -37,7 +36,7 @@ export const Video = ({ src, width, height, percentage = 0, className }: VideoPr
         videoElement.removeEventListener('loadedmetadata', updateCurrentTime);
       };
     }
-  }, [percentage]);
+  }, [ratio]);
 
   return (
     <video
@@ -48,4 +47,4 @@ export const Video = ({ src, width, height, percentage = 0, className }: VideoPr
       className={`h-full w-full object-cover ${className}`}
     ></video>
   );
-};
+});
