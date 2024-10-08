@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { useSectionScrollState } from '@react-scrollytelling/core';
 import { useResizeObserver } from '@react-scrollytelling/layout';
@@ -15,28 +15,26 @@ export const StickyVideo = ({ src }: StickyVideoProps) => {
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const { width, height } = useResizeObserver(videoContainerRef);
 
-  const {} = useSectionScrollState(sectionRef);
+  const { scrolledRatio } = useSectionScrollState(sectionRef);
 
   return (
     <StickyContainer
       overlay={
         <>
-          <section
-            className="border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
-            ref={sectionRef}
-          >
-            Overlay
+          <section className="relative border-green-400" ref={sectionRef} style={{ height }}>
+            {/* One video height of the empty space */}
           </section>
           <section
-            className="border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
+            className="relative border-green-400 bg-green-200 dark:border-green-700 dark:bg-green-800"
             ref={sectionRef}
+            style={{ height }}
           >
-            Overlay
+            {Math.round(scrolledRatio * 100)}%
           </section>
         </>
       }
     >
-      <div ref={videoContainerRef} className="absolute left-0 right-0 top-0 h-screen">
+      <div ref={videoContainerRef} className="absolute left-0 right-0 top-14 h-screen">
         <Video width={width} height={height} src={src} />
       </div>
     </StickyContainer>
