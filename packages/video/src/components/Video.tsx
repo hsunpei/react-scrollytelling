@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useImperativeHandle, useRef } from 'react';
 
 export interface VideoProps {
   src: string;
@@ -12,39 +12,61 @@ export interface VideoProps {
 // - thumbnail
 // - preload
 // - use imperative handle to play instead of changing through props
+// - loadedmetadata
 
-export const Video = React.memo(({ src, width, height, ratio = 0, className }: VideoProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+export const Video = ({ src, width, height, ratio = 0, className }: VideoProps) => {
+  const videoRef = useRef<VideoRef>(null);
 
   useEffect(() => {
-    const videoElement = videoRef.current;
-    if (videoElement) {
-      const updateCurrentTime = () => {
-        const duration = videoElement.duration;
-        if (!isNaN(duration)) {
-          videoElement.currentTime = ratio * duration;
-        }
-      };
-
-      // update currentTime when the video metadata is loaded
-      videoElement.addEventListener('loadedmetadata', updateCurrentTime);
-
-      // update currentTime when the percentage prop changes
-      updateCurrentTime();
-
-      return () => {
-        videoElement.removeEventListener('loadedmetadata', updateCurrentTime);
-      };
+    // update currentTime when the percentage prop changes
+    if (!videoRef.current) {
+      return;
     }
+
+    videoRef.current.setRatio(ratio);
   }, [ratio]);
 
   return (
-    <video
+    <VideoWithImperativeHandle
       ref={videoRef}
       width={width}
       height={height}
       src={src}
-      className={`h-full w-full object-cover ${className}`}
-    ></video>
+      className={className}
+    ></VideoWithImperativeHandle>
   );
-});
+};
+
+export interface VideoRef {
+  setRatio: (ratio: number) => void;
+}
+
+export const VideoWithImperativeHandle = React.memo(
+  React.forwardRef<VideoRef, VideoProps>(({ src, width, height, className }, ref) => {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useImperativeHandle(
+      ref,
+      () => {
+        return {
+          setRatio: (ratio: number) => {
+            const videoElement = videoRef.current;
+            if (!videoElement) {
+              return;
+            }
+
+            const duration = videoElement.duration;
+            if (!isNaN(duration)) {
+              videoElement.currentTime = ratio * duration;
+            }
+          },
+        };
+      },
+      []
+    );
+
+    return (
+      <video ref={videoRef} width={width} height={height} src={src} className={className}></video>
+    );
+  })
+);

@@ -40,7 +40,13 @@ export const StickyVideo = ({ src }: StickyVideoProps) => {
       }
     >
       <div ref={videoContainerRef} className="absolute left-0 right-0 top-14 h-screen">
-        <Video width={width} height={height} src={src} ratio={scrolledRatio} />
+        <Video
+          className="h-full w-full object-cover"
+          width={width}
+          height={height}
+          src={src}
+          ratio={Math.round(scrolledRatio * 100) / 100}
+        />
       </div>
     </StickyContainer>
   );
