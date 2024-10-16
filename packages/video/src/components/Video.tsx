@@ -1,4 +1,6 @@
-import React, { useEffect, useImperativeHandle, useRef } from 'react';
+import React, { useEffect, useImperativeHandle, useCallback, useRef } from 'react';
+
+import { useRafThrottle } from '@react-scrollytelling/core';
 
 export interface VideoProps {
   src: string;
@@ -18,11 +20,10 @@ export const Video = ({ src, width, height, ratio = 0, className }: VideoProps) 
   const videoRef = useRef<VideoRef>(null);
 
   useEffect(() => {
-    // update currentTime when the percentage prop changes
+    // update currentTime when the ratio prop changes
     if (!videoRef.current) {
       return;
     }
-
     videoRef.current.setRatio(ratio);
   }, [ratio]);
 
@@ -45,28 +46,45 @@ export const VideoWithImperativeHandle = React.memo(
   React.forwardRef<VideoRef, VideoProps>(({ src, width, height, className }, ref) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    const setVideoRatio = useCallback((ratio: number) => {
+      const videoElement = videoRef.current;
+      if (!videoElement) {
+        return;
+      }
+
+      const duration = videoElement.duration;
+      if (!isNaN(duration)) {
+        requestAnimationFrame(() => {
+          videoElement.currentTime = Math.round(ratio * duration * 100) / 100;
+          console.log('setRatio', ratio, Math.round(ratio * duration * 100) / 100);
+        });
+      }
+    }, []);
+    const setVideoRatioThrottled = useRafThrottle(setVideoRatio);
+
     useImperativeHandle(
       ref,
       () => {
         return {
-          setRatio: (ratio: number) => {
-            const videoElement = videoRef.current;
-            if (!videoElement) {
-              return;
-            }
-
-            const duration = videoElement.duration;
-            if (!isNaN(duration)) {
-              videoElement.currentTime = ratio * duration;
-            }
-          },
+          setRatio: setVideoRatioThrottled,
         };
       },
-      []
+      [setVideoRatioThrottled]
     );
 
     return (
-      <video ref={videoRef} width={width} height={height} src={src} className={className}></video>
+      <video
+        ref={videoRef}
+        width={width}
+        height={height}
+        src={src}
+        className={className}
+        muted
+        disablePictureInPicture
+        disableRemotePlayback
+        playsInline
+        controls={false}
+      ></video>
     );
   })
 );
