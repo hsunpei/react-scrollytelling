@@ -3,7 +3,12 @@ import React, { useEffect, useImperativeHandle, useCallback, useRef } from 'reac
 import { useRafThrottle } from '@react-scrollytelling/core';
 
 export interface VideoProps {
+  /** Source of the mp4 video */
   src: string;
+
+  /** Source of the webm video */
+  srcWebm?: string;
+
   className?: string;
   width: number;
   height: number;
@@ -13,10 +18,9 @@ export interface VideoProps {
 // TODO:
 // - thumbnail
 // - preload
-// - use imperative handle to play instead of changing through props
 // - loadedmetadata
 
-export const Video = ({ src, width, height, ratio = 0, className }: VideoProps) => {
+export const Video = ({ src, srcWebm, width, height, ratio = 0, className }: VideoProps) => {
   const videoRef = useRef<VideoRef>(null);
 
   useEffect(() => {
@@ -33,6 +37,7 @@ export const Video = ({ src, width, height, ratio = 0, className }: VideoProps) 
       width={width}
       height={height}
       src={src}
+      srcWebm={srcWebm}
       className={className}
     ></VideoWithImperativeHandle>
   );
@@ -43,7 +48,7 @@ export interface VideoRef {
 }
 
 export const VideoWithImperativeHandle = React.memo(
-  React.forwardRef<VideoRef, VideoProps>(({ src, width, height, className }, ref) => {
+  React.forwardRef<VideoRef, VideoProps>(({ src, srcWebm, width, height, className }, ref) => {
     const videoRef = useRef<HTMLVideoElement>(null);
 
     const setVideoRatio = useCallback((ratio: number) => {
@@ -77,14 +82,16 @@ export const VideoWithImperativeHandle = React.memo(
         ref={videoRef}
         width={width}
         height={height}
-        src={src}
         className={className}
         muted
         disablePictureInPicture
         disableRemotePlayback
         playsInline
         controls={false}
-      ></video>
+      >
+        {srcWebm && <source src={srcWebm} type="video/webm" />}
+        <source src={src} type="video/mp4" />
+      </video>
     );
   })
 );
