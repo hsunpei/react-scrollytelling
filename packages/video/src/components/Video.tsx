@@ -17,8 +17,6 @@ export interface VideoProps {
 
 // TODO:
 // - thumbnail
-// - preload
-// - loadedmetadata
 
 export const Video = ({ src, srcWebm, width, height, ratio = 0, className }: VideoProps) => {
   const videoRef = useRef<VideoRef>(null);
@@ -88,6 +86,8 @@ export const VideoWithImperativeHandle = React.memo(
         disableRemotePlayback
         playsInline
         controls={false}
+        // preload the video
+        preload="auto"
       >
         {srcWebm && <source src={srcWebm} type="video/webm" />}
         <source src={src} type="video/mp4" />
