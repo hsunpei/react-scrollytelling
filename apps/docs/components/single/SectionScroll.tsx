@@ -10,7 +10,7 @@ export const SectionScroll = ({ className }: { className: string }) => {
     <div className="mx-2 my-12">
       <section
         ref={sectionRef}
-        className={`flex h-96 flex-col items-center justify-center rounded-lg border-4 p-10 ${className}`}
+        className={`flex h-96 flex-col items-center justify-center rounded-lg border-2 bg-opacity-20 p-10 drop-shadow-2xl dark:bg-opacity-20 ${className}`}
       >
         <ul className="list-disc text-lg marker:text-slate-400">
           <li>
