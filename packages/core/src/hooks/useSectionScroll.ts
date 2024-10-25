@@ -8,9 +8,16 @@ import { useRafThrottle } from './performance/useRafThrottle';
 import { clampScrolledRatio, getScrollPosition } from '../utils';
 
 export interface SectionScrollInfo {
+  /** Whether the section is intersecting with the viewport */
   isIntersecting: boolean;
+
+  /** The ratio of the section that is above the bottom of the viewport */
   scrolledRatio: number;
+
+  /** The distance from the top of the page to the page position of the bottom of the viewport */
   scrollBottom: number;
+
+  /** The distance from the top of the section to the bottom of the viewport */
   distance: number;
 }
 
@@ -38,8 +45,9 @@ export function getSectionScrollInfo(
  * his hook will pass the ratio of the section that is above the bottom of the viewport
  * through the `onScroll` callback.
  * @param sectionRef - The reference to the section element
- * @param shouldObserve - Whether the underlying IntersectionObserver should be active
  * @param onScroll - The callback to track the scroll ratio
+ * @param shouldObserve - Whether the underlying IntersectionObserver should be active
+ * @param options - The options to pass to the IntersectionObserver
  */
 export function useSectionScroll(
   sectionRef: React.RefObject<Element>,

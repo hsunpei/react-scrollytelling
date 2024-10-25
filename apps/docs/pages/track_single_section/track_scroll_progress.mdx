@@ -1,19 +1,26 @@
 import { SectionScroll } from '../../components/single/SectionScroll';
 
-Detect whether an element is in view with the Intersection Observer API.
+Track the scroll progress of a single section.
+
+`useSectionScroll()` provides a callback to update the scroll progress without triggering re-renders.
+If you are using an animation library like [react-spring](https://react-spring.dev/docs/advanced/spring-value) or [frame-motion](https://www.framer.com/motion/motionvalue/),
+you can use the callback to update the animation value.
+
+Alternatively, `useSectionScrollState()` provides the scroll progress as a state, which is just a simple wrapper around `useSectionScroll()`.
+
 
 ## Usage
 
 ```tsx
-export const IntersectionSection = () => {
+export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting } = useIntersectionObserverState(sectionRef);
+  const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
 
   return (
     <>
       <section ref={sectionRef}>
-        <h1>Intersection Observer</h1>
         <p>isIntersecting: {`${isIntersecting}`}</p>
+        <p>scrolledRatio: {`${scrolledRatio}`}</p>
       </section>
     </>
   );
@@ -25,18 +32,25 @@ export const IntersectionSection = () => {
 The `useIntersectionObserver` hook accepts the following parameters:
 
 ```jsx
-export function useIntersectionObserver(
+export function useSectionScroll(
   sectionRef: React.RefObject<Element>,
-  options: IntersectionObserverOptions,
-  shouldObserve: boolean,
-  onObserve?: (isIntersecting: IntersectionObserverEntry) => void
+  onScroll: (scrollInfo: SectionScrollInfo) => void,
+  shouldObserve = true,
+  options?: IntersectionObserverOptions
 ) // ...
 ```
 
-- `sectionRef`: A reference to the element to observe.
-- `options`: Allow customizing the observer. You can pass an `IntersectionObserverOptions` [object to configure the observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#instance_properties).
+- `sectionRef`: The reference to the section element.
+- `onScroll` - The callback to track the scroll ratio
+  - `scrollInfo`: An object that contains the following properties:
+    - `isIntersecting`: Whether the section is intersecting with the viewport.
+    - `scrollRatio`: The ratio of the section that is above the bottom of the viewport. The value ranges from `0` to `1`.
+    - `scrollBottom`: The distance from the top of the page to the page position of the bottom of the viewport (`scrollTop` + `windowHeight`).
+    - `distance`: The distance from the top of the section to the bottom of the viewport.
 - `shouldObserve`: A boolean that determines whether to observe the element. You can disable the observer by setting this value to `false`. Default value: `true`.
-- `onObserve`: A callback function that is called when the element is intersecting. The callback receives an `IntersectionObserverEntry` object as an argument.
+- `options`: Allow customizing the observer. You can pass an `IntersectionObserverOptions` [object to configure the observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#instance_properties).
+
+
 
 <SectionScroll className="bg-emerald-100 dark:bg-emerald-700" />
 

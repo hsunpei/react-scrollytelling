@@ -24,9 +24,6 @@ export interface VideoProps {
   loadingOverlay?: React.ReactNode;
 }
 
-// TODO:
-// - thumbnail
-
 export const Video = ({
   src,
   srcWebm,
