@@ -1,8 +1,8 @@
 import { TrackedSection } from '../components/grouped/TrackedSection';
-import { StickyContainer } from '../components/grouped/StickyContainer';
 import { ActiveSectionInfo } from '../components/grouped/ActiveSectionInfo';
 
 import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
+import { StickyContainer } from '@react-scrollytelling/layout';
 
 To tell a story that spans multiple sections, for example, changing the background based on the section in view,
 multiple sections tracking tools of `react-scrollytelling` can help you achieve this.
@@ -145,9 +145,8 @@ You can replace the states with motion values from animation libraries like [rea
         </>
       }
     >
-      <div className="absolute left-0 right-0 top-0 h-screen">
+        {/* Background */}
         <ActiveSectionInfo />
-      </div>
     </StickyContainer>
   </ScrollytellingProvider>
 </div>
