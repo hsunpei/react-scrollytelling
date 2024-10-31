@@ -7,7 +7,7 @@ import { SectionScrollInfo, useSectionScroll } from './useSectionScroll';
  * Get the state of the section scroll
  * @param sectionRef - The reference to the section element
  * @param shouldObserve - Whether the underlying IntersectionObserver should be active
- * @param onScroll - The callback to track the scroll ratio
+ * @param options - The options to pass to the IntersectionObserver
  */
 export function useSectionScrollState(
   sectionRef: React.RefObject<Element>,

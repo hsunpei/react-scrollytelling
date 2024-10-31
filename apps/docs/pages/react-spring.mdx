@@ -1,0 +1,32 @@
+import {
+  SectionScrollSpring
+} from '../components/single/SectionScrollSpring';
+
+Track the scroll progress of a single section.
+
+`useSectionScroll()` provides a callback to update the scroll progress without triggering re-renders.
+If you are using an animation library like [react-spring](https://react-spring.dev/docs/advanced/spring-value) or [frame-motion](https://www.framer.com/motion/motionvalue/),
+you can use the callback to update the animation value.
+
+Alternatively, `useSectionScrollState()` provides the scroll progress as a state, which is just a simple wrapper around `useSectionScroll()`.
+
+
+## Usage
+
+```tsx
+export const Section = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
+
+  return (
+    <>
+      <section ref={sectionRef}>
+        <p>isIntersecting: {`${isIntersecting}`}</p>
+        <p>scrolledRatio: {`${scrolledRatio}`}</p>
+      </section>
+    </>
+  );
+};
+```
+
+<SectionScrollSpring className="border-green-400 dark:border-green-700 bg-green-200 dark:bg-green-800" />
