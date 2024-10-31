@@ -2,28 +2,37 @@ import {
   SectionScrollSpring
 } from '../components/single/SectionScrollSpring';
 
-Track the scroll progress of a single section.
+Using a state to do animations can be very expensive in terms of performance.
 
-`useSectionScroll()` provides a callback to update the scroll progress without triggering re-renders.
-If you are using an animation library like [react-spring](https://react-spring.dev/docs/advanced/spring-value) or [frame-motion](https://www.framer.com/motion/motionvalue/),
-you can use the callback to update the animation value.
+`react-spring` provides a way to control the styles/text without triggering re-renders.
+By using the [SpringValue](https://react-spring.dev/docs/advanced/spring-value) with an animated element, you can update the value without triggering re-renders.
 
-Alternatively, `useSectionScrollState()` provides the scroll progress as a state, which is just a simple wrapper around `useSectionScroll()`.
+react-scrollytelling provides a wrapper around `useSectionScroll()` to update the `SpringValue`, so you can animate the element based on the scroll progress.
 
 
-## Usage
+## Example
+
+### Single Section
+
+You can use `useSectionScrollSpring()` which returned updated `SpringValue` - `scrolledRatioSpring` based on the scroll progress:
 
 ```tsx
+import { useSectionScrollSpring } from '@react-scrollytelling/react-spring';
+import { animated } from '@react-spring/web';
+
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
+  const { scrolledRatioSpring } = useSectionScrollSpring(sectionRef);
 
   return (
     <>
-      <section ref={sectionRef}>
-        <p>isIntersecting: {`${isIntersecting}`}</p>
-        <p>scrolledRatio: {`${scrolledRatio}`}</p>
-      </section>
+      {/* Use SpringValue with an animated element to change the styles */}
+      <animated.section ref={sectionRef} style={{
+          opacity: scrolledRatioSpring.to((val) => 0.2 + 0.8 * val),
+          borderWidth: scrolledRatioSpring.to((val) => `${Math.round(val * 6)}px`),
+        }}>
+      {/* ... */}
+      </animated.section>
     </>
   );
 };

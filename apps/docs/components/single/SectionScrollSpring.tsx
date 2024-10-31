@@ -9,9 +9,13 @@ export const SectionScrollSpring = ({ className }: { className: string }) => {
 
   return (
     <div className="mx-2 my-12">
-      <section
+      <animated.section
         ref={sectionRef}
-        className={`flex h-96 flex-col items-center justify-center rounded-lg border-2 bg-opacity-20 p-10 drop-shadow-2xl dark:bg-opacity-20 ${className}`}
+        style={{
+          opacity: scrolledRatioSpring.to((val) => 0.2 + 0.8 * val),
+          borderWidth: scrolledRatioSpring.to((val) => `${Math.round(val * 6)}px`),
+        }}
+        className={`flex h-96 flex-col items-center rounded-lg bg-opacity-20 p-10 drop-shadow-2xl dark:bg-opacity-20 ${className}`}
       >
         <ul className="list-disc text-lg marker:text-slate-400">
           <li>
@@ -24,7 +28,7 @@ export const SectionScrollSpring = ({ className }: { className: string }) => {
             </animated.span>
           </li>
         </ul>
-      </section>
+      </animated.section>
     </div>
   );
 };
