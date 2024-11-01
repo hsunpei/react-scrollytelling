@@ -1,3 +1,9 @@
+import { TrackedSection } from '../components/grouped/TrackedSection';
+import { ActiveSectionInfoSpring } from '../components/grouped/ActiveSectionInfoSpring';
+
+import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
+import { StickyContainerTailwind } from '@react-scrollytelling/layout';
+
 import {
   SectionScrollSpring
 } from '../components/single/SectionScrollSpring';
@@ -38,4 +44,50 @@ export const Section = () => {
 };
 ```
 
+### Example
+
 <SectionScrollSpring className="border-green-400 dark:border-green-700 bg-green-200 dark:bg-green-800" />
+
+
+## Multiple Sections
+
+### Example
+
+<div className="mx-2 my-12">
+  <ScrollytellingProvider>
+    <StickyContainerTailwind
+      overlay={
+        <>
+          <TrackedSection
+            sectionID="RED"
+            className="border-rose-400 dark:border-rose-700 bg-rose-200 dark:bg-rose-800 rounded-t-lg pt-[50vh]"
+          />
+          <TrackedSection
+            sectionID="ORANGE"
+            className="-mt-[3px] border-orange-400 dark:border-orange-700 bg-orange-200 dark:bg-orange-800"
+          />
+          <TrackedSection
+            sectionID="YELLOW"
+            className="-mt-[3px] border-yellow-400 dark:border-yellow-700 bg-yellow-200 dark:bg-yellow-800"
+          />
+          <TrackedSection
+            sectionID="GREEN"
+            className="-mt-[3px] border-green-400 dark:border-green-700 bg-green-200 dark:bg-green-800"
+          />
+          <TrackedSection
+            sectionID="BLUE"
+            className="-mt-[3px] border-blue-400 dark:border-blue-700 bg-blue-200 dark:bg-blue-800"
+          />
+          <TrackedSection
+            sectionID="PURPLE"
+            className="-mt-[3px] border-purple-400 dark:border-purple-700 bg-purple-200 dark:bg-purple-800 rounded-b-lg pt-[10vh]"
+          />
+        </>
+      }
+    >
+      {/* Background */}
+      <ActiveSectionInfoSpring />
+    </StickyContainerTailwind>
+  </ScrollytellingProvider>
+</div>
+

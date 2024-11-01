@@ -8,7 +8,7 @@ import {
 import { SpringValue } from '@react-spring/web';
 
 /**
- * Get the state of the section scroll
+ * Get the Spring value (react-spring) of the section scroll
  * @param sectionRef - The reference to the section element
  * @param shouldObserve - Whether the underlying IntersectionObserver should be active
  * @param onScroll - The callback to track the scroll ratio
@@ -24,7 +24,6 @@ export function useSectionScrollSpring(
   const onSectionScroll = useCallback(
     (scrollInfo: SectionScrollInfo) => {
       const { scrolledRatio } = scrollInfo;
-      console.log('onSectionScroll', scrolledRatio);
       scrolledRatioSpringRef.current.set(scrolledRatio);
 
       if (onScroll) {

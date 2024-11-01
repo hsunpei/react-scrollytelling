@@ -43,6 +43,8 @@
     "vite": "^5.2.11"
   },
   "peerDependencies": {
+    "@react-scrollytelling/core": "workspace:^",
+    "@react-scrollytelling/grouped": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-spring": "^9.7.5"

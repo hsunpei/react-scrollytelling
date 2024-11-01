@@ -22,7 +22,6 @@ export const SectionScrollSpring = ({ className }: { className: string }) => {
             scrolledRatio:{' '}
             <animated.span>
               {scrolledRatioSpring.to((val) => {
-                console.log(val, Math.round(val * 10000) / 10000);
                 return `${Math.round(val * 10000) / 10000}`;
               })}
             </animated.span>
