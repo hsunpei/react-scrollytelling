@@ -150,3 +150,53 @@ You can replace the states with motion values from animation libraries like [rea
     </StickyContainerTailwind>
   </ScrollytellingProvider>
 </div>
+
+
+## Note
+
+To show the sticky background effect with a series of multiple tracked sections on its top,
+you can use `StickyContainer` to help you create the effect easily:
+
+```tsx
+import { StickyContainer } from '@react-scrollytelling/layout';
+
+ <StickyContainer
+      overlay={
+        <>
+          {/* Put foreground sections here */}
+          <TrackedSection
+            sectionID="RED"
+            className="border-rose-400 dark:border-rose-700 bg-rose-200 dark:bg-rose-800 rounded-t-lg pt-[50vh]"
+          />
+          {/* ... More tracked sections */}
+        </>
+      }
+    >
+        {/* Put sticky background here */}
+        <StickyBackground />
+</StickyContainer>
+```
+
+
+Alternatively, if you want to use the Tailwind CSS utility classes to style the sticky container,
+you can use `StickyContainerTailwind` instead of `StickyContainer`:
+
+```tsx
+import { StickyContainerTailwind } from '@react-scrollytelling/layout';
+
+<StickyContainerTailwind>
+    {/* ...*/}
+<StickyBackground />
+```
+
+In your Tailwind CSS configuration, remember to import `@react-scrollytelling/layout` so the classes can be applied:
+
+```js
+module.exports = {
+  // ...
+  content: [
+    // path to the library
+    '../../node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}',
+  ],
+};
+```

@@ -8,5 +8,6 @@ module.exports = {
     './components/**/*.js',
     './pages/**/*.{md,mdx}',
     './theme.config.tsx',
+    '../../node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}',
   ],
 };
