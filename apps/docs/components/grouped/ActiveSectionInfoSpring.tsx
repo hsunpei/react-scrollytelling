@@ -27,7 +27,7 @@ export const ActiveSectionInfoSpring = () => {
         <div>
           <div className="w-full rounded-full bg-gray-200 dark:bg-gray-700">
             <animated.div
-              className="min-w-20 rounded-full bg-blue-600  p-0.5 text-center text-xs font-medium leading-none text-blue-100"
+              className="mt-2 min-w-20 rounded-full bg-blue-600  p-0.5 text-center text-xs font-medium leading-none text-blue-100"
               style={{
                 width: scrolledRatioSpring.to((val) => {
                   return `${Math.round(val * 10000) / 100}%`;

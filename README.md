@@ -2,6 +2,8 @@
 
 ## To develop
 
+Copy `.env.example` to `.env` and set up the variables.
+
 ```bash
 yarn dev
 ```

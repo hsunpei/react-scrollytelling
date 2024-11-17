@@ -2257,10 +2257,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hsunpei/prettier-config@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@hsunpei/prettier-config@npm:1.0.2::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40hsunpei%2Fprettier-config%2F1.0.2%2F8071d9335bc954ada59835a7f0528a895a2d5c5c"
-  checksum: 19358e9af4d868b73360a32928f4b338440de261c6e1ff738a585544dd7a760e40223e0db5e561bc5bc658f0f60b6fb378b34ed46df3b94e211cb021d57946ec
+"@hsunpei/prettier-config@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@hsunpei/prettier-config@npm:1.0.1"
+  checksum: 51472d94956e95fb4063df7b8199d7c9ef00627e98f6d8868f392bca6dbccf8896df967a22542dccf31dc851b8d02c64d5d5a67bd6568085d6c7a46bf63ee802
   languageName: node
   linkType: hard
 
@@ -15288,7 +15288,7 @@ __metadata:
     "@commitlint/cli": ^17.6.6
     "@hsunpei/commitlint-config": ^0.1.0
     "@hsunpei/eslint-config": ^0.0.8
-    "@hsunpei/prettier-config": ^1.0.2
+    "@hsunpei/prettier-config": ^1.0.1
     "@hsunpei/stylelint-config": ^0.1.6
     "@hsunpei/typescript-config": ^1.0.7
     "@rollup/plugin-node-resolve": ^15.2.3

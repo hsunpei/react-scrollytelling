@@ -47,7 +47,7 @@
     "@commitlint/cli": "^17.6.6",
     "@hsunpei/commitlint-config": "^0.1.0",
     "@hsunpei/eslint-config": "^0.0.8",
-    "@hsunpei/prettier-config": "^1.0.2",
+    "@hsunpei/prettier-config": "^1.0.1",
     "@hsunpei/stylelint-config": "^0.1.6",
     "@hsunpei/typescript-config": "^1.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
