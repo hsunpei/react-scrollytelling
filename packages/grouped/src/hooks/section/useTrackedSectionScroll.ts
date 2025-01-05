@@ -46,8 +46,6 @@ export function useTrackedSectionScroll(
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
-      console.log('onObserve', isIntersecting, sectionID);
-
       if (isIntersecting) {
         const { scrollTop } = getScrollPosition();
 
@@ -56,15 +54,7 @@ export function useTrackedSectionScroll(
           sectionBottom: (sectionRef.current?.getBoundingClientRect().bottom || 0) + scrollTop,
           onActiveScroll: onScroll,
         });
-
-        console.log('useTrackedSectionScroll > onObserve > added', sectionID, {
-          sectionTop: sectionRef.current?.getBoundingClientRect().top || 0,
-          sectionBottom: sectionRef.current?.getBoundingClientRect().bottom || 0,
-          onActiveScroll: onScroll,
-        });
       } else {
-        console.log('useTrackedSectionScroll > onObserve > removed', sectionID);
-
         // notify the scroll progress that isIntersecting = false
         const { scrolledRatio = 0, scrollBottom = 0, distance = 0 } = scrollInfoRef.current || {};
 

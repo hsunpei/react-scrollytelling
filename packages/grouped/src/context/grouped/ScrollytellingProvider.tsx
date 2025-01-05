@@ -67,12 +67,6 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
 
     const activeSection = trackedSectionsRef.current.getSection(activeSectionId || '');
 
-    console.log('handleScroll', {
-      activeSectionId,
-      activeSection,
-      trackedSection: trackedSectionsRef.current,
-    });
-
     // notify the active section about its scroll progress
     if (activeSection) {
       const { sectionTop, sectionBottom } = activeSection;
@@ -109,8 +103,6 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
-      console.log('*** ScrollytellingProvider > onObserve', isIntersecting);
-
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
         window.addEventListener('scroll', handleScrollThrottled);

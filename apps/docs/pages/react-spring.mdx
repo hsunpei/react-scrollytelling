@@ -53,6 +53,14 @@ export const Section = () => {
 
 ### Example
 
+You can simply the example in [track grouped sections](/track_grouped_sections) and use `useActiveSectionSpring()` to get the active section information and the updated `SpringValue` based on the scroll progress:
+
+```tsx
+import { useActiveSectionSpring } from '@react-scrollytelling/react-spring';
+
+const { trackingId, scrolledRatioSpring } = useActiveSectionSpring();
+```
+
 <div className="mx-2 my-12">
   <ScrollytellingProvider>
     <StickyContainerTailwind

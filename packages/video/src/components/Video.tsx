@@ -78,7 +78,6 @@ export const VideoWithImperativeHandle = React.memo(
         if (!isNaN(duration)) {
           requestAnimationFrame(() => {
             videoElement.currentTime = Math.round(ratio * duration * 100) / 100;
-            console.log('setRatio', ratio, Math.round(ratio * duration * 100) / 100);
           });
         }
       }, []);
@@ -95,12 +94,10 @@ export const VideoWithImperativeHandle = React.memo(
       );
 
       const handleWaiting = useCallback(() => {
-        console.log('waiting');
         setIsLoading(true);
       }, []);
 
       const handleCanPlay = useCallback(() => {
-        console.log('can play');
         setIsLoading(false);
       }, []);
 
