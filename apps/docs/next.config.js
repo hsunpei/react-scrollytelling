@@ -4,6 +4,8 @@ const withNextra = require('nextra')({
   themeConfig: './theme.config.tsx',
 });
 
+// Use Nextra as the documentation generator:
+// https://nextra.site/docs
 module.exports = withNextra({
   output: 'export',
   basePath: '/react-scrollytelling',
