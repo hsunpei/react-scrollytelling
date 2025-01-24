@@ -7,6 +7,8 @@ Detect whether an element is in view with the Intersection Observer API.
 ## Usage
 
 ```tsx
+import { useIntersectionObserverState } from '@react-scrollytelling/core';
+
 export const IntersectionSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { isIntersecting } = useIntersectionObserverState(sectionRef);

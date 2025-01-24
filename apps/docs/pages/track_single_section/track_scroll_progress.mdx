@@ -12,6 +12,8 @@ Alternatively, `useSectionScrollState()` provides the scroll progress as a state
 ## Usage
 
 ```tsx
+import { useSectionScrollState } from '@react-scrollytelling/core';
+
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { isIntersecting, scrolledRatio } = useSectionScrollState(sectionRef);
