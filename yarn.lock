@@ -3712,6 +3712,27 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@react-scrollytelling/framer-motion@workspace:^, @react-scrollytelling/framer-motion@workspace:packages/framer-motion":
+  version: 0.0.0-use.local
+  resolution: "@react-scrollytelling/framer-motion@workspace:packages/framer-motion"
+  dependencies:
+    "@testing-library/dom": ^10.4.0
+    "@testing-library/jest-dom": ^6.4.8
+    "@testing-library/react": ^16.0.0
+    jest: ^29.7.0
+    jest-environment-jsdom: ^29.7.0
+    motion: ^12.23.11
+    ts-jest: ^29.2.4
+    vite: ^5.2.11
+  peerDependencies:
+    "@react-scrollytelling/core": "workspace:^"
+    "@react-scrollytelling/grouped": "workspace:^"
+    motion: ^12.23.11
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
+
 "@react-scrollytelling/grouped@workspace:^, @react-scrollytelling/grouped@workspace:packages/grouped":
   version: 0.0.0-use.local
   resolution: "@react-scrollytelling/grouped@workspace:packages/grouped"
@@ -7693,6 +7714,7 @@ __metadata:
   resolution: "docs@workspace:apps/docs"
   dependencies:
     "@react-scrollytelling/core": "workspace:^"
+    "@react-scrollytelling/framer-motion": "workspace:^"
     "@react-scrollytelling/grouped": "workspace:^"
     "@react-scrollytelling/layout": "workspace:^"
     "@react-scrollytelling/react-spring": "workspace:^"
@@ -9142,6 +9164,28 @@ __metadata:
   version: 4.3.7
   resolution: "fraction.js@npm:4.3.7"
   checksum: e1553ae3f08e3ba0e8c06e43a3ab20b319966dfb7ddb96fd9b5d0ee11a66571af7f993229c88ebbb0d4a816eb813a24ed48207b140d442a8f76f33763b8d1f3f
+  languageName: node
+  linkType: hard
+
+"framer-motion@npm:^12.23.16":
+  version: 12.23.16
+  resolution: "framer-motion@npm:12.23.16"
+  dependencies:
+    motion-dom: ^12.23.12
+    motion-utils: ^12.23.6
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: c41934987ba76c76dfd9ff51831ae9c4adf816a0094b724c82aa31c1052c57fcd01ca7c6eb217f64150740a4d2065066d6dcf01b4d738dc84389ac9b369f0626
   languageName: node
   linkType: hard
 
@@ -13636,6 +13680,43 @@ __metadata:
   version: 1.0.1
   resolution: "modify-values@npm:1.0.1"
   checksum: 8296610c608bc97b03c2cf889c6cdf4517e32fa2d836440096374c2209f6b7b3e256c209493a0b32584b9cb32d528e99d0dd19dcd9a14d2d915a312d391cc7e9
+  languageName: node
+  linkType: hard
+
+"motion-dom@npm:^12.23.12":
+  version: 12.23.12
+  resolution: "motion-dom@npm:12.23.12"
+  dependencies:
+    motion-utils: ^12.23.6
+  checksum: 3fb9450a9a3312ff11a9d0f7e6d44474c2bc66409cd7a2b4a29fc0e2e641414a4e1f869c0110d92bbaf5b4663bb49edccc745fad077d03169d96c2a361f7dc73
+  languageName: node
+  linkType: hard
+
+"motion-utils@npm:^12.23.6":
+  version: 12.23.6
+  resolution: "motion-utils@npm:12.23.6"
+  checksum: e7c0b1d7a893c5979eab529f2bd269031f71f8d23cbf8be2ec8785558544ee45b9ba7b23390f9a46f2f0a493903b6adc0666229de3b05e977a0bfc3c5fb13d8b
+  languageName: node
+  linkType: hard
+
+"motion@npm:^12.23.11":
+  version: 12.23.16
+  resolution: "motion@npm:12.23.16"
+  dependencies:
+    framer-motion: ^12.23.16
+    tslib: ^2.4.0
+  peerDependencies:
+    "@emotion/is-prop-valid": "*"
+    react: ^18.0.0 || ^19.0.0
+    react-dom: ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@emotion/is-prop-valid":
+      optional: true
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: d0da7b1ccd1822bd121a93b9532b981b4cb77d7eef4dcb98452035cec03cbb7c1d1e2b3fa085e64e0f11fa71fcfb02ace7be9f322670931e39803522cfc02bbb
   languageName: node
   linkType: hard
 
