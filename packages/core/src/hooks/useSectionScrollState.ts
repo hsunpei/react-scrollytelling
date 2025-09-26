@@ -10,7 +10,7 @@ import { SectionScrollInfo, useSectionScroll } from './useSectionScroll';
  * @param options - The options to pass to the IntersectionObserver
  */
 export function useSectionScrollState(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   shouldObserve = true,
   options?: IntersectionObserverOptions
 ) {

@@ -14,7 +14,7 @@ export const DEFAULT_INTERSECTION_OBS_OPTIONS: IntersectionObserverOptions = {};
  * to detect when the section is visible in the viewport.
  */
 export function useIntersectionObserver(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS,
   shouldObserve = true,
   onObserve?: (entry: IntersectionObserverEntry, disconnect: () => void) => void
@@ -43,7 +43,7 @@ export function useIntersectionObserver(
       const sectionElement = sectionRef.current;
 
       if (sectionElement) {
-        observerRef.current.observe(sectionRef.current);
+        observerRef.current.observe(sectionElement);
       }
 
       return () => {
@@ -52,7 +52,7 @@ export function useIntersectionObserver(
         }
       };
     }
-  }, [sectionRef, options, shouldObserve, onObserve]);
+  }, [sectionRef, options, shouldObserve, onObserve, disconnect]);
 
   return { isIntersecting, disconnect };
 }

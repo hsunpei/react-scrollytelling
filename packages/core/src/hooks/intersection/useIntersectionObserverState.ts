@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
 
 export function useIntersectionObserverState(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   options?: IntersectionObserverOptions,
   shouldObserve?: boolean
 ) {

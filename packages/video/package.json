@@ -1,6 +1,6 @@
 {
   "name": "@react-scrollytelling/video",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "> TODO: description",
   "author": "@hsunpei",
   "license": "MIT",
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "@react-scrollytelling/core": "workspace:^",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   }
 }

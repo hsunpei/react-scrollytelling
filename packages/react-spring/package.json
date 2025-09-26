@@ -1,6 +1,6 @@
 {
   "name": "@react-scrollytelling/react-spring",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "> TODO: description",
   "author": "@hsunpei",
   "license": "MIT",
@@ -45,8 +45,8 @@
   "peerDependencies": {
     "@react-scrollytelling/core": "workspace:^",
     "@react-scrollytelling/grouped": "workspace:^",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-spring": "^9.7.5"
+    "@react-spring/web": "^10.0.3",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   }
 }

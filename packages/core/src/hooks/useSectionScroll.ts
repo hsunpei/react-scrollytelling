@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 
+import { clampScrolledRatio, getScrollPosition } from '../utils';
 import {
   IntersectionObserverOptions,
   useIntersectionObserver,
 } from './intersection/useIntersectionObserver';
 import { useRafThrottle } from './performance/useRafThrottle';
-import { clampScrolledRatio, getScrollPosition } from '../utils';
 
 export interface SectionScrollInfo {
   /** Whether the section is intersecting with the viewport */
@@ -22,7 +22,7 @@ export interface SectionScrollInfo {
 }
 
 export function getSectionScrollInfo(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   isIntersecting: boolean
 ): SectionScrollInfo {
   // TODO: can possibly reduce the measurement by using resizeObserver
@@ -50,7 +50,7 @@ export function getSectionScrollInfo(
  * @param options - The options to pass to the IntersectionObserver
  */
 export function useSectionScroll(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   onScroll: (scrollInfo: SectionScrollInfo) => void,
   shouldObserve = true,
   options?: IntersectionObserverOptions

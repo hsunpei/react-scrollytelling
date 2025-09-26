@@ -11,7 +11,7 @@ import {
  * It is useful for building triggering animations or lazy loading images.
  */
 export function useIntersectionReveal(
-  sectionRef: React.RefObject<Element>,
+  sectionRef: React.RefObject<Element | null>,
   trackOnce = false,
   options: IntersectionObserverOptions = DEFAULT_INTERSECTION_OBS_OPTIONS
 ) {

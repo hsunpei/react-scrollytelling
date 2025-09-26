@@ -15,12 +15,12 @@
     "@react-scrollytelling/layout": "workspace:^",
     "@react-scrollytelling/react-spring": "workspace:^",
     "@react-scrollytelling/video": "workspace:^",
-    "@react-spring/web": "^9.7.5",
+    "@react-spring/web": "^10.0.3",
     "next": "^14.2.3",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
