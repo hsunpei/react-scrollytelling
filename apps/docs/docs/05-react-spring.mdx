@@ -6,9 +6,7 @@ import { ActiveSectionInfoSpring } from '../src/components/grouped/ActiveSection
 import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 import { StickyContainerTailwind } from '@react-scrollytelling/layout';
 
-import {
-SectionScrollSpring
-} from '../src/components/single/SectionScrollSpring';
+import { SectionScrollSpring } from '../src/components/single/SectionScrollSpring';
 
 Using a state to do animations can be very expensive in terms of performance.
 
@@ -56,7 +54,7 @@ export const Section = () => {
 
 ### Example
 
-You can simply the example in [track grouped sections](/track_grouped_sections) and use `useActiveSectionSpring()` to get the active section information and the updated `SpringValue` based on the scroll progress:
+You can simply the example in [track grouped sections](/docs/track_grouped_sections) and use `useActiveSectionSpring()` to get the active section information and the updated `SpringValue` based on the scroll progress:
 
 ```tsx
 import { useActiveSectionSpring } from '@react-scrollytelling/react-spring';
