@@ -1,0 +1,202 @@
+import { TrackedSection } from '../components/grouped/TrackedSection';
+import { ActiveSectionInfo } from '../components/grouped/ActiveSectionInfo';
+
+import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
+import { StickyContainerTailwind } from '@react-scrollytelling/layout';
+
+To tell a story that spans multiple sections, for example, changing the background based on the section in view,
+multiple sections tracking tools of `react-scrollytelling` can help you achieve this.
+
+Instead of tracking every section individually and listening to window scroll events in each section, `react-scrollytelling`
+only tracks the sections that are viewport to minimize the performance impact.
+
+
+## Building a scrollytelling story with multiple sections
+
+Here are some key concepts to keep in mind when building a scrollytelling story with multiple sections:
+
+### Active section
+
+When there are multiple sections in the viewport, the effects to show should be based on the section that the user is currently viewing.
+
+We call the section the user is currently viewing the "active section", and it the section that has just been scrolled into view.
+Therefore, the active section is the section that is closest to the bottom of the viewport.
+
+![Alt Text](/images/multiple_sections.jpg)
+
+
+### Scroll progress
+
+For the reading/scroll progress of the active section, it is defined as `the height above the bottom of the viewport` divided by `the height of the active section`.
+
+![Alt Text](/images/scroll_progress.jpg)
+
+
+## Start tracking the active section
+
+
+### 1. Set up sections to track
+
+For each section you want to track, assign it with a ref and name it with a unique `sectionID`.
+Then, use the `useTrackedSectionScroll` hook to track the active section based on the sectionID.
+
+```tsx
+import { useTrackedSectionScroll } from '@react-scrollytelling/grouped';
+
+export const TrackedSection = ({sectionID} : {sectionID: string}) => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  useTrackedSectionScroll(sectionRef, sectionID);
+
+  return (
+    <section ref={sectionRef}>
+      {/* ... */}
+    </section>
+  );
+};
+```
+
+
+### 2. Wrap the sections with `ScrollytellingProvider`
+
+```tsx
+import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
+
+// ...
+  <ScrollytellingProvider>
+    <TrackedSection sectionID="RED" />
+    <TrackedSection sectionID="ORANGE" />
+  </ScrollytellingProvider>
+```
+
+It is recommended to wrap the sections with one `ScrollytellingProvider` at the page level
+because `ScrollytellingProvider` is listening to the window scroll events.
+
+
+### 3. Subscribe to the active section changes
+
+To get the active section information, use the `useActiveSection()` hook.
+
+```tsx
+import { useActiveSection } from '@react-scrollytelling/grouped';
+
+export const ActiveSectionInfo = () => {
+  const [trackingId, setTrackingId] = useState<string>('');
+  const [scrolledRatio, setScrolledRatio] = useState<number>(0);
+
+  const onActiveSectionChange = useCallback(
+    ({ trackingId: id, scrolledRatio: ratio }: { trackingId: string; scrolledRatio: number }) => {
+      setTrackingId(id);
+      setScrolledRatio(ratio);
+    },
+    []
+  );
+
+  useActiveSection(onActiveSectionChange);
+
+  return (
+      <div className="list-disc text-xl leading-9 marker:text-slate-400">
+        <ul>
+          <li>You are viewing {trackingId}</li>
+          <li>Reading ratio: {scrolledRatio}</li>
+        </ul>
+      </div>
+  );
+};
+```
+
+`useActiveSection()` hook accepts a callback function that is called when the active section changes.
+
+Note that the state changes in the callback function will trigger re-renders which add performance overheads to your animations.
+You can replace the states with motion values from animation libraries like [react-spring](https://react-spring.dev/docs/advanced/spring-value) or
+[frame-motion](https://www.framer.com/motion/motionvalue/) to avoid triggering re-renders.
+
+
+## Example
+
+<div className="mx-2 my-12">
+  <ScrollytellingProvider>
+    <StickyContainerTailwind
+      overlay={
+        <>
+          <TrackedSection
+            sectionID="RED"
+            className="border-rose-400 dark:border-rose-700 bg-rose-200 dark:bg-rose-800 rounded-t-lg pt-[50vh]"
+          />
+          <TrackedSection
+            sectionID="ORANGE"
+            className="-mt-[3px] border-orange-400 dark:border-orange-700 bg-orange-200 dark:bg-orange-800"
+          />
+          <TrackedSection
+            sectionID="YELLOW"
+            className="-mt-[3px] border-yellow-400 dark:border-yellow-700 bg-yellow-200 dark:bg-yellow-800"
+          />
+          <TrackedSection
+            sectionID="GREEN"
+            className="-mt-[3px] border-green-400 dark:border-green-700 bg-green-200 dark:bg-green-800"
+          />
+          <TrackedSection
+            sectionID="BLUE"
+            className="-mt-[3px] border-blue-400 dark:border-blue-700 bg-blue-200 dark:bg-blue-800"
+          />
+          <TrackedSection
+            sectionID="PURPLE"
+            className="-mt-[3px] border-purple-400 dark:border-purple-700 bg-purple-200 dark:bg-purple-800 rounded-b-lg pt-[10vh]"
+          />
+        </>
+      }
+    >
+        {/* Background */}
+        <ActiveSectionInfo />
+    </StickyContainerTailwind>
+  </ScrollytellingProvider>
+</div>
+
+
+## Note
+
+To show the sticky background effect with a series of multiple tracked sections on its top,
+you can use `StickyContainer` to help you create the effect easily:
+
+```tsx
+import { StickyContainer } from '@react-scrollytelling/layout';
+
+ <StickyContainer
+      overlay={
+        <>
+          {/* Put foreground sections here */}
+          <TrackedSection
+            sectionID="RED"
+            className="border-rose-400 dark:border-rose-700 bg-rose-200 dark:bg-rose-800 rounded-t-lg pt-[50vh]"
+          />
+          {/* ... More tracked sections */}
+        </>
+      }
+    >
+        {/* Put sticky background here */}
+        <StickyBackground />
+</StickyContainer>
+```
+
+
+Alternatively, if you want to use the Tailwind CSS utility classes to style the sticky container,
+you can use `StickyContainerTailwind` instead of `StickyContainer`:
+
+```tsx
+import { StickyContainerTailwind } from '@react-scrollytelling/layout';
+
+<StickyContainerTailwind>
+    {/* ...*/}
+<StickyBackground />
+```
+
+In your Tailwind CSS configuration, remember to import `@react-scrollytelling/layout` so the classes can be applied:
+
+```js
+module.exports = {
+  // ...
+  content: [
+    // path to the library
+    './node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}',
+  ],
+};
+```

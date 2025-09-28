@@ -1,31 +1,50 @@
 {
-  "private": true,
   "name": "docs",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "next dev -p 3600",
-    "build": "next build",
-    "prod": "next start -p 3800",
-    "start": "next start",
-    "clean": "rimraf .next && rimraf out"
+    "docusaurus": "docusaurus",
+    "dev": "docusaurus start -p 3600",
+    "build": "docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "start": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@react-scrollytelling/core": "workspace:^",
-    "@react-scrollytelling/framer-motion": "workspace:^",
-    "@react-scrollytelling/grouped": "workspace:^",
-    "@react-scrollytelling/layout": "workspace:^",
-    "@react-scrollytelling/react-spring": "workspace:^",
-    "@react-scrollytelling/video": "workspace:^",
-    "@react-spring/web": "^10.0.3",
-    "next": "^14.2.3",
-    "nextra": "^2.13.4",
-    "nextra-theme-docs": "^2.13.4",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "@docusaurus/core": "3.9.1",
+    "@docusaurus/preset-classic": "3.9.1",
+    "@mdx-js/react": "^3.0.0",
+    "clsx": "^2.0.0",
+    "prism-react-renderer": "^2.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.3"
+    "@docusaurus/module-type-aliases": "3.9.1",
+    "@docusaurus/tsconfig": "3.9.1",
+    "@docusaurus/types": "3.9.1",
+    "@tailwindcss/postcss": "^4.1.13",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.6.2"
   },
-  "version": "0.1.1"
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 3 chrome version",
+      "last 3 firefox version",
+      "last 5 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0"
+  }
 }

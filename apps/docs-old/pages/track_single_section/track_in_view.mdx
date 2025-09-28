@@ -1,0 +1,43 @@
+import { IntersectionSection } from '../../components/single/IntersectionSection';
+
+Detect whether an element is in view with the Intersection Observer API.
+
+<IntersectionSection className="border-green-400 dark:border-green-700 bg-green-200 dark:bg-green-800" />
+
+## Usage
+
+```tsx
+import { useIntersectionObserverState } from '@react-scrollytelling/core';
+
+export const IntersectionSection = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isIntersecting } = useIntersectionObserverState(sectionRef);
+
+  return (
+    <>
+      <section ref={sectionRef}>
+        <h1>Intersection Observer</h1>
+        <p>isIntersecting: {`${isIntersecting}`}</p>
+      </section>
+    </>
+  );
+};
+```
+
+## Parameters
+
+The `useIntersectionObserver` hook accepts the following parameters:
+
+```jsx
+export function useIntersectionObserver(
+  sectionRef: React.RefObject<Element>,
+  options: IntersectionObserverOptions,
+  shouldObserve: boolean,
+  onObserve?: (isIntersecting: IntersectionObserverEntry) => void
+) // ...
+```
+
+- `sectionRef`: A reference to the element to observe.
+- `options`: Allow customizing the observer. You can pass an `IntersectionObserverOptions` [object to configure the observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#instance_properties).
+- `shouldObserve`: A boolean that determines whether to observe the element. You can disable the observer by setting this value to `false`. Default value: `true`.
+- `onObserve`: A callback function that is called when the element is intersecting. The callback receives an `IntersectionObserverEntry` object as an argument.

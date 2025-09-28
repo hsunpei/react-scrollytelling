@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+/* Custom styles for React Scrollytelling docs */

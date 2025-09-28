@@ -1,0 +1,37 @@
+import { StickyVideo } from '../components/video/StickyVideo'
+
+You could use the `<Video>` component to create a sticky video that plays based on the scroll progress:
+
+
+```tsx
+import { Video } from '@react-scrollytelling/video';
+import { useSectionScrollState } from '@react-scrollytelling/core';
+
+
+export const StickyVideo = ({ src }: StickyVideoProps) => {
+  const { scrolledRatio } = useSectionScrollState(sectionRef);
+
+  return (
+      <Video
+        className="h-full w-full object-cover"
+        width={width}
+        height={height}
+        src={src}
+        ratio={scrolledRatio}
+      />
+  );
+};
+```
+
+
+
+<StickyVideo
+  srcWebm="/react-scrollytelling/videos/taiwan_keyframe4.webm"
+  src="/react-scrollytelling/videos/taiwan_keyframe4.mp4" />
+
+
+
+If the playback is not smooth, try to re-create the video with [a smaller keyframe interval](https://stackoverflow.com/questions/48304359/repeatedly-setting-html5-videos-currenttime-is-jittery-on-chrome-firefox-but-no):
+```
+ffmpeg -i input.mp4 -g 4 -vcodec libx264 -profile:v main -level:v 4.1 -an -movflags faststart output.mp4
+```
