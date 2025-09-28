@@ -9,6 +9,8 @@ module.exports = {
     '../../node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}',
     '../../packages/layout/**/*.{js,jsx,ts,tsx}',
   ],
+  // Important: Don't let Tailwind override Docusaurus styles
+  important: false,
   theme: {
     extend: {},
   },
