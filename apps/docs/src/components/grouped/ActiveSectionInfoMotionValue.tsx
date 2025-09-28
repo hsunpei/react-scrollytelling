@@ -39,7 +39,7 @@ export const ActiveSectionInfoMotionValue = () => {
         <div>
           <div className="w-full rounded-full bg-gray-200 dark:bg-gray-700">
             <motion.div
-              className="min-w-20 mt-2 rounded-full bg-blue-600  p-0.5 text-center text-xs font-medium leading-none text-blue-100"
+              className="mt-2 min-w-20 rounded-full bg-blue-600  p-0.5 text-center text-xs font-medium leading-none text-blue-100"
               style={{
                 width: widthPercentage,
               }}

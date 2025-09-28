@@ -27,7 +27,7 @@ export const SectionScrollMotionValue = ({ className }: { className: string }) =
           opacity,
           borderWidth,
         }}
-        className={`flex h-96 flex-col items-center rounded-lg p-10 drop-shadow-2xl ${className}`}
+        className={`flex h-96 flex-col items-center rounded-lg bg-opacity-20 p-10 drop-shadow-2xl dark:bg-opacity-20 ${className}`}
       >
         <ul className="list-disc text-lg marker:text-slate-400">
           <li>

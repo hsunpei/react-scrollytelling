@@ -3,3 +3,4 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 /* Custom styles for React Scrollytelling docs */
+@source "../../../../packages/layout/**/*.{js,jsx,ts,tsx}";

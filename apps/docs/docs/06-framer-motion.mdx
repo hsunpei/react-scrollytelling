@@ -1,18 +1,12 @@
 # Framer Motion Integration
 
-import { TrackedSection } from '../src/components/TrackedSection';
-import { ActiveSectionInfoMotionValue } from '../src/components/ActiveSectionInfoMotionValue';
+import { TrackedSection } from '../src/components/grouped/TrackedSection';
+import { ActiveSectionInfoMotionValue } from '../src/components/grouped/ActiveSectionInfoMotionValue';
 
 import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 import { StickyContainerTailwind } from '@react-scrollytelling/layout';
 
-import { SectionScrollMotionValue } from '../src/components/SectionScrollMotionValue';
-
-<div className="bg-blue-100 dark:bg-blue-900 p-4 rounded-lg mb-4">
-  <p className="text-blue-800 dark:text-blue-200 font-semibold">
-    🎉 Tailwind v4 is now integrated! This blue box demonstrates Tailwind classes working with dark mode support.
-  </p>
-</div>
+import { SectionScrollMotionValue } from '../src/components/single/SectionScrollMotionValue';
 
 Using a state to do animations can be very expensive in terms of performance.
 
@@ -76,8 +70,6 @@ const { trackingId, scrolledRatioMotionValue } = useActiveSectionMotionValue();
 
 <div className="mx-2 my-12">
   <ScrollytellingProvider>
-    {/* Test class to verify Tailwind is working */}
-    <div className="pb-10 -mt-10 hidden">Test</div>
     <StickyContainerTailwind
       overlay={
         <>
