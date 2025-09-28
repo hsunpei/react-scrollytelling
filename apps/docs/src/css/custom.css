@@ -1,4 +1,12 @@
-@import "tailwindcss";
+@import "tailwindcss/theme.css" layer(theme);
+
+@layer base {
+  #tw-scope {
+    @import "tailwindcss/preflight.css" layer(base);
+  }
+}
+
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 

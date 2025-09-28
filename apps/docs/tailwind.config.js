@@ -9,10 +9,6 @@ module.exports = {
     '../../node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}',
     '../../packages/layout/**/*.{js,jsx,ts,tsx}',
   ],
-  // Disable preflight to prevent conflicts with Docusaurus styles
-  corePlugins: {
-    preflight: false,
-  },
   // Important: Don't let Tailwind override Docusaurus styles
   important: false,
   theme: {
