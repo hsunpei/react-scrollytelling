@@ -7,11 +7,23 @@ export interface StickyContainerProps {
 
   /** Ref to the background container */
   backgroundRef?: React.RefObject<HTMLDivElement>;
+
+  /** Class name for outer container */
+  className?: string;
+
+  /** Class name for the overlay */
+  overlayClassName?: string;
 }
 
-export const StickyContainer = ({ overlay, children, backgroundRef }: StickyContainerProps) => {
+export const StickyContainer = ({
+  overlay,
+  children,
+  backgroundRef,
+  className,
+  overlayClassName,
+}: StickyContainerProps) => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative' }} className={className}>
       {/* Background */}
       <div
         style={{
@@ -40,6 +52,7 @@ export const StickyContainer = ({ overlay, children, backgroundRef }: StickyCont
           position: 'relative',
           marginTop: '-100vh',
         }}
+        className={overlayClassName}
       >
         {overlay}
       </div>
