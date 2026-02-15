@@ -1,2 +1,2 @@
-export * from './useActiveSectionMotionValue';
-export * from './useSectionScrollMotionValue';
+export * from "./useActiveSectionMotionValue";
+export * from "./useSectionScrollMotionValue";

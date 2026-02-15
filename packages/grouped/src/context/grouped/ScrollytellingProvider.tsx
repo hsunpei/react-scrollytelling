@@ -1,20 +1,28 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
-import { useIntersectionObserver } from '@react-scrollytelling/core';
-import { useRafThrottle } from '@react-scrollytelling/core';
-import { clampScrolledRatio, getScrollPosition } from '@react-scrollytelling/core';
+import { useIntersectionObserver } from "@react-scrollytelling/core";
+import { useRafThrottle } from "@react-scrollytelling/core";
+import {
+  clampScrolledRatio,
+  getScrollPosition,
+} from "@react-scrollytelling/core";
 
-import { ActiveSectionObservable } from './ActiveSectionObservable';
-import { ActiveSectionTracker, ScrollytellingContext } from './ScrollytellingContext';
-import { TrackedSections } from './TrackedSections';
+import { ActiveSectionObservable } from "./ActiveSectionObservable";
+import {
+  ActiveSectionTracker,
+  ScrollytellingContext,
+} from "./ScrollytellingContext";
+import { TrackedSections } from "./TrackedSections";
 
 export interface ScrollytellingProviderProps {
   children: React.ReactNode;
 }
 
-export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps) => {
+export const ScrollytellingProvider = ({
+  children,
+}: ScrollytellingProviderProps) => {
   const { Provider } = ScrollytellingContext;
 
   /**
@@ -23,7 +31,9 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
    */
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const activeSectionObservableRef = useRef<ActiveSectionObservable | null>(null);
+  const activeSectionObservableRef = useRef<ActiveSectionObservable | null>(
+    null
+  );
   // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
   if (!activeSectionObservableRef.current) {
     activeSectionObservableRef.current = new ActiveSectionObservable();
@@ -43,12 +53,20 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
   const activeSectionBtmDistRef = useRef<number>(Infinity);
 
   const onActiveSectionUpdate = useCallback(
-    (trackingId: string, scrolledRatio: number, viewportBtmDistance: number) => {
+    (
+      trackingId: string,
+      scrolledRatio: number,
+      viewportBtmDistance: number
+    ) => {
       activeSectionIdRef.current = trackingId;
       activeSectionRatioRef.current = scrolledRatio;
       activeSectionBtmDistRef.current = viewportBtmDistance;
 
-      activeSectionObservable.notify({ trackingId, scrolledRatio, viewportBtmDistance });
+      activeSectionObservable.notify({
+        trackingId,
+        scrolledRatio,
+        viewportBtmDistance,
+      });
     },
     [activeSectionObservable]
   );
@@ -65,7 +83,9 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
       windowHeight
     );
 
-    const activeSection = trackedSectionsRef.current.getSection(activeSectionId || '');
+    const activeSection = trackedSectionsRef.current.getSection(
+      activeSectionId || ""
+    );
 
     // notify the active section about its scroll progress
     if (activeSection) {
@@ -105,9 +125,9 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
     ({ isIntersecting }: IntersectionObserverEntry) => {
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
-        window.addEventListener('scroll', handleScrollThrottled);
+        window.addEventListener("scroll", handleScrollThrottled);
       } else {
-        window.removeEventListener('scroll', handleScrollThrottled);
+        window.removeEventListener("scroll", handleScrollThrottled);
       }
     },
     [handleScrollThrottled]
@@ -130,7 +150,7 @@ export const ScrollytellingProvider = ({ children }: ScrollytellingProviderProps
   useEffect(() => {
     // prevent listening to scroll events when the component is unmounted
     return () => {
-      window.removeEventListener('scroll', handleScrollThrottled);
+      window.removeEventListener("scroll", handleScrollThrottled);
     };
   }, [handleScrollThrottled]);
 

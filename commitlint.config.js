@@ -1,3 +1,3 @@
 module.exports = {
-  extends: ['@hsunpei/commitlint-config'],
+  extends: ["@hsunpei/commitlint-config"],
 };

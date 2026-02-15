@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 /**
  * Use requestAnimationFrame to throttle a callback
  * @param callback - The callback to throttle by rAF
  * @returns A throttled callback
  */
-export function useRafThrottle<T extends unknown[]>(callback: (...params: T) => void) {
+export function useRafThrottle<T extends unknown[]>(
+  callback: (...params: T) => void
+) {
   const rafRef = useRef<number | null>(null);
 
   const rafCallback = useCallback(

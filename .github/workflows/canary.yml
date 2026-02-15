@@ -3,11 +3,11 @@ name: Publish Package
 on:
   push:
     branches:
-      - '*' # matches every branch that doesn't contain a '/'
-      - '*/*' # matches every branch containing a single '/'
-      - '**' # matches every branch
-      - '!main' # excludes main
-      - '!master' # excludes master
+      - "*" # matches every branch that doesn't contain a '/'
+      - "*/*" # matches every branch containing a single '/'
+      - "**" # matches every branch
+      - "!main" # excludes main
+      - "!master" # excludes master
 
 jobs:
   install-and-build:
@@ -22,8 +22,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path

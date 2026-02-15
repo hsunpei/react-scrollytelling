@@ -1,6 +1,6 @@
-import { SectionScrollInfo } from '@react-scrollytelling/core';
+import { SectionScrollInfo } from "@react-scrollytelling/core";
 
-import { TrackedSectionInfo } from './ScrollytellingContext';
+import { TrackedSectionInfo } from "./ScrollytellingContext";
 
 /** Stores all the sections in the viewport */
 export class TrackedSections {
@@ -11,7 +11,9 @@ export class TrackedSections {
 
   private onNewSectionAdded?: (sectionID: string) => void;
 
-  constructor({ onNewSectionAdded }: { onNewSectionAdded?: (sectionID: string) => void } = {}) {
+  constructor({
+    onNewSectionAdded,
+  }: { onNewSectionAdded?: (sectionID: string) => void } = {}) {
     this.trackedSections = new Map();
     this.closetSectionId = null;
     this.onNewSectionAdded = onNewSectionAdded;
@@ -52,7 +54,10 @@ export class TrackedSections {
     return this.trackedSections.has(sectionID);
   };
 
-  findClosestToBottomId = (scrollTop: number, windowHeight: number): string | null => {
+  findClosestToBottomId = (
+    scrollTop: number,
+    windowHeight: number
+  ): string | null => {
     let closestId: string | null = null;
     let minDistance = Infinity;
 

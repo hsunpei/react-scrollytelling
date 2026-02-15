@@ -1,4 +1,7 @@
-import { ActiveSectionObserver, ActiveSectionScrollInfo } from './ScrollytellingContext';
+import {
+  ActiveSectionObserver,
+  ActiveSectionScrollInfo,
+} from "./ScrollytellingContext";
 
 export class ActiveSectionObservable {
   private observers: Set<ActiveSectionObserver>;

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { ActiveSectionObserver } from '../../context/grouped/ScrollytellingContext';
-import { useScrollytelling } from '../grouped/useScrollytelling';
+import { ActiveSectionObserver } from "../../context/grouped/ScrollytellingContext";
+import { useScrollytelling } from "../grouped/useScrollytelling";
 
 /**
  * Watches for all tracked sections to find the section closet to the bottom of the viewport

@@ -1,11 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from "react";
 
 import {
   ActiveSectionScrollInfo,
   useActiveSection,
   ActiveSectionObserver,
-} from '@react-scrollytelling/grouped';
-import { SpringValue } from '@react-spring/web';
+} from "@react-scrollytelling/grouped";
+import { SpringValue } from "@react-spring/web";
 
 /**
  * Watches for all tracked sections to find the section closet to the bottom of the viewport
@@ -15,7 +15,9 @@ import { SpringValue } from '@react-spring/web';
  * @param onActiveSectionChange - The callback needs to be memoized
  * @returns The trackingId of the active section and the Spring value of the section scroll
  */
-export function useActiveSectionSpring(onActiveSectionChange?: ActiveSectionObserver) {
+export function useActiveSectionSpring(
+  onActiveSectionChange?: ActiveSectionObserver
+) {
   const scrolledRatioSpringRef = useRef(new SpringValue(0));
   const [trackingId, setTrackingId] = useState<string | null>(null);
 

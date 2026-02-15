@@ -1,11 +1,11 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from "react";
 
 import {
   ActiveSectionScrollInfo,
   useActiveSection,
   ActiveSectionObserver,
-} from '@react-scrollytelling/grouped';
-import { useMotionValue, MotionValue } from 'motion/react';
+} from "@react-scrollytelling/grouped";
+import { useMotionValue, MotionValue } from "motion/react";
 
 /**
  * Watches for all tracked sections to find the section closet to the bottom of the viewport
@@ -15,8 +15,12 @@ import { useMotionValue, MotionValue } from 'motion/react';
  * @param onActiveSectionChange - The callback needs to be memoized
  * @returns The trackingId of the active section and the Motion value of the section scroll
  */
-export function useActiveSectionMotionValue(onActiveSectionChange?: ActiveSectionObserver) {
-  const scrolledRatioMotionValueRef = useRef<MotionValue<number>>(useMotionValue(0));
+export function useActiveSectionMotionValue(
+  onActiveSectionChange?: ActiveSectionObserver
+) {
+  const scrolledRatioMotionValueRef = useRef<MotionValue<number>>(
+    useMotionValue(0)
+  );
   const [trackingId, setTrackingId] = useState<string | null>(null);
 
   const onSectionScroll = useCallback(
@@ -34,5 +38,8 @@ export function useActiveSectionMotionValue(onActiveSectionChange?: ActiveSectio
 
   useActiveSection(onSectionScroll);
 
-  return { trackingId, scrolledRatioMotionValue: scrolledRatioMotionValueRef.current };
+  return {
+    trackingId,
+    scrolledRatioMotionValue: scrolledRatioMotionValueRef.current,
+  };
 }

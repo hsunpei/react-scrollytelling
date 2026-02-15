@@ -1,1 +1,1 @@
-export * from './useScrollytelling';
+export * from "./useScrollytelling";

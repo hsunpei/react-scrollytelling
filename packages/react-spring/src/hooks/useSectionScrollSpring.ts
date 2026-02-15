@@ -1,11 +1,11 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 import {
   IntersectionObserverOptions,
   SectionScrollInfo,
   useSectionScroll,
-} from '@react-scrollytelling/core';
-import { SpringValue } from '@react-spring/web';
+} from "@react-scrollytelling/core";
+import { SpringValue } from "@react-spring/web";
 
 /**
  * Get the Spring value (react-spring) of the section scroll

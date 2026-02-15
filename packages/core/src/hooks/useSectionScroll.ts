@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
-import { clampScrolledRatio, getScrollPosition } from '../utils';
+import { clampScrolledRatio, getScrollPosition } from "../utils";
 import {
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from './intersection/useIntersectionObserver';
-import { useRafThrottle } from './performance/useRafThrottle';
+} from "./intersection/useIntersectionObserver";
+import { useRafThrottle } from "./performance/useRafThrottle";
 
 export interface SectionScrollInfo {
   /** Whether the section is intersecting with the viewport */
@@ -28,7 +28,12 @@ export function getSectionScrollInfo(
   // TODO: can possibly reduce the measurement by using resizeObserver
   const sectionRect = sectionRef.current?.getBoundingClientRect();
   if (!sectionRect) {
-    return { scrolledRatio: 0, scrollBottom: 0, distance: Infinity, isIntersecting };
+    return {
+      scrolledRatio: 0,
+      scrollBottom: 0,
+      distance: Infinity,
+      isIntersecting,
+    };
   }
 
   const { scrollTop, scrollBottom } = getScrollPosition();
@@ -70,9 +75,15 @@ export function useSectionScroll(
 
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
-        window.addEventListener('scroll', onPageScroll.bind(null, isIntersecting));
+        window.addEventListener(
+          "scroll",
+          onPageScroll.bind(null, isIntersecting)
+        );
       } else {
-        window.removeEventListener('scroll', onPageScroll.bind(null, isIntersecting));
+        window.removeEventListener(
+          "scroll",
+          onPageScroll.bind(null, isIntersecting)
+        );
       }
     },
     [onPageScroll]

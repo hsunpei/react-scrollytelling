@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from '@react-scrollytelling/core/src/hooks/intersection/useIntersectionObserver';
-import { SectionScrollInfo } from '@react-scrollytelling/core/src/hooks/useSectionScroll';
-import { getScrollPosition } from '@react-scrollytelling/core/src/utils';
+} from "@react-scrollytelling/core/src/hooks/intersection/useIntersectionObserver";
+import { SectionScrollInfo } from "@react-scrollytelling/core/src/hooks/useSectionScroll";
+import { getScrollPosition } from "@react-scrollytelling/core/src/utils";
 
-import { useScrollytelling } from '../grouped/useScrollytelling';
+import { useScrollytelling } from "../grouped/useScrollytelling";
 
 /**
  * Notify ScrollytellingProvider to update the active section
@@ -50,16 +50,28 @@ export function useTrackedSectionScroll(
         const { scrollTop } = getScrollPosition();
 
         trackedSections.setSection(sectionID, {
-          sectionTop: (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
-          sectionBottom: (sectionRef.current?.getBoundingClientRect().bottom || 0) + scrollTop,
+          sectionTop:
+            (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
+          sectionBottom:
+            (sectionRef.current?.getBoundingClientRect().bottom || 0) +
+            scrollTop,
           onActiveScroll: onScroll,
         });
       } else {
         // notify the scroll progress that isIntersecting = false
-        const { scrolledRatio = 0, scrollBottom = 0, distance = 0 } = scrollInfoRef.current || {};
+        const {
+          scrolledRatio = 0,
+          scrollBottom = 0,
+          distance = 0,
+        } = scrollInfoRef.current || {};
 
         if (onScroll) {
-          onScroll({ scrolledRatio, scrollBottom, distance, isIntersecting: false });
+          onScroll({
+            scrolledRatio,
+            scrollBottom,
+            distance,
+            isIntersecting: false,
+          });
         }
         trackedSections.removeSection(sectionID);
       }

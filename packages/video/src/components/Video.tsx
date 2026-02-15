@@ -1,6 +1,12 @@
-import React, { useEffect, useImperativeHandle, useCallback, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 
-import { useRafThrottle } from '@react-scrollytelling/core';
+import { useRafThrottle } from "@react-scrollytelling/core";
 
 export interface VideoProps {
   /** Source of the mp4 video */
@@ -64,7 +70,10 @@ export interface VideoRef {
 
 export const VideoWithImperativeHandle = React.memo(
   React.forwardRef<VideoRef, VideoProps>(
-    ({ src, srcWebm, width, height, thumbnail, className, loadingOverlay }, ref) => {
+    (
+      { src, srcWebm, width, height, thumbnail, className, loadingOverlay },
+      ref
+    ) => {
       const videoRef = useRef<HTMLVideoElement>(null);
       const [isLoading, setIsLoading] = useState(true);
 
@@ -83,15 +92,11 @@ export const VideoWithImperativeHandle = React.memo(
       }, []);
       const setVideoRatioThrottled = useRafThrottle(setVideoRatio);
 
-      useImperativeHandle(
-        ref,
-        () => {
-          return {
-            setRatio: setVideoRatioThrottled,
-          };
-        },
-        [setVideoRatioThrottled]
-      );
+      useImperativeHandle(ref, () => {
+        return {
+          setRatio: setVideoRatioThrottled,
+        };
+      }, [setVideoRatioThrottled]);
 
       const handleWaiting = useCallback(() => {
         setIsLoading(true);
@@ -102,7 +107,7 @@ export const VideoWithImperativeHandle = React.memo(
       }, []);
 
       return (
-        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <div style={{ position: "relative", width: "100%", height: "100%" }}>
           <video
             ref={videoRef}
             width={width}
@@ -119,10 +124,17 @@ export const VideoWithImperativeHandle = React.memo(
             onCanPlay={handleCanPlay}
             poster={thumbnail}
           >
-            {srcWebm && <source src={thumbnail ? srcWebm : `${srcWebm}#t=0.1`} type="video/webm" />}
+            {srcWebm && (
+              <source
+                src={thumbnail ? srcWebm : `${srcWebm}#t=0.1`}
+                type="video/webm"
+              />
+            )}
             <source src={thumbnail ? src : `${src}#t=0.1`} type="video/mp4" />
           </video>
-          <div style={{ position: 'absolute', inset: 0 }}>{isLoading && loadingOverlay}</div>
+          <div style={{ position: "absolute", inset: 0 }}>
+            {isLoading && loadingOverlay}
+          </div>
         </div>
       );
     }

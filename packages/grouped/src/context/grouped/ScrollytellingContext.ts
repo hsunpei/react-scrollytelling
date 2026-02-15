@@ -1,8 +1,8 @@
-import { createContext } from 'react';
+import { createContext } from "react";
 
-import { SectionScrollInfo } from '@react-scrollytelling/core';
+import { SectionScrollInfo } from "@react-scrollytelling/core";
 
-import { TrackedSections } from './TrackedSections';
+import { TrackedSections } from "./TrackedSections";
 
 export type sectionID = string | null;
 
@@ -47,4 +47,6 @@ export interface ActiveSectionTracker {
   trackedSections: TrackedSections;
 }
 
-export const ScrollytellingContext = createContext<ActiveSectionTracker | null>(null);
+export const ScrollytellingContext = createContext<ActiveSectionTracker | null>(
+  null
+);

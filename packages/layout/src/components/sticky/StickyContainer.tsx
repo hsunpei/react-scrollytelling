@@ -23,22 +23,22 @@ export const StickyContainer = ({
   overlayClassName,
 }: StickyContainerProps) => {
   return (
-    <div style={{ position: 'relative' }} className={className}>
+    <div style={{ position: "relative" }} className={className}>
       {/* Background */}
       <div
         style={{
-          position: 'sticky',
+          position: "sticky",
           top: 0,
-          paddingBottom: '100vh',
+          paddingBottom: "100vh",
         }}
       >
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             right: 0,
             top: 0,
-            height: '100vh',
+            height: "100vh",
           }}
           ref={backgroundRef}
         >
@@ -49,8 +49,8 @@ export const StickyContainer = ({
       {/* Overlay foreground content */}
       <div
         style={{
-          position: 'relative',
-          marginTop: '-100vh',
+          position: "relative",
+          marginTop: "-100vh",
         }}
         className={overlayClassName}
       >

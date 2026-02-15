@@ -1,2 +1,2 @@
-export * from './ScrollytellingContext';
-export * from './ScrollytellingProvider';
+export * from "./ScrollytellingContext";
+export * from "./ScrollytellingProvider";

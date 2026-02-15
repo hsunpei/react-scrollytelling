@@ -1,10 +1,10 @@
-import { useCallback, useState, useRef } from 'react';
+import { useCallback, useState, useRef } from "react";
 
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from './useIntersectionObserver';
+} from "./useIntersectionObserver";
 
 /**
  * A function to help track the in viewport state of an element with track once option.

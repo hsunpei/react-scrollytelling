@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { IntersectionObserverOptions } from './intersection/useIntersectionObserver';
-import { SectionScrollInfo, useSectionScroll } from './useSectionScroll';
+import { IntersectionObserverOptions } from "./intersection/useIntersectionObserver";
+import { SectionScrollInfo, useSectionScroll } from "./useSectionScroll";
 
 /**
  * Get the state of the section scroll
@@ -18,7 +18,10 @@ export function useSectionScrollState(
   const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 
   const onScroll = useCallback(
-    ({ scrolledRatio: ratio, isIntersecting: intersecting }: SectionScrollInfo) => {
+    ({
+      scrolledRatio: ratio,
+      isIntersecting: intersecting,
+    }: SectionScrollInfo) => {
       setScrolledRatio(ratio);
       setIsIntersecting(intersecting);
     },

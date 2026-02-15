@@ -1,6 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
-import { IntersectionObserverOptions, useIntersectionObserver } from './useIntersectionObserver';
+import {
+  IntersectionObserverOptions,
+  useIntersectionObserver,
+} from "./useIntersectionObserver";
 
 export function useIntersectionObserverState(
   sectionRef: React.RefObject<Element | null>,
@@ -13,7 +16,12 @@ export function useIntersectionObserverState(
     setIsIntersecting(entry.isIntersecting);
   }, []);
 
-  const { disconnect } = useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
+  const { disconnect } = useIntersectionObserver(
+    sectionRef,
+    options,
+    shouldObserve,
+    onObserve
+  );
 
   return { isIntersecting, disconnect };
 }

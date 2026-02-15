@@ -1,2 +1,2 @@
-export * from './useSectionScrollSpring';
-export * from './useActiveSectionSpring';
+export * from "./useSectionScrollSpring";
+export * from "./useActiveSectionSpring";
