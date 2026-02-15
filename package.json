@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "lerna run dev --stream",
-    "start": "yarn run dev",
+    "start": "pnpm run dev",
     "docs": "lerna run storybook",
     "build": "lerna run build",
     "build:website": "lerna run build:website",
@@ -37,9 +37,9 @@
   },
   "volta": {
     "node": "22.20.0",
-    "yarn": "3.2.4"
+    "pnpm": "10.29.3"
   },
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "pnpm@10.29.3",
   "devDependencies": {
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
