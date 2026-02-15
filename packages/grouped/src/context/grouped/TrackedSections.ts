@@ -19,6 +19,12 @@ export class TrackedSections {
     this.onNewSectionAdded = onNewSectionAdded;
   }
 
+  updateOnNewSectionAdded = (
+    onNewSectionAdded: (sectionID: string) => void
+  ) => {
+    this.onNewSectionAdded = onNewSectionAdded;
+  };
+
   getSection = (sectionID: string) => {
     return this.trackedSections.get(sectionID);
   };

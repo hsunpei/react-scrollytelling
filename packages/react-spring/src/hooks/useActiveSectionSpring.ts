@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   ActiveSectionScrollInfo,
@@ -18,23 +18,24 @@ import { SpringValue } from "@react-spring/web";
 export function useActiveSectionSpring(
   onActiveSectionChange?: ActiveSectionObserver
 ) {
-  const scrolledRatioSpringRef = useRef(new SpringValue(0));
+  // Use state to return a stable SpringValue object
+  const [scrolledRatioSpring] = useState(() => new SpringValue(0));
   const [trackingId, setTrackingId] = useState<string | null>(null);
 
   const onSectionScroll = useCallback(
     (scrollInfo: ActiveSectionScrollInfo) => {
       const { trackingId: id, scrolledRatio } = scrollInfo;
       setTrackingId(id);
-      scrolledRatioSpringRef.current.set(scrolledRatio);
+      scrolledRatioSpring.set(scrolledRatio);
 
       if (onActiveSectionChange) {
         onActiveSectionChange(scrollInfo);
       }
     },
-    [onActiveSectionChange]
+    [onActiveSectionChange, scrolledRatioSpring]
   );
 
   useActiveSection(onSectionScroll);
 
-  return { trackingId, scrolledRatioSpring: scrolledRatioSpringRef.current };
+  return { trackingId, scrolledRatioSpring };
 }

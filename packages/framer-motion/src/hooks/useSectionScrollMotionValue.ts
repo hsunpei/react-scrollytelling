@@ -1,11 +1,11 @@
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 
 import {
   IntersectionObserverOptions,
   SectionScrollInfo,
   useSectionScroll,
 } from "@react-scrollytelling/core";
-import { useMotionValue, MotionValue } from "motion/react";
+import { useMotionValue } from "motion/react";
 
 /**
  * Get the Motion value of the section scroll
@@ -19,23 +19,21 @@ export function useSectionScrollMotionValue(
   shouldObserve = true,
   options?: IntersectionObserverOptions
 ) {
-  const scrolledRatioMotionValueRef = useRef<MotionValue<number>>(
-    useMotionValue(0)
-  );
+  const scrolledRatioMotionValue = useMotionValue(0);
 
   const onSectionScroll = useCallback(
     (scrollInfo: SectionScrollInfo) => {
       const { scrolledRatio } = scrollInfo;
-      scrolledRatioMotionValueRef.current.set(scrolledRatio);
+      scrolledRatioMotionValue.set(scrolledRatio);
 
       if (onScroll) {
         onScroll(scrollInfo);
       }
     },
-    [onScroll]
+    [onScroll, scrolledRatioMotionValue]
   );
 
   useSectionScroll(sectionRef, onSectionScroll, shouldObserve, options);
 
-  return { scrolledRatioMotionValue: scrolledRatioMotionValueRef.current };
+  return { scrolledRatioMotionValue };
 }

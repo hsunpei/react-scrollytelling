@@ -1,11 +1,11 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 
 import {
   ActiveSectionScrollInfo,
   useActiveSection,
   ActiveSectionObserver,
 } from "@react-scrollytelling/grouped";
-import { useMotionValue, MotionValue } from "motion/react";
+import { useMotionValue } from "motion/react";
 
 /**
  * Watches for all tracked sections to find the section closet to the bottom of the viewport
@@ -18,28 +18,26 @@ import { useMotionValue, MotionValue } from "motion/react";
 export function useActiveSectionMotionValue(
   onActiveSectionChange?: ActiveSectionObserver
 ) {
-  const scrolledRatioMotionValueRef = useRef<MotionValue<number>>(
-    useMotionValue(0)
-  );
+  const scrolledRatioMotionValue = useMotionValue(0);
   const [trackingId, setTrackingId] = useState<string | null>(null);
 
   const onSectionScroll = useCallback(
     (scrollInfo: ActiveSectionScrollInfo) => {
       const { trackingId: id, scrolledRatio } = scrollInfo;
       setTrackingId(id);
-      scrolledRatioMotionValueRef.current.set(scrolledRatio);
+      scrolledRatioMotionValue.set(scrolledRatio);
 
       if (onActiveSectionChange) {
         onActiveSectionChange(scrollInfo);
       }
     },
-    [onActiveSectionChange]
+    [onActiveSectionChange, scrolledRatioMotionValue]
   );
 
   useActiveSection(onSectionScroll);
 
   return {
     trackingId,
-    scrolledRatioMotionValue: scrolledRatioMotionValueRef.current,
+    scrolledRatioMotionValue,
   };
 }

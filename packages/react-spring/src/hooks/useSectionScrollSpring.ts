@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useState } from "react";
 
 import {
   IntersectionObserverOptions,
@@ -19,21 +19,22 @@ export function useSectionScrollSpring(
   shouldObserve = true,
   options?: IntersectionObserverOptions
 ) {
-  const scrolledRatioSpringRef = useRef(new SpringValue(0));
+  // Use state to return a stable SpringValue object
+  const [scrolledRatioSpring] = useState(() => new SpringValue(0));
 
   const onSectionScroll = useCallback(
     (scrollInfo: SectionScrollInfo) => {
       const { scrolledRatio } = scrollInfo;
-      scrolledRatioSpringRef.current.set(scrolledRatio);
+      scrolledRatioSpring.set(scrolledRatio);
 
       if (onScroll) {
         onScroll(scrollInfo);
       }
     },
-    [onScroll]
+    [onScroll, scrolledRatioSpring]
   );
 
   useSectionScroll(sectionRef, onSectionScroll, shouldObserve, options);
 
-  return { scrolledRatioSpring: scrolledRatioSpringRef.current };
+  return { scrolledRatioSpring: scrolledRatioSpring };
 }

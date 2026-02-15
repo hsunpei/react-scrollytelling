@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useIntersectionObserver } from "@react-scrollytelling/core";
 import { useRafThrottle } from "@react-scrollytelling/core";
@@ -31,20 +31,14 @@ export const ScrollytellingProvider = ({
    */
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const activeSectionObservableRef = useRef<ActiveSectionObservable | null>(
-    null
-  );
-  // avoiding recreating the ref contents on every re-renders (instead of using initialValue)
-  if (!activeSectionObservableRef.current) {
-    activeSectionObservableRef.current = new ActiveSectionObservable();
-  }
-  const { current: activeSectionObservable } = activeSectionObservableRef;
+  const [activeSectionObservable] = useState(() => new ActiveSectionObservable());
 
   /**
    * Ref to the tracked sections in the viewport, initialize later to track mounted active sections
    * (scroll events are not triggered yet for these sections).
    */
-  const trackedSectionsRef = useRef<TrackedSections | null>(null);
+  // const trackedSectionsRef = useRef<TrackedSections | null>(null);
+  const [trackedSections] = useState(() => new TrackedSections());
 
   const activeSectionIdRef = useRef<string | null>(null);
   const activeSectionRatioRef = useRef<number | null>(null);
@@ -75,17 +69,12 @@ export const ScrollytellingProvider = ({
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();
 
-    if (!trackedSectionsRef.current) {
-      return;
-    }
-    const activeSectionId = trackedSectionsRef.current.findClosestToBottomId(
+    const activeSectionId = trackedSections.findClosestToBottomId(
       scrollTop,
       windowHeight
     );
 
-    const activeSection = trackedSectionsRef.current.getSection(
-      activeSectionId || ""
-    );
+    const activeSection = trackedSections.getSection(activeSectionId || "");
 
     // notify the active section about its scroll progress
     if (activeSection) {
@@ -109,17 +98,13 @@ export const ScrollytellingProvider = ({
       // notify the sections tracking the active section
       onActiveSectionUpdateThrottled(activeSectionId!, ratio, distance);
     }
-  }, [onActiveSectionUpdateThrottled]);
+  }, [onActiveSectionUpdateThrottled, trackedSections]);
   const handleScrollThrottled = useRafThrottle(handleScroll);
 
-  // avoiding recreating the ref contents on every re-renders (instead of using initialValue).
-  // also use this occasion to update the active sections mounted in the viewport,
-  // while no scroll events are being triggered.
-  if (!trackedSectionsRef.current) {
-    trackedSectionsRef.current = new TrackedSections({
-      onNewSectionAdded: handleScrollThrottled,
-    });
-  }
+  // Update the onNewSectionAdded callback when handleScrollThrottled changes.
+  useEffect(() => {
+    trackedSections.updateOnNewSectionAdded(handleScrollThrottled);
+  }, [trackedSections, handleScrollThrottled]);
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
@@ -142,9 +127,13 @@ export const ScrollytellingProvider = ({
       activeSectionRatioRef,
       subscribe: activeSectionObservable.subscribe,
       unsubscribe: activeSectionObservable.unsubscribe,
-      trackedSections: trackedSectionsRef.current!,
+      trackedSections: trackedSections,
     }),
-    [activeSectionObservable.subscribe, activeSectionObservable.unsubscribe]
+    [
+      activeSectionObservable.subscribe,
+      activeSectionObservable.unsubscribe,
+      trackedSections,
+    ]
   );
 
   useEffect(() => {
