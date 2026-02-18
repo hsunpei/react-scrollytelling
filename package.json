@@ -38,6 +38,7 @@
   },
   "packageManager": "pnpm@10.29.3",
   "devDependencies": {
+    "@babel/core": "^7.29.0",
     "@babel/preset-env": "^7.22.7",
     "@babel/preset-react": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
@@ -47,6 +48,7 @@
     "@hsunpei/stylelint-config": "^0.1.6",
     "@hsunpei/typescript-config": "^1.0.7",
     "@next/eslint-plugin-next": "^16.1.6",
+    "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/jest": "^29.5.12",
     "@types/mdx": "^2.0.10",
@@ -55,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^8.55.0",
     "@typescript-eslint/parser": "^8.55.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "7.0.1",
@@ -70,12 +73,12 @@
     "rimraf": "^5.0.1",
     "rollup-plugin-analyzer": "^4.0.0",
     "stylelint": "^15.10.1",
+    "tsdown": "0.20.3",
     "typescript": "^5.1.6",
     "vite": "^5.2.11",
     "vite-plugin-dts": "^3.9.0",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^4.3.2",
-    "tsdown": "0.20.3"
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "dependencies": {
     "@headlessui/react": "latest"
