@@ -74,7 +74,8 @@
     "vite": "^5.2.11",
     "vite-plugin-dts": "^3.9.0",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^4.3.2"
+    "vite-tsconfig-paths": "^4.3.2",
+    "tsdown": "0.20.3"
   },
   "dependencies": {
     "@headlessui/react": "latest"

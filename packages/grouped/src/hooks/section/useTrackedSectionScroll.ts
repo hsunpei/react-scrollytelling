@@ -4,9 +4,9 @@ import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
   IntersectionObserverOptions,
   useIntersectionObserver,
-} from "@react-scrollytelling/core/src/hooks/intersection/useIntersectionObserver";
-import { SectionScrollInfo } from "@react-scrollytelling/core/src/hooks/useSectionScroll";
-import { getScrollPosition } from "@react-scrollytelling/core/src/utils";
+  SectionScrollInfo,
+  getScrollPosition,
+} from "@react-scrollytelling/core";
 
 import { useScrollytelling } from "../grouped/useScrollytelling";
 

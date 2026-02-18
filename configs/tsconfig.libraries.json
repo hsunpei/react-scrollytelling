@@ -10,8 +10,12 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true,
-    "composite": true,
-    "declarationMap": true
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": "..",
+    "paths": {
+      "@react-scrollytelling/*": ["packages/*/src"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": [
