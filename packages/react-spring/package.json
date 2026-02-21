@@ -42,18 +42,18 @@
     "url": "https://github.com/hsunpei/react-scrollytelling/issues"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.4.8",
-    "@testing-library/react": "^16.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.2.4"
+    "@testing-library/dom": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "jest": "catalog:",
+    "jest-environment-jsdom": "catalog:",
+    "ts-jest": "catalog:"
   },
   "peerDependencies": {
-    "@react-scrollytelling/core": "workspace:^",
-    "@react-scrollytelling/grouped": "workspace:^",
-    "@react-spring/web": "^10.0.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "@react-scrollytelling/core": "workspace:*",
+    "@react-scrollytelling/grouped": "workspace:*",
+    "@react-spring/web": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
   }
 }
