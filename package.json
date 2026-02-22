@@ -27,7 +27,7 @@
     "versionup:patch": "lerna version patch --conventional-commits --no-git-tag-version",
     "versionup:minor": "lerna version minor --conventional-commits --no-git-tag-version",
     "versionup:major": "lerna version major --conventional-commits --no-git-tag-version",
-    "release": "lerna publish from-package --yes --no-verify-access",
+    "release": "pnpm -r --filter './packages/*' exec npm publish --access public --provenance",
     "release:beta": "lerna publish --no-push --dist-tag=prerelease",
     "release:canary": "lerna publish -y --canary --preid ci --npm-tag=ci --force-publish",
     "release:interactive": "lerna publish"

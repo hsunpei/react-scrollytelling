@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { useIntersectionObserver } from "@react-scrollytelling/core";
 import { useRafThrottle } from "@react-scrollytelling/core";
@@ -31,7 +37,9 @@ export const ScrollytellingProvider = ({
    */
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const [activeSectionObservable] = useState(() => new ActiveSectionObservable());
+  const [activeSectionObservable] = useState(
+    () => new ActiveSectionObservable()
+  );
 
   /**
    * Ref to the tracked sections in the viewport, initialize later to track mounted active sections

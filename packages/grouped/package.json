@@ -1,6 +1,6 @@
 {
   "name": "@react-scrollytelling/grouped",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "> TODO: description",
   "author": "@hsunpei",
   "license": "MIT",
@@ -29,7 +29,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hsunpei/react-scrollytelling.git"
+    "url": "git+https://github.com/hsunpei/react-scrollytelling.git",
+    "directory": "packages/grouped"
   },
   "scripts": {
     "dev": "tsdown --watch",
