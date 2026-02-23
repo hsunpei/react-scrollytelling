@@ -29,7 +29,7 @@
     "versionup:major": "lerna version major --conventional-commits --no-git-tag-version",
     "release": "pnpm -r --filter './packages/*' exec npm publish --access public --provenance",
     "release:beta": "lerna publish --no-push --dist-tag=prerelease",
-    "release:canary": "lerna publish -y --canary --preid ci --npm-tag=ci --force-publish",
+    "release:canary": "pnpm -r --filter './packages/*' exec npm publish --access public --provenance --tag ci",
     "release:interactive": "lerna publish"
   },
   "volta": {
