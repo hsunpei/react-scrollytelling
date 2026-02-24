@@ -1,0 +1,113 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: #1a1a2e;
+  background: #f8f9fa;
+}
+
+/* ── Tracked Section ────────────────────────────────────────────── */
+.tracked-section {
+  position: relative;
+  border: 2px solid;
+  padding: 2.5rem;
+  padding-bottom: 50vh;
+}
+
+.tracked-section--first {
+  padding-top: 50vh;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.tracked-section--last {
+  padding-top: 10vh;
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.tracked-section + .tracked-section {
+  margin-top: -3px;
+}
+
+.tracked-section__label {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.6);
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Section colors */
+.section-red {
+  border-color: #fb7185;
+  background: rgba(251, 113, 133, 0.1);
+}
+.section-orange {
+  border-color: #fb923c;
+  background: rgba(251, 146, 60, 0.1);
+}
+.section-yellow {
+  border-color: #facc15;
+  background: rgba(250, 204, 21, 0.1);
+}
+.section-green {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+.section-blue {
+  border-color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+.section-purple {
+  border-color: #c084fc;
+  background: rgba(192, 132, 252, 0.1);
+}
+
+/* ── Active Section Info (sticky background) ────────────────────── */
+.active-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.active-info ul {
+  list-style: disc;
+  font-size: 1.25rem;
+  line-height: 2.25rem;
+}
+
+.active-info b {
+  font-weight: 700;
+}
+
+/* Color classes for the active label */
+.text-red {
+  color: #e11d48;
+}
+.text-orange {
+  color: #ea580c;
+}
+.text-yellow {
+  color: #ca8a04;
+}
+.text-green {
+  color: #16a34a;
+}
+.text-blue {
+  color: #2563eb;
+}
+.text-purple {
+  color: #9333ea;
+}

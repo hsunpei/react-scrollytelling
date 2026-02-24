@@ -14,3 +14,13 @@ yarn dev
 ```
 
 Open http://localhost:3600/react-scrollytelling to develop
+
+## E2E test app
+
+A simple Vite app at `apps/e2e` renders a grouped scrolling demo for e2e testing.
+
+```bash
+pnpm --filter e2e dev
+```
+
+Open http://localhost:3456 to view the app.
