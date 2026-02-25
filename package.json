@@ -23,6 +23,8 @@
     "pre-commit": "lint:fix",
     "test": "lerna run test",
     "test:watch": "lerna run test:watch",
+    "test:e2e": "pnpm --filter e2e run test:e2e",
+    "test:e2e:ui": "pnpm --filter e2e run test:e2e:ui",
     "versionup": "lerna version --conventional-commits --no-git-tag-version",
     "versionup:patch": "lerna version patch --conventional-commits --no-git-tag-version",
     "versionup:minor": "lerna version minor --conventional-commits --no-git-tag-version",
