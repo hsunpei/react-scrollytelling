@@ -24,3 +24,17 @@ pnpm --filter e2e dev
 ```
 
 Open http://localhost:3456 to view the app.
+
+### Running E2E tests
+
+To run the Playwright end-to-end tests:
+
+```bash
+pnpm test:e2e
+```
+
+To run the tests with Playwright UI:
+
+```bash
+pnpm test:e2e:ui
+```
