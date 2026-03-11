@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-scrollytelling/core": "workspace:*",
+    "@react-scrollytelling/framer-motion": "workspace:*",
     "@react-scrollytelling/grouped": "workspace:*",
     "@react-scrollytelling/layout": "workspace:*",
     "react": "catalog:",

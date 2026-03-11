@@ -250,6 +250,9 @@ importers:
       '@react-scrollytelling/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@react-scrollytelling/framer-motion':
+        specifier: workspace:*
+        version: link:../../packages/framer-motion
       '@react-scrollytelling/grouped':
         specifier: workspace:*
         version: link:../../packages/grouped
