@@ -1,8 +1,84 @@
-# Intro
+---
+slug: /
+sidebar_label: Introduction
+title: React Scrollytelling
+---
 
-The react-scrollytelling library is designed to seamlessly integrate with React and optimize performance.
+# React Scrollytelling
 
-You can effortlessly monitor which sections your readers are engaging with.
-It's perfectly suited for content with multiple sections, like visual news, and it also provides a smooth and engaging user experience.
+Scroll-triggered animations for React — seamlessly track which sections your readers are engaging with, drive animations from scroll progress, and build immersive visual stories.
 
-Codesandbox example: [Multiple sections](https://codesandbox.io/p/github/hsunpei/react-scrollytelling-multi-sections-demo/main)
+Perfect for data journalism, product pages, portfolios, and any content with multiple sections that benefits from a smooth, engaging user experience.
+
+## Installation
+
+```bash
+npm install @react-scrollytelling/core
+```
+
+Additional packages are available for specific use cases:
+
+| Package | Description |
+|---|---|
+| `@react-scrollytelling/core` | Core hooks for scroll tracking |
+| `@react-scrollytelling/grouped` | Multi-section tracking with active section detection |
+| `@react-scrollytelling/layout` | Sticky container layouts for scrollytelling |
+| `@react-scrollytelling/video` | Scroll-driven video playback |
+| `@react-scrollytelling/react-spring` | React Spring integration |
+| `@react-scrollytelling/framer-motion` | Framer Motion integration |
+
+## Quick Start
+
+Track whether an element is in view:
+
+```tsx
+import { useRef } from 'react';
+import { useIntersectionObserverState } from '@react-scrollytelling/core';
+
+export const Section = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { isIntersecting } = useIntersectionObserverState(sectionRef);
+
+  return (
+    <section ref={sectionRef}>
+      <p>In view: {`${isIntersecting}`}</p>
+    </section>
+  );
+};
+```
+
+Track scroll progress through a section:
+
+```tsx
+import { useRef } from 'react';
+import { useSectionScrollState } from '@react-scrollytelling/core';
+
+export const Section = () => {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrolledRatio } = useSectionScrollState(sectionRef);
+
+  return (
+    <section ref={sectionRef}>
+      <p>Progress: {`${(scrolledRatio * 100).toFixed(0)}%`}</p>
+    </section>
+  );
+};
+```
+
+## Features
+
+Explore the full set of capabilities:
+
+- **[Track In View](./track_single_section/track_in_view)** — Detect when elements enter or leave the viewport using the Intersection Observer API
+- **[Track Scroll Progress](./track_single_section/track_scroll_progress)** — Monitor how far a user has scrolled through a section, with callback-based updates for animation libraries
+- **[Reveal Effects](./track_single_section/reveal_effect)** — Trigger entrance animations when elements scroll into view, with one-time or repeating modes
+- **[Grouped Sections](./track_grouped_sections)** — Track multiple sections at once, detect the active section, and drive background changes or story transitions
+- **[Video Playback](./video_playback)** — Control video playback based on scroll position
+- **[React Spring Integration](./react-spring)** — Pair scroll tracking with React Spring for physics-based animations
+- **[Framer Motion Integration](./framer-motion)** — Combine with Framer Motion for declarative scroll-driven animations
+
+## Demo
+
+Try the interactive CodeSandbox example:
+
+🔗 [Multiple sections demo](https://codesandbox.io/p/github/hsunpei/react-scrollytelling-multi-sections-demo/main)
