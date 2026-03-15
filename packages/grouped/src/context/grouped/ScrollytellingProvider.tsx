@@ -17,7 +17,7 @@ import {
 
 import { ActiveSectionObservable } from "./ActiveSectionObservable";
 import {
-  ActiveSectionTracker,
+  type ActiveSectionTracker,
   ScrollytellingContext,
 } from "./ScrollytellingContext";
 import { TrackedSections } from "./TrackedSections";

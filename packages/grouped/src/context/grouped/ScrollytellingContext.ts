@@ -1,8 +1,8 @@
 import { createContext } from "react";
 
-import { SectionScrollInfo } from "@react-scrollytelling/core";
+import { type SectionScrollInfo } from "@react-scrollytelling/core";
 
-import { TrackedSections } from "./TrackedSections";
+import { type TrackedSections } from "./TrackedSections";
 
 export type sectionID = string | null;
 

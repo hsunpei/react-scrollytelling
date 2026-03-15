@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
 import {
-  IntersectionObserverOptions,
+  type IntersectionObserverOptions,
   useIntersectionObserver,
 } from "./useIntersectionObserver";
 

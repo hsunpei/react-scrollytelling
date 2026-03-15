@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
 import {
-  ActiveSectionScrollInfo,
+  type ActiveSectionScrollInfo,
   useActiveSection,
-  ActiveSectionObserver,
+  type ActiveSectionObserver,
 } from "@react-scrollytelling/grouped";
 import { useMotionValue } from "motion/react";
 

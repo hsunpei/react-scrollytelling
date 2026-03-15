@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 
 import {
-  IntersectionObserverOptions,
-  SectionScrollInfo,
+  type IntersectionObserverOptions,
+  type SectionScrollInfo,
   useSectionScroll,
 } from "@react-scrollytelling/core";
 import { SpringValue } from "@react-spring/web";

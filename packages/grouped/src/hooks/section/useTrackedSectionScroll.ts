@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef } from "react";
 
 import {
   DEFAULT_INTERSECTION_OBS_OPTIONS,
-  IntersectionObserverOptions,
+  type IntersectionObserverOptions,
   useIntersectionObserver,
-  SectionScrollInfo,
+  type SectionScrollInfo,
   getScrollPosition,
 } from "@react-scrollytelling/core";
 

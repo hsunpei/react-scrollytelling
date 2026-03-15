@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { ActiveSectionObserver } from "../../context/grouped/ScrollytellingContext";
+import { type ActiveSectionObserver } from "../../context/grouped/ScrollytellingContext";
 import { useScrollytelling } from "../grouped/useScrollytelling";
 
 /**

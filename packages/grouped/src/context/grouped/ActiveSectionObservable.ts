@@ -1,6 +1,6 @@
 import {
-  ActiveSectionObserver,
-  ActiveSectionScrollInfo,
+  type ActiveSectionObserver,
+  type ActiveSectionScrollInfo,
 } from "./ScrollytellingContext";
 
 export class ActiveSectionObservable {

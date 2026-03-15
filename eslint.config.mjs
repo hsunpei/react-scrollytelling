@@ -23,6 +23,7 @@ export default [
       "**/.next/",
       "**/out/",
       "**/build/",
+      "**/dist_types/",
     ],
   },
   js.configs.recommended,
@@ -49,6 +50,13 @@ export default [
     rules: {
       ...tsPlugin.configs.recommended.rules,
       "no-undef": "off", // TypeScript checks for undefined variables
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports"
+        }
+      ],
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-explicit-any": "warn",
       "prefer-const": "error",

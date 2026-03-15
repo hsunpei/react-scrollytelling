@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { clampScrolledRatio, getScrollPosition } from "../utils";
 import {
-  IntersectionObserverOptions,
+  type IntersectionObserverOptions,
   useIntersectionObserver,
 } from "./intersection/useIntersectionObserver";
 import { useRafThrottle } from "./performance/useRafThrottle";

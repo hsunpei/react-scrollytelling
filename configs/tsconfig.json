@@ -2,6 +2,7 @@
   "extends": "@hsunpei/typescript-config/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "verbatimModuleSyntax": true,
     "paths": {
       "@react-scrollytelling/*": ["packages/*/src"]
     }

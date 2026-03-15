@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 
 import {
-  IntersectionObserverOptions,
-  SectionScrollInfo,
+  type IntersectionObserverOptions,
+  type SectionScrollInfo,
   useSectionScroll,
 } from "@react-scrollytelling/core";
 import { useMotionValue } from "motion/react";

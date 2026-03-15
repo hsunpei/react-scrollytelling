@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 
-import { IntersectionObserverOptions } from "./intersection/useIntersectionObserver";
-import { SectionScrollInfo, useSectionScroll } from "./useSectionScroll";
+import { type IntersectionObserverOptions } from "./intersection/useIntersectionObserver";
+import { type SectionScrollInfo, useSectionScroll } from "./useSectionScroll";
 
 /**
  * Get the state of the section scroll

@@ -12,6 +12,7 @@
     "strict": true,
     "declaration": true,
     "declarationMap": true,
+    "verbatimModuleSyntax": true,
     "baseUrl": "..",
     "paths": {
       "@react-scrollytelling/*": ["packages/*/src"]
