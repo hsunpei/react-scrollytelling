@@ -5,20 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ## 0.3.1 (2026-05-24)
 
-**Note:** Version bump only for package docs
-
-
-
-
-
-# 0.3.0 (2026-02-22)
-
-**Note:** Version bump only for package docs
-
-
-
-
-
-# 0.2.0 (2026-02-22)
-
-**Note:** Version bump only for package docs
+**Note:** Version bump only for package e2e
