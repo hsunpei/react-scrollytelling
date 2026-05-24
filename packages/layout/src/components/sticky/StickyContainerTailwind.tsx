@@ -28,7 +28,7 @@ export const StickyContainerTailwind = ({
       className={className ? `relative ${className}` : "relative"}
     >
       {/* Background */}
-      <div className="sticky top-0 pb-[100vh]">
+      <div className="sticky top-0" style={{ paddingBottom: "100vh" }}>
         <div
           className="absolute left-0 right-0 top-0 h-screen"
           ref={backgroundRef}
@@ -39,7 +39,8 @@ export const StickyContainerTailwind = ({
 
       {/* Overlay foreground content */}
       <div
-        className={`relative -mt-[100vh]${overlayClassName ? ` ${overlayClassName}` : ""}`}
+        className={`relative${overlayClassName ? ` ${overlayClassName}` : ""}`}
+        style={{ marginTop: "-100vh" }}
       >
         {overlay}
       </div>
