@@ -259,6 +259,9 @@ importers:
       '@react-scrollytelling/layout':
         specifier: workspace:*
         version: link:../../packages/layout
+      motion:
+        specifier: 'catalog:'
+        version: 12.34.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       react:
         specifier: 'catalog:'
         version: 19.2.6
