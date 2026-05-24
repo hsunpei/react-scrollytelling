@@ -25,7 +25,7 @@ export function useActiveSectionSpring(
   const onSectionScroll = useCallback(
     (scrollInfo: ActiveSectionScrollInfo) => {
       const { trackingId: id, scrolledRatio } = scrollInfo;
-      setTrackingId(id);
+      setTrackingId((prev) => (prev === id ? prev : id));
       scrolledRatioSpring.set(scrolledRatio);
 
       if (onActiveSectionChange) {

@@ -24,7 +24,7 @@ export function useActiveSectionMotionValue(
   const onSectionScroll = useCallback(
     (scrollInfo: ActiveSectionScrollInfo) => {
       const { trackingId: id, scrolledRatio } = scrollInfo;
-      setTrackingId(id);
+      setTrackingId((prev) => (prev === id ? prev : id));
       scrolledRatioMotionValue.set(scrolledRatio);
 
       if (onActiveSectionChange) {

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { memo, useRef } from 'react';
 import { useTrackedSectionScroll } from '@react-scrollytelling/grouped';
 
 interface TrackedSectionProps {
@@ -8,12 +8,12 @@ interface TrackedSectionProps {
   isLast?: boolean;
 }
 
-export const TrackedSection = ({
+export const TrackedSection = memo(function TrackedSection({
   sectionID,
   colorClass,
   isFirst,
   isLast,
-}: TrackedSectionProps) => {
+}: TrackedSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null!);
   useTrackedSectionScroll(sectionRef as React.RefObject<Element>, sectionID);
 
@@ -33,4 +33,6 @@ export const TrackedSection = ({
       </div>
     </section>
   );
-};
+});
+
+
