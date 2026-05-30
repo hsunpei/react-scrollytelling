@@ -112,13 +112,15 @@ export const ScrollytellingProvider = ({
   // Update the onNewSectionAdded callback when handleScrollThrottled changes.
   useEffect(() => {
     trackedSections.updateOnNewSectionAdded(handleScrollThrottled);
-  }, [trackedSections, handleScrollThrottled]);
+    handleScroll();
+  }, [trackedSections, handleScrollThrottled, handleScroll]);
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
         window.addEventListener("scroll", handleScrollThrottled);
+        handleScrollThrottled();
       } else {
         window.removeEventListener("scroll", handleScrollThrottled);
       }

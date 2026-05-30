@@ -22,6 +22,7 @@ export function useRafThrottle<T extends unknown[]>(
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
       }
     };
   }, []);

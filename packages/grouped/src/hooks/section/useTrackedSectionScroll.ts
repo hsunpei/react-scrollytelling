@@ -44,6 +44,22 @@ export function useTrackedSectionScroll(
     trackedSections.subscribeScroll(sectionID, handleScroll);
   }, [onScroll, sectionID, trackedSections]);
 
+  // Register the section in trackedSections on mount to allow initial closest section detection
+  useEffect(() => {
+    const { scrollTop } = getScrollPosition();
+    trackedSections.setSection(sectionID, {
+      sectionTop:
+        (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
+      sectionBottom:
+        (sectionRef.current?.getBoundingClientRect().bottom || 0) + scrollTop,
+      onActiveScroll: onScroll,
+    });
+
+    return () => {
+      trackedSections.unregisterSection(sectionID);
+    };
+  }, [sectionID, sectionRef, onScroll, trackedSections]);
+
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       if (isIntersecting) {
@@ -73,7 +89,7 @@ export function useTrackedSectionScroll(
             isIntersecting: false,
           });
         }
-        trackedSections.removeSection(sectionID);
+        trackedSections.untrackSection(sectionID);
       }
     },
     [trackedSections, sectionID, sectionRef, onScroll]

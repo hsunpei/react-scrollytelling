@@ -20,16 +20,14 @@ body {
   position: relative;
   border: 2px solid;
   padding: 2.5rem;
-  padding-bottom: 50vh;
+  min-height: 150vh;
 }
 
 .tracked-section--first {
-  padding-top: 50vh;
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .tracked-section--last {
-  padding-top: 10vh;
   border-radius: 0 0 0.5rem 0.5rem;
 }
 

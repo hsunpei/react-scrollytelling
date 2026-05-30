@@ -10,7 +10,11 @@ const TEXT_COLOR: Record<string, string> = {
   PURPLE: 'text-purple',
 };
 
-export const ActiveSectionInfo = () => {
+interface ActiveSectionInfoProps {
+  hideTestIds?: boolean;
+}
+
+export const ActiveSectionInfo = ({ hideTestIds }: ActiveSectionInfoProps = {}) => {
   const { trackingId, scrolledRatioMotionValue } = useActiveSectionMotionValue();
 
   // Transform the motion value to percentage width
@@ -30,13 +34,13 @@ export const ActiveSectionInfo = () => {
       <div style={{ minWidth: '24rem', fontSize: '1.25rem', lineHeight: '2.25rem' }}>
         <div style={{ marginBottom: '1rem' }}>
           <small>
-            Active Section = <b data-testid="active-section-id">{trackingId}</b>:
+            Active Section = <b data-testid={hideTestIds ? undefined : "active-section-id"}>{trackingId}</b>:
           </small>
         </div>
         <div>
           You are viewing{' '}
           <span style={{ backgroundColor: '#f1f5f9', padding: '0.25rem 0.5rem', borderRadius: '0.375rem', color: '#0f172a' }}>
-            <b className={trackingId ? TEXT_COLOR[trackingId] : ''} data-testid="active-section-label">
+            <b className={trackingId ? TEXT_COLOR[trackingId] : ''} data-testid={hideTestIds ? undefined : "active-section-label"}>
               {trackingId}
             </b>
           </span>{' '}
@@ -59,7 +63,7 @@ export const ActiveSectionInfo = () => {
                 color: '#dbeafe'
               }}
             >
-              <motion.b data-testid="active-section-ratio">{displayValue}</motion.b>
+              <motion.b data-testid={hideTestIds ? undefined : "active-section-ratio"}>{displayValue}</motion.b>
             </motion.div>
           </div>
         </div>
