@@ -27,7 +27,7 @@ export const TrackedSection = memo(function TrackedSection({
     .join(' ');
 
   return (
-    <section ref={sectionRef} className={classNames} data-testid={`section-${sectionID}`}>
+    <section ref={sectionRef} id={sectionID} className={classNames} data-testid={`section-${sectionID}`}>
       <div className="tracked-section__label">
         <span>{sectionID}</span>
       </div>
