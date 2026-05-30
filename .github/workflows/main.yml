@@ -45,8 +45,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 🎭 Get Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(pnpm --filter e2e exec playwright --version | head -1 | awk '{print $2}')" >> $GITHUB_OUTPUT
+
+      - name: 🎭 Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
+
       - name: 🎭 Install Playwright Browsers
-        run: pnpm --filter e2e exec playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter e2e exec playwright install chromium
+        timeout-minutes: 3
 
       - name: 🧪 Run E2E tests
         run: pnpm test:e2e
