@@ -58,8 +58,8 @@ jobs:
 
       - name: 🎭 Install Playwright Browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm --filter e2e exec playwright install chromium
-        timeout-minutes: 3
+        run: pnpm --filter e2e exec playwright install --only-shell chromium
+        timeout-minutes: 10
 
       - name: 🧪 Run E2E tests
         run: pnpm test:e2e
