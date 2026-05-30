@@ -7,17 +7,9 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 **Note:** Version bump only for package @react-scrollytelling/react-spring
 
-
-
-
-
 ## 0.3.1 (2026-05-24)
 
 **Note:** Version bump only for package @react-scrollytelling/react-spring
-
-
-
-
 
 # 0.3.0 (2026-02-22)
 
