@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+node -e '
+const fs = require("fs");
+const execSync = require("child_process").execSync;
+
+const commitMsgFile = process.argv[1];
+if (!commitMsgFile) process.exit(0);
+
+let msg = fs.readFileSync(commitMsgFile, "utf8").trim();
+
+try {
+  // Run devmoji on the message
+  const emojified = execSync(`pnpm exec devmoji -t "${msg.replace(/"/g, "\\\"")}"`, { encoding: "utf8" }).trim();
+  
+  // Match standard devmoji output: "type(scope): 🚀 subject" or "type: 🚀 subject"
+  const match = emojified.match(/^([a-z]+(?:\([^)]+\))?):\s+([\p{Emoji}\u200d\uFE0F]+)\s+(.+)$/u);
+  
+  if (match) {
+    const [, typeScope, emoji, subject] = match;
+    // Format to Gitmoji-first format: "🚀 type(scope): subject"
+    const rewritten = `${emoji} ${typeScope}: ${subject}`;
+    fs.writeFileSync(commitMsgFile, rewritten, "utf8");
+  } else {
+    fs.writeFileSync(commitMsgFile, emojified, "utf8");
+  }
+} catch (e) {
+  // If devmoji fails, fallback to original message
+  console.error("Devmoji failed, keeping original message:", e);
+}
+' "$1"
