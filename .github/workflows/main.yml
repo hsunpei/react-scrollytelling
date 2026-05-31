@@ -14,8 +14,42 @@ permissions:
   packages: read
 
 jobs:
+  # ── E2E tests ──────────────────────────────────────────────────
+  # Runs inside the official Playwright image so the browsers are
+  # pre-installed — this avoids the `playwright install` hang on
+  # Node 24 (fixed in Playwright >= 1.60.0) and skips the download.
+  e2e:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+      - name: 💿 Install packages
+        run: pnpm install --frozen-lockfile
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🏗️ Build packages
+        run: pnpm build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🧪 Run E2E tests
+        run: pnpm test:e2e
+        env:
+          HOME: /root # ensure Playwright finds the pre-baked browsers
+
   build-and-publish:
     runs-on: ubuntu-latest
+    needs: e2e # only publish/deploy once the e2e suite passes
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,25 +78,6 @@ jobs:
         run: pnpm clean && pnpm build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🎭 Get Playwright version
-        id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(pnpm --filter e2e exec playwright --version | head -1 | awk '{print $2}')" >> $GITHUB_OUTPUT
-
-      - name: 🎭 Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.PLAYWRIGHT_VERSION }}
-
-      - name: 🎭 Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm --filter e2e exec playwright install --only-shell chromium
-        timeout-minutes: 10
-
-      - name: 🧪 Run E2E tests
-        run: pnpm test:e2e
 
       # ── Stable release (main/master only) ──────────────────────────
 
