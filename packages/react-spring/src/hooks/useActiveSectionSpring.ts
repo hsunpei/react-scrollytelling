@@ -20,22 +20,27 @@ export function useActiveSectionSpring(
 ) {
   // Use state to return a stable SpringValue object
   const [scrolledRatioSpring] = useState(() => new SpringValue(0));
+  const [trackingIdSpring] = useState(() => new SpringValue<string | null>(null));
+  const [viewportBtmDistanceSpring] = useState(() => new SpringValue(0));
   const [trackingId, setTrackingId] = useState<string | null>(null);
 
   const onSectionScroll = useCallback(
     (scrollInfo: ActiveSectionScrollInfo) => {
-      const { trackingId: id, scrolledRatio } = scrollInfo;
+      const { trackingId: id, scrolledRatio, viewportBtmDistance } = scrollInfo;
       setTrackingId((prev) => (prev === id ? prev : id));
+      
+      trackingIdSpring.set(id);
       scrolledRatioSpring.set(scrolledRatio);
+      viewportBtmDistanceSpring.set(viewportBtmDistance);
 
       if (onActiveSectionChange) {
         onActiveSectionChange(scrollInfo);
       }
     },
-    [onActiveSectionChange, scrolledRatioSpring]
+    [onActiveSectionChange, scrolledRatioSpring, trackingIdSpring, viewportBtmDistanceSpring]
   );
 
   useActiveSection(onSectionScroll);
 
-  return { trackingId, scrolledRatioSpring };
+  return { trackingId, trackingIdSpring, scrolledRatioSpring, viewportBtmDistanceSpring };
 }
