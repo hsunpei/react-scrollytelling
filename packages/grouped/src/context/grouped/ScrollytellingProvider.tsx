@@ -72,7 +72,15 @@ export const ScrollytellingProvider = ({
     },
     [activeSectionObservable]
   );
-  const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
+  /**
+   * Not throttled: its only caller, `handleScroll`, is already inside a frame.
+   *
+   * Wrapping it scheduled a *second* rAF from within an animation-frame
+   * callback, which lands on the next frame. So a section's own `onScroll` —
+   * called synchronously below — and everything reading the active section
+   * through this observable animated 16 ms apart, from the same event. That
+   * reads as tearing, not lag.
+   */
 
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();
@@ -104,9 +112,9 @@ export const ScrollytellingProvider = ({
       }
 
       // notify the sections tracking the active section
-      onActiveSectionUpdateThrottled(activeSectionId!, ratio, distance);
+      onActiveSectionUpdate(activeSectionId!, ratio, distance);
     }
-  }, [onActiveSectionUpdateThrottled, trackedSections]);
+  }, [onActiveSectionUpdate, trackedSections]);
   const handleScrollThrottled = useRafThrottle(handleScroll);
 
   // Update the onNewSectionAdded callback when handleScrollThrottled changes.

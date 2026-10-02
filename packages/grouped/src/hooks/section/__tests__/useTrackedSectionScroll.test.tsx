@@ -122,6 +122,33 @@ describe("a section whose viewport changes height", () => {
     expect(trackedSections.getSection("section-1")?.sectionTop).toBe(120);
   });
 
+  it("does not put the section back in the viewport set when it resizes", () => {
+    setViewportHeight(600, 0);
+    mountSection();
+
+    // Scrolled past: the IntersectionObserver takes it out of the set that
+    // the per-frame search walks.
+    trackedSections.untrackSection("section-1");
+    expect(trackedSections.findClosestToBottomId(0, 600)).toBe("section-1");
+
+    setViewportHeight(660, 0);
+    act(() => {
+      window.visualViewport?.dispatchEvent(new Event("resize"));
+    });
+
+    // Offsets are fresh...
+    expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(660);
+
+    // ...but it is still off screen. Routing the re-measure through
+    // setSection would re-add it, and since every section re-measures on one
+    // resize, the search would scan the whole document from then on — on
+    // mobile, during the very gesture this re-measure exists for.
+    const tracked = trackedSections as unknown as {
+      trackedSections: Map<string, unknown>;
+    };
+    expect(tracked.trackedSections.has("section-1")).toBe(false);
+  });
+
   it("stops listening once the section unmounts", () => {
     setViewportHeight(600, 0);
     const { view } = mountSection();

@@ -52,28 +52,44 @@ export function useTrackedSectionScroll(
    * live `window.innerHeight`. Measure at the wrong moment and the two
    * disagree.
    */
-  const measure = useCallback(() => {
+  const readOffsets = useCallback(() => {
     const element = sectionRef.current;
-    if (!element) return;
+    if (!element) return null;
 
     const { scrollTop } = getScrollPosition();
     const rect = element.getBoundingClientRect();
 
-    trackedSections.setSection(sectionID, {
+    return {
       sectionTop: rect.top + scrollTop,
       sectionBottom: rect.bottom + scrollTop,
+    };
+  }, [sectionRef]);
+
+  /** Measure and register as on screen. For mount and viewport entry. */
+  const register = useCallback(() => {
+    const offsets = readOffsets();
+    if (!offsets) return;
+
+    trackedSections.setSection(sectionID, {
+      ...offsets,
       onActiveScroll: onScroll,
     });
-  }, [onScroll, sectionID, sectionRef, trackedSections]);
+  }, [onScroll, readOffsets, sectionID, trackedSections]);
+
+  /** Measure only. For resize, which says nothing about visibility. */
+  const remeasure = useCallback(() => {
+    const offsets = readOffsets();
+    if (offsets) trackedSections.updateOffsets(sectionID, offsets);
+  }, [readOffsets, sectionID, trackedSections]);
 
   // Register the section in trackedSections on mount to allow initial closest section detection
   useEffect(() => {
-    measure();
+    register();
 
     return () => {
       trackedSections.unregisterSection(sectionID);
     };
-  }, [measure, sectionID, trackedSections]);
+  }, [register, sectionID, trackedSections]);
 
   /**
    * Re-measure whenever the section moves under us.
@@ -85,33 +101,37 @@ export function useTrackedSectionScroll(
    * the cached offsets are then wrong by the height of the toolbar, and the
    * ratio jumps by that fraction of a section. `visualViewport` is the signal
    * that actually fires for in-app browser chrome; `resize` alone can miss it.
+   *
+   * Offsets only — see `updateOffsets`. Re-measuring must not re-assert that
+   * the section is on screen, or one resize puts every section back in the
+   * viewport set and the per-frame search never shortens again.
    */
   useEffect(() => {
     const element = sectionRef.current;
     if (!element || typeof window === "undefined") return;
 
-    const remeasure = () => measure();
+    const onViewportChange = () => remeasure();
 
     const observer =
       typeof ResizeObserver === "undefined"
         ? null
-        : new ResizeObserver(remeasure);
+        : new ResizeObserver(onViewportChange);
     observer?.observe(element);
 
-    window.addEventListener("resize", remeasure);
-    window.visualViewport?.addEventListener("resize", remeasure);
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    window.visualViewport?.addEventListener("resize", onViewportChange);
 
     return () => {
       observer?.disconnect();
-      window.removeEventListener("resize", remeasure);
-      window.visualViewport?.removeEventListener("resize", remeasure);
+      window.removeEventListener("resize", onViewportChange);
+      window.visualViewport?.removeEventListener("resize", onViewportChange);
     };
-  }, [measure, sectionRef]);
+  }, [remeasure, sectionRef]);
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       if (isIntersecting) {
-        measure();
+        register();
       } else {
         // notify the scroll progress that isIntersecting = false
         const {
@@ -131,7 +151,7 @@ export function useTrackedSectionScroll(
         trackedSections.untrackSection(sectionID);
       }
     },
-    [measure, onScroll, sectionID, trackedSections]
+    [register, onScroll, sectionID, trackedSections]
   );
 
   useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
