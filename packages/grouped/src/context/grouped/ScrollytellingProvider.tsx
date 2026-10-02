@@ -115,11 +115,35 @@ export const ScrollytellingProvider = ({
     handleScroll();
   }, [trackedSections, handleScrollThrottled, handleScroll]);
 
+  /**
+   * Recompute once the viewport has settled at its new height.
+   *
+   * The ratio divides a live `window.innerHeight` by cached section offsets,
+   * so a viewport change makes the two disagree until the sections have
+   * re-measured. Running after them — they listen to the same events — turns
+   * what would surface as a jump into a corrected value on the next frame.
+   */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const onViewportChange = () => handleScrollThrottled();
+
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    window.visualViewport?.addEventListener("resize", onViewportChange);
+
+    return () => {
+      window.removeEventListener("resize", onViewportChange);
+      window.visualViewport?.removeEventListener("resize", onViewportChange);
+    };
+  }, [handleScrollThrottled]);
+
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
-        window.addEventListener("scroll", handleScrollThrottled);
+        window.addEventListener("scroll", handleScrollThrottled, {
+          passive: true,
+        });
         handleScrollThrottled();
       } else {
         window.removeEventListener("scroll", handleScrollThrottled);

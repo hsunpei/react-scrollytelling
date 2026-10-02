@@ -44,35 +44,74 @@ export function useTrackedSectionScroll(
     trackedSections.subscribeScroll(sectionID, handleScroll);
   }, [onScroll, sectionID, trackedSections]);
 
-  // Register the section in trackedSections on mount to allow initial closest section detection
-  useEffect(() => {
+  /**
+   * Record where the section sits in the document, as of right now.
+   *
+   * The offsets are absolute, so anything that moves or resizes the section
+   * invalidates them — and the scroll ratio is computed from them against a
+   * live `window.innerHeight`. Measure at the wrong moment and the two
+   * disagree.
+   */
+  const measure = useCallback(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
     const { scrollTop } = getScrollPosition();
+    const rect = element.getBoundingClientRect();
+
     trackedSections.setSection(sectionID, {
-      sectionTop:
-        (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
-      sectionBottom:
-        (sectionRef.current?.getBoundingClientRect().bottom || 0) + scrollTop,
+      sectionTop: rect.top + scrollTop,
+      sectionBottom: rect.bottom + scrollTop,
       onActiveScroll: onScroll,
     });
+  }, [onScroll, sectionID, sectionRef, trackedSections]);
+
+  // Register the section in trackedSections on mount to allow initial closest section detection
+  useEffect(() => {
+    measure();
 
     return () => {
       trackedSections.unregisterSection(sectionID);
     };
-  }, [sectionID, sectionRef, onScroll, trackedSections]);
+  }, [measure, sectionID, trackedSections]);
+
+  /**
+   * Re-measure whenever the section moves under us.
+   *
+   * A mobile browser hiding its address bar — or an in-app browser collapsing
+   * its own toolbars — changes the viewport height mid-scroll. Sections sized
+   * in viewport units grow, every offset below them shifts, and
+   * `window.innerHeight` changes in the same frame. Measured once at mount,
+   * the cached offsets are then wrong by the height of the toolbar, and the
+   * ratio jumps by that fraction of a section. `visualViewport` is the signal
+   * that actually fires for in-app browser chrome; `resize` alone can miss it.
+   */
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element || typeof window === "undefined") return;
+
+    const remeasure = () => measure();
+
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(remeasure);
+    observer?.observe(element);
+
+    window.addEventListener("resize", remeasure);
+    window.visualViewport?.addEventListener("resize", remeasure);
+
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener("resize", remeasure);
+      window.visualViewport?.removeEventListener("resize", remeasure);
+    };
+  }, [measure, sectionRef]);
 
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       if (isIntersecting) {
-        const { scrollTop } = getScrollPosition();
-
-        trackedSections.setSection(sectionID, {
-          sectionTop:
-            (sectionRef.current?.getBoundingClientRect().top || 0) + scrollTop,
-          sectionBottom:
-            (sectionRef.current?.getBoundingClientRect().bottom || 0) +
-            scrollTop,
-          onActiveScroll: onScroll,
-        });
+        measure();
       } else {
         // notify the scroll progress that isIntersecting = false
         const {
@@ -92,10 +131,8 @@ export function useTrackedSectionScroll(
         trackedSections.untrackSection(sectionID);
       }
     },
-    [trackedSections, sectionID, sectionRef, onScroll]
+    [measure, onScroll, sectionID, trackedSections]
   );
-
-  // TODO - setSection when the section is resizing
 
   useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
 }
