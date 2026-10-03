@@ -130,15 +130,23 @@ jobs:
 
       # ── Canary release (non-main branches) ─────────────────────────
 
-      # Two steps rather than one `exec bash -c`: the version bump is per
-      # package and npm does it fine, but the publish has to be pnpm's so the
-      # `catalog:` ranges are resolved. See the note on the stable step.
+      # `npm version` is out for the same reason as `npm publish`: it reifies
+      # the dependency tree before writing, so it hits `catalog:` too. The
+      # version is computed here and written with `npm pkg set`, which only
+      # edits the manifest and resolves nothing. Lerna keeps every package on
+      # one version, so `lerna.json` is the single source for it.
       - name: 📢 Publish canary release
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
         run: |
           git stash
           SHORT_SHA=$(git rev-parse --short HEAD)
-          pnpm -r --filter './packages/*' exec npm version prerelease --preid "ci.${SHORT_SHA}" --no-git-tag-version
+          CANARY=$(node -e "
+            const v = require('./lerna.json').version.split('.').map(Number);
+            v[2] += 1;
+            console.log(\`\${v.join('.')}-ci.\${process.argv[1]}.0\`);
+          " "$SHORT_SHA")
+          echo "Publishing canary $CANARY"
+          pnpm -r --filter './packages/*' exec npm pkg set version="$CANARY"
           pnpm -r --filter './packages/*' publish --access public --provenance --no-git-checks --tag ci
 
       # ── Docs deployment (main/master only) ─────────────────────────
