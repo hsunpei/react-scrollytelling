@@ -29,9 +29,9 @@
     "versionup:patch": "lerna version patch --no-git-tag-version",
     "versionup:minor": "lerna version minor --no-git-tag-version",
     "versionup:major": "lerna version major --no-git-tag-version",
-    "release": "pnpm -r --filter './packages/*' exec npm publish --access public --provenance",
+    "release": "pnpm -r --filter './packages/*' publish --access public --provenance",
     "release:beta": "lerna publish --no-push --dist-tag=prerelease",
-    "release:canary": "pnpm -r --filter './packages/*' exec npm publish --access public --provenance --tag ci",
+    "release:canary": "pnpm -r --filter './packages/*' publish --access public --provenance --tag ci",
     "release:interactive": "lerna publish"
   },
   "volta": {
