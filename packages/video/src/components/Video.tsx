@@ -84,10 +84,18 @@ export const VideoWithImperativeHandle = React.memo(
         }
 
         const duration = videoElement.duration;
-        if (!isNaN(duration)) {
-          requestAnimationFrame(() => {
-            videoElement.currentTime = Math.round(ratio * duration * 100) / 100;
-          });
+        if (isNaN(duration)) return;
+
+        // No inner requestAnimationFrame: the caller is already rAF-throttled,
+        // so scheduling another from inside that frame pushed every seek to
+        // the frame after the one it was computed for.
+        const next = Math.round(ratio * duration * 100) / 100;
+
+        // A seek is decoder work even when it lands on the frame already
+        // showing. The quantisation above is finer than a video frame, so
+        // without this a scrub issues redundant seeks continuously.
+        if (videoElement.currentTime !== next) {
+          videoElement.currentTime = next;
         }
       }, []);
       const setVideoRatioThrottled = useRafThrottle(setVideoRatio);

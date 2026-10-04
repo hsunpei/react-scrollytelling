@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/hsunpei/react-scrollytelling/compare/v0.3.2...v0.5.0) (2026-10-03)
+
+
+### Bug Fixes
+
+* **core:** deliver the newest scroll sample, and stop leaking listeners ([539de02](https://github.com/hsunpei/react-scrollytelling/commit/539de0210a3eeb6c7907c3806709be9058d15877))
+* **e2e:** fix Playwright install hang on Node 24 in CI ([c34bbb4](https://github.com/hsunpei/react-scrollytelling/commit/c34bbb4e3157e9b0dde55b38c19dcc5dbaefb75f))
+* **e2e:** fix Playwright install timeout in CI ([457c169](https://github.com/hsunpei/react-scrollytelling/commit/457c1699ded41ace56d8d2caeb559654d83aa2bd))
+* **grouped:** re-measure sections when the viewport resizes ([a16d2db](https://github.com/hsunpei/react-scrollytelling/commit/a16d2db6cdbcc815252cb0f1c8408e25c9affbf4))
+
+
+### Features
+
+* **core:** add useFrameLoop, an animation frame loop that can stop ([3ea9116](https://github.com/hsunpei/react-scrollytelling/commit/3ea911658b1d9164a8b57e4d2297971290631466))
+* **grouped:** set activeSection as the closest section when sections are out of view ([5dac913](https://github.com/hsunpei/react-scrollytelling/commit/5dac913f286852ea1c05b8bb4434f6ec45003e12))
+* **hooks:** expose active section tracking ID and viewport distance as animatable values ([08ba9eb](https://github.com/hsunpei/react-scrollytelling/commit/08ba9ebee2096662462d25bf7461097684ab9b64))
+* **layout:** let the sticky range choose its viewport unit ([e1ff194](https://github.com/hsunpei/react-scrollytelling/commit/e1ff1942bd28937167a625b094be3003c4ff70ea))
+
+
+
+
+
 ## [0.4.1](https://github.com/hsunpei/react-scrollytelling/compare/v0.3.2...v0.4.1) (2026-06-09)
 
 

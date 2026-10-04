@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { clampScrolledRatio, getScrollPosition } from "../utils";
 import {
@@ -69,25 +69,38 @@ export function useSectionScroll(
   );
   const onPageScroll = useRafThrottle(handleScroll);
 
+  /**
+   * Whether the section is on screen, held in a ref.
+   *
+   * The listener is registered once and reads this, rather than being
+   * re-registered per visibility change with the value bound in. `bind`
+   * returns a new function every call, so the old code's
+   * `removeEventListener(onPageScroll.bind(…))` matched nothing: every section
+   * that had ever been seen kept a listener for the life of the page, each one
+   * measuring an off-screen element every frame and reporting a frozen
+   * `isIntersecting: true`.
+   */
+  const isIntersectingRef = useRef(false);
+
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
+      isIntersectingRef.current = isIntersecting;
       onPageScroll(isIntersecting);
-
-      // track scrolling only when the section is visible in viewport
-      if (isIntersecting) {
-        window.addEventListener(
-          "scroll",
-          onPageScroll.bind(null, isIntersecting)
-        );
-      } else {
-        window.removeEventListener(
-          "scroll",
-          onPageScroll.bind(null, isIntersecting)
-        );
-      }
     },
     [onPageScroll]
   );
 
   useIntersectionObserver(sectionRef, options, shouldObserve, onObserve);
+
+  useEffect(() => {
+    if (!shouldObserve) return;
+
+    const listener = () => {
+      // Off-screen sections cost nothing: the frame is never scheduled.
+      if (isIntersectingRef.current) onPageScroll(true);
+    };
+
+    window.addEventListener("scroll", listener, { passive: true });
+    return () => window.removeEventListener("scroll", listener);
+  }, [onPageScroll, shouldObserve]);
 }

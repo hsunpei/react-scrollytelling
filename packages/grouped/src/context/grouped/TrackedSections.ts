@@ -43,6 +43,33 @@ export class TrackedSections {
     }
   };
 
+  /**
+   * Refresh a section's cached offsets without claiming it is on screen.
+   *
+   * `setSection` means "this section is in the viewport" — it is what keeps
+   * the per-frame search short. Re-measuring after a resize must not say that:
+   * every section re-measures on one resize, and routing that through
+   * `setSection` would move all of them into the viewport set and leave the
+   * hot loop scanning the whole document from then on.
+   *
+   * It also leaves `onActiveScroll` alone, so the wrapper `subscribeScroll`
+   * installed to maintain the section's own scroll info survives a re-measure.
+   */
+  updateOffsets = (
+    sectionID: string,
+    offsets: Pick<TrackedSectionInfo, "sectionTop" | "sectionBottom">
+  ) => {
+    const registered = this.registeredSections.get(sectionID);
+    if (registered) {
+      Object.assign(registered, offsets);
+    }
+
+    const tracked = this.trackedSections.get(sectionID);
+    if (tracked && tracked !== registered) {
+      Object.assign(tracked, offsets);
+    }
+  };
+
   subscribeScroll = (
     sectionID: string,
     onActiveScroll: (scrollInfo: SectionScrollInfo) => void

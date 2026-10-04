@@ -117,20 +117,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # `pnpm publish`, not `npm publish`: the manifests declare their deps as
+      # `catalog:`, and only pnpm rewrites that to a real range on the way out.
+      # npm reads it as a URL and fails with EUNSUPPORTEDPROTOCOL.
+      # `--no-git-checks` because CI builds a detached HEAD, which pnpm would
+      # otherwise refuse to publish from.
       - name: 📢 Publish stable release
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         run: |
           git stash
-          pnpm -r --filter './packages/*' exec npm publish --access public --provenance
+          pnpm -r --filter './packages/*' publish --access public --provenance --no-git-checks
 
       # ── Canary release (non-main branches) ─────────────────────────
 
+      # `npm version` is out for the same reason as `npm publish`: it reifies
+      # the dependency tree before writing, so it hits `catalog:` too. The
+      # version is computed here and written with `npm pkg set`, which only
+      # edits the manifest and resolves nothing. Lerna keeps every package on
+      # one version, so `lerna.json` is the single source for it.
       - name: 📢 Publish canary release
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
         run: |
           git stash
           SHORT_SHA=$(git rev-parse --short HEAD)
-          pnpm -r --filter './packages/*' exec bash -c "npm version prerelease --preid ci.${SHORT_SHA} --no-git-tag-version && npm publish --access public --provenance --tag ci"
+          CANARY=$(node -e "
+            const v = require('./lerna.json').version.split('.').map(Number);
+            v[2] += 1;
+            console.log(\`\${v.join('.')}-ci.\${process.argv[1]}.0\`);
+          " "$SHORT_SHA")
+          echo "Publishing canary $CANARY"
+          pnpm -r --filter './packages/*' exec npm pkg set version="$CANARY"
+          pnpm -r --filter './packages/*' publish --access public --provenance --no-git-checks --tag ci
 
       # ── Docs deployment (main/master only) ─────────────────────────
 

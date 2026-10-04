@@ -72,7 +72,15 @@ export const ScrollytellingProvider = ({
     },
     [activeSectionObservable]
   );
-  const onActiveSectionUpdateThrottled = useRafThrottle(onActiveSectionUpdate);
+  /**
+   * Not throttled: its only caller, `handleScroll`, is already inside a frame.
+   *
+   * Wrapping it scheduled a *second* rAF from within an animation-frame
+   * callback, which lands on the next frame. So a section's own `onScroll` —
+   * called synchronously below — and everything reading the active section
+   * through this observable animated 16 ms apart, from the same event. That
+   * reads as tearing, not lag.
+   */
 
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();
@@ -104,9 +112,9 @@ export const ScrollytellingProvider = ({
       }
 
       // notify the sections tracking the active section
-      onActiveSectionUpdateThrottled(activeSectionId!, ratio, distance);
+      onActiveSectionUpdate(activeSectionId!, ratio, distance);
     }
-  }, [onActiveSectionUpdateThrottled, trackedSections]);
+  }, [onActiveSectionUpdate, trackedSections]);
   const handleScrollThrottled = useRafThrottle(handleScroll);
 
   // Update the onNewSectionAdded callback when handleScrollThrottled changes.
@@ -115,11 +123,35 @@ export const ScrollytellingProvider = ({
     handleScroll();
   }, [trackedSections, handleScrollThrottled, handleScroll]);
 
+  /**
+   * Recompute once the viewport has settled at its new height.
+   *
+   * The ratio divides a live `window.innerHeight` by cached section offsets,
+   * so a viewport change makes the two disagree until the sections have
+   * re-measured. Running after them — they listen to the same events — turns
+   * what would surface as a jump into a corrected value on the next frame.
+   */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const onViewportChange = () => handleScrollThrottled();
+
+    window.addEventListener("resize", onViewportChange, { passive: true });
+    window.visualViewport?.addEventListener("resize", onViewportChange);
+
+    return () => {
+      window.removeEventListener("resize", onViewportChange);
+      window.visualViewport?.removeEventListener("resize", onViewportChange);
+    };
+  }, [handleScrollThrottled]);
+
   const onObserve = useCallback(
     ({ isIntersecting }: IntersectionObserverEntry) => {
       // track scrolling only when the section is visible in viewport
       if (isIntersecting) {
-        window.addEventListener("scroll", handleScrollThrottled);
+        window.addEventListener("scroll", handleScrollThrottled, {
+          passive: true,
+        });
         handleScrollThrottled();
       } else {
         window.removeEventListener("scroll", handleScrollThrottled);
