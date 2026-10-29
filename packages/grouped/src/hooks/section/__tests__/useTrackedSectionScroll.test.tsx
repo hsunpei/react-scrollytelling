@@ -9,8 +9,7 @@ jest.mock("../../grouped/useScrollytelling");
 
 jest.mock("@react-scrollytelling/core", () => ({
   ...jest.requireActual("@react-scrollytelling/core"),
-  // The real one needs a live IntersectionObserver; the section's own
-  // registration is what these cases are about.
+  // mocked since jsdom has no IntersectionObserver
   useIntersectionObserver: jest.fn(),
 }));
 
@@ -18,11 +17,6 @@ const mockedUseScrollytelling = useScrollytelling as jest.MockedFunction<
   typeof useScrollytelling
 >;
 
-/**
- * The section is a viewport tall, which is how every scrollytelling layout is
- * built — so when the viewport height changes, so does the section, and so
- * does every offset below it.
- */
 function mountSection() {
   const ref = createRef<HTMLDivElement>();
 
@@ -39,6 +33,7 @@ function mountSection() {
   return { ref, view };
 }
 
+/** Set the viewport height. The section is as tall as the viewport, like most scrollytelling layouts. */
 function setViewportHeight(height: number, elementTop: number) {
   (window as { innerHeight: number }).innerHeight = height;
   jest
@@ -60,8 +55,7 @@ describe("a section whose viewport changes height", () => {
   let trackedSections: TrackedSections;
 
   beforeAll(() => {
-    // jsdom implements no visualViewport, which is the one event an in-app
-    // browser reliably fires when its toolbars move.
+    // jsdom has no visualViewport, add one to fire its resize event
     Object.defineProperty(window, "visualViewport", {
       configurable: true,
       value: new EventTarget(),
@@ -86,14 +80,13 @@ describe("a section whose viewport changes height", () => {
 
     expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(600);
 
-    // The toolbar goes away: the viewport grows and the section grows with it.
+    // the viewport and the section get taller when the toolbars are hidden
     setViewportHeight(660, 0);
     act(() => {
       window.visualViewport?.dispatchEvent(new Event("resize"));
     });
 
-    // Measured once at mount this would still read 600, and the ratio — which
-    // divides a live innerHeight by these offsets — would step by 60/600.
+    // it would still be 600 if the section was only measured on mount
     expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(660);
   });
 
@@ -113,7 +106,7 @@ describe("a section whose viewport changes height", () => {
     setViewportHeight(600, 0);
     mountSection();
 
-    // A section above grew, so this one moved without changing size.
+    // this section moved down without resizing because a section above got taller
     setViewportHeight(600, 120);
     act(() => {
       window.dispatchEvent(new Event("resize"));
@@ -126,8 +119,7 @@ describe("a section whose viewport changes height", () => {
     setViewportHeight(600, 0);
     mountSection();
 
-    // Scrolled past: the IntersectionObserver takes it out of the set that
-    // the per-frame search walks.
+    // the section is removed from the sections in the viewport after scrolling past it
     trackedSections.untrackSection("section-1");
     expect(trackedSections.findClosestToBottomId(0, 600)).toBe("section-1");
 
@@ -136,13 +128,8 @@ describe("a section whose viewport changes height", () => {
       window.visualViewport?.dispatchEvent(new Event("resize"));
     });
 
-    // Offsets are fresh...
     expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(660);
 
-    // ...but it is still off screen. Routing the re-measure through
-    // setSection would re-add it, and since every section re-measures on one
-    // resize, the search would scan the whole document from then on — on
-    // mobile, during the very gesture this re-measure exists for.
     const tracked = trackedSections as unknown as {
       trackedSections: Map<string, unknown>;
     };

@@ -117,11 +117,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # `pnpm publish`, not `npm publish`: the manifests declare their deps as
-      # `catalog:`, and only pnpm rewrites that to a real range on the way out.
-      # npm reads it as a URL and fails with EUNSUPPORTEDPROTOCOL.
-      # `--no-git-checks` because CI builds a detached HEAD, which pnpm would
-      # otherwise refuse to publish from.
+      # Use `pnpm publish` because only pnpm replaces `catalog:` with the real versions.
+      # `--no-git-checks` skips pnpm's checks on the git branch and the working tree.
       - name: 📢 Publish stable release
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         run: |
@@ -130,11 +127,8 @@ jobs:
 
       # ── Canary release (non-main branches) ─────────────────────────
 
-      # `npm version` is out for the same reason as `npm publish`: it reifies
-      # the dependency tree before writing, so it hits `catalog:` too. The
-      # version is computed here and written with `npm pkg set`, which only
-      # edits the manifest and resolves nothing. Lerna keeps every package on
-      # one version, so `lerna.json` is the single source for it.
+      # `npm version` also fails on `catalog:`.
+      # The canary version is computed from lerna.json and set with `npm pkg set`.
       - name: 📢 Publish canary release
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
         run: |

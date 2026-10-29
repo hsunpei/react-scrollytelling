@@ -17,20 +17,14 @@ export interface StickyContainerProps {
   overlayClassName?: string;
 
   /**
-   * Viewport unit the sticky range is measured in. Defaults to `vh`.
-   *
-   * `svh` keeps the scroll length fixed while a mobile or in-app browser
-   * collapses its toolbars. See {@link ViewportUnit}.
+   * Viewport unit of the sticky range. Default value: `vh`.
+   * Use `svh` to keep the scroll length the same when the browser toolbars collapse on mobile.
    */
   viewportUnit?: ViewportUnit;
 
   /**
-   * Viewport unit for the pinned background's height. Defaults to
-   * `viewportUnit`.
-   *
-   * Worth setting to `dvh` when the background is full-bleed — a map or a
-   * photo — so it still reaches the bottom edge once the toolbars are gone,
-   * while `viewportUnit` keeps the scroll length itself stable.
+   * Viewport unit of the background height. Default value: `viewportUnit`.
+   * Use `dvh` for a full-screen background.
    */
   backgroundUnit?: ViewportUnit;
 }
@@ -44,7 +38,7 @@ export const StickyContainer = ({
   viewportUnit = "vh",
   backgroundUnit,
 }: StickyContainerProps) => {
-  // The spacer and the pull-up have to cancel exactly, so they share a unit.
+  // the padding and the negative margin need to use the same unit
   const range = `100${viewportUnit}`;
   const backgroundHeight = `100${backgroundUnit ?? viewportUnit}`;
 

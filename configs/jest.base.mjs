@@ -1,14 +1,9 @@
 /**
- * Shared Jest setup for every package.
+ * Shared Jest config for all packages.
  *
- * ESM, and plain JavaScript, on purpose. Jest loads a `.ts` config through
- * ts-node as CommonJS, which `verbatimModuleSyntax` in `configs/tsconfig.json`
- * forbids — so a TypeScript config file fails to parse before a single test
- * runs. A `.mjs` config skips that path entirely.
- *
- * The transform carries the same override for the test files themselves:
- * ts-jest emits CommonJS, which the repo-wide `verbatimModuleSyntax` would
- * likewise reject.
+ * It is a `.mjs` file because Jest loads a `.ts` config as CommonJS,
+ * and `verbatimModuleSyntax` in `configs/tsconfig.json` does not allow it.
+ * For the same reason, the transform turns off `verbatimModuleSyntax` for the test files.
  */
 
 /** @type {import("jest").Config} */
@@ -18,12 +13,10 @@ const base = {
   testEnvironment: "jsdom",
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
 
-  // Several packages have no tests yet; `lerna run test` should not fail on
-  // them, only on a real failure.
+  // some packages have no tests yet
   passWithNoTests: true,
 
-  // Resolve sibling packages to their source, so a test exercises the code in
-  // the repo rather than whatever was last built into dist.
+  // test against the source of the other packages instead of their dist
   moduleNameMapper: {
     "^@react-scrollytelling/([^/]+)$": "<rootDir>/../$1/src/index.ts",
   },

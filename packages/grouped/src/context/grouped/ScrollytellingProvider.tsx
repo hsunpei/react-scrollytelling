@@ -54,6 +54,8 @@ export const ScrollytellingProvider = ({
   /** Record the distance to the bottom of the viewport */
   const activeSectionBtmDistRef = useRef<number>(Infinity);
 
+  // It is not throttled because handleScroll calls it, and scroll events already go through handleScrollThrottled.
+  // Throttling it again would delay the update by one frame.
   const onActiveSectionUpdate = useCallback(
     (
       trackingId: string,
@@ -72,15 +74,6 @@ export const ScrollytellingProvider = ({
     },
     [activeSectionObservable]
   );
-  /**
-   * Not throttled: its only caller, `handleScroll`, is already inside a frame.
-   *
-   * Wrapping it scheduled a *second* rAF from within an animation-frame
-   * callback, which lands on the next frame. So a section's own `onScroll` —
-   * called synchronously below — and everything reading the active section
-   * through this observable animated 16 ms apart, from the same event. That
-   * reads as tearing, not lag.
-   */
 
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();
@@ -123,14 +116,7 @@ export const ScrollytellingProvider = ({
     handleScroll();
   }, [trackedSections, handleScrollThrottled, handleScroll]);
 
-  /**
-   * Recompute once the viewport has settled at its new height.
-   *
-   * The ratio divides a live `window.innerHeight` by cached section offsets,
-   * so a viewport change makes the two disagree until the sections have
-   * re-measured. Running after them — they listen to the same events — turns
-   * what would surface as a jump into a corrected value on the next frame.
-   */
+  // update the active section after the sections are measured again on resize
   useEffect(() => {
     if (typeof window === "undefined") return;
 
