@@ -1,7 +1,7 @@
 {
   "name": "@react-scrollytelling/framer-motion",
   "version": "0.5.0",
-  "description": "> TODO: description",
+  "description": "Framer Motion integration",
   "author": "@hsunpei",
   "license": "MIT",
   "publishConfig": {
