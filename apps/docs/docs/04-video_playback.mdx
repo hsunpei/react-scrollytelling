@@ -23,13 +23,41 @@ export const StickyVideo = ({ src }: StickyVideoProps) => {
 };
 ```
 
-<StickyVideo
-  srcWebm="/react-scrollytelling/videos/taiwan_keyframe4.webm"
-  src="/react-scrollytelling/videos/taiwan_keyframe4.mp4"
-/>
+<StickyVideo src="/react-scrollytelling/videos/hotel_de_ville_paris.mp4" />
 
-If the playback is not smooth, try to re-create the video with [a smaller keyframe interval](https://stackoverflow.com/questions/48304359/repeatedly-setting-html5-videos-currenttime-is-jittery-on-chrome-firefox-but-no):
+## Smooth playback
+
+If the playback is not smooth, try to re-create the video with [a smaller keyframe interval](https://stackoverflow.com/questions/48304359/repeatedly-setting-html5-videos-currenttime-is-jittery-on-chrome-firefox-but-no).
+Every time the browser seeks to a frame, it has to decode from the previous keyframe, so fewer frames between keyframes means faster seeking.
+Scaling the video down to the size it is displayed at also helps.
+
+The video above is encoded with a keyframe every 10 frames at 1440x810:
 
 ```
-ffmpeg -i input.mp4 -g 4 -vcodec libx264 -profile:v main -level:v 4.1 -an -movflags faststart output.mp4
+ffmpeg -i input.mp4 -an -vf scale=1440:-2 \
+  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 26 \
+  -g 10 -keyint_min 10 -sc_threshold 0 \
+  -movflags +faststart output.mp4
+```
+
+`-g` sets the keyframe interval. A smaller value makes seeking faster but the file larger,
+so you can try a few values to find what works for your video.
+
+To check how many keyframes the video has:
+
+```
+ffprobe -v error -select_streams v:0 -skip_frame nokey \
+  -show_entries frame=pts_time -of csv=p=0 output.mp4 | wc -l
+```
+
+## Loading the video
+
+With `-movflags +faststart`, the browser reads the index at the beginning of the file first,
+and then only fetches the parts it needs with [HTTP range requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Range_requests),
+similar to how [Protomaps](https://protomaps.com/) loads map tiles from a single file.
+
+Make sure your server supports range requests. It should return `206 Partial Content` for a request with a `Range` header:
+
+```
+curl -sI -H "Range: bytes=0-1023" https://example.com/video.mp4 | head -1
 ```
