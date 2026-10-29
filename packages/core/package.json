@@ -1,7 +1,7 @@
 {
   "name": "@react-scrollytelling/core",
   "version": "0.5.0",
-  "description": "> TODO: description",
+  "description": "Core hooks for scroll tracking",
   "author": "@hsunpei",
   "license": "MIT",
   "publishConfig": {
