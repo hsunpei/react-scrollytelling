@@ -19,22 +19,25 @@ npm install @react-scrollytelling/framer-motion @react-scrollytelling/core @reac
 
 ### Single section
 
-You can use `useSectionScrollMotionValue()`, which returns `scrolledRatioMotionValue` updated based on the scroll progress:
+You can use `useSectionScrollMotionValue()` which returns `scrolledRatioMotionValue` updated based on the scroll progress:
 
 ```tsx
-import { useRef } from 'react';
-import { useSectionScrollMotionValue } from '@react-scrollytelling/framer-motion';
-import { motion, useTransform } from 'motion/react';
+import { useRef } from "react";
+import { useSectionScrollMotionValue } from "@react-scrollytelling/framer-motion";
+import { motion, useTransform } from "motion/react";
 
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrolledRatioMotionValue } = useSectionScrollMotionValue(sectionRef);
 
-  // Transform the motion value for opacity
-  const opacity = useTransform(scrolledRatioMotionValue, (val) => 0.2 + 0.8 * val);
-
-  // Transform the motion value for border width
-  const borderWidth = useTransform(scrolledRatioMotionValue, (val) => `${Math.round(val * 6)}px`);
+  const opacity = useTransform(
+    scrolledRatioMotionValue,
+    (val) => 0.2 + 0.8 * val
+  );
+  const borderWidth = useTransform(
+    scrolledRatioMotionValue,
+    (val) => `${Math.round(val * 6)}px`
+  );
 
   return (
     <motion.section ref={sectionRef} style={{ opacity, borderWidth }}>
@@ -49,10 +52,14 @@ export const Section = () => {
 You can follow the example in [track grouped sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) and use `useActiveSectionMotionValue()` to get the active section information and the updated `MotionValue` based on the scroll progress:
 
 ```tsx
-import { useActiveSectionMotionValue } from '@react-scrollytelling/framer-motion';
+import { useActiveSectionMotionValue } from "@react-scrollytelling/framer-motion";
 
-const { trackingId, trackingIdMotionValue, scrolledRatioMotionValue, viewportBtmDistanceMotionValue } =
-  useActiveSectionMotionValue();
+const {
+  trackingId,
+  trackingIdMotionValue,
+  scrolledRatioMotionValue,
+  viewportBtmDistanceMotionValue,
+} = useActiveSectionMotionValue();
 ```
 
 Documentation: [Framer Motion Integration](https://hsunpei.github.io/react-scrollytelling/framer-motion)

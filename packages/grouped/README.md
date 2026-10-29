@@ -16,8 +16,8 @@ For each section you want to track, assign it with a ref and name it with a uniq
 Then, use the `useTrackedSectionScroll` hook to track the active section based on the sectionID.
 
 ```tsx
-import { useRef } from 'react';
-import { useTrackedSectionScroll } from '@react-scrollytelling/grouped';
+import { useRef } from "react";
+import { useTrackedSectionScroll } from "@react-scrollytelling/grouped";
 
 export const TrackedSection = ({ sectionID }: { sectionID: string }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ You can also pass an `onScroll` callback to `useTrackedSectionScroll` to get the
 ### 2. Wrap the sections with `ScrollytellingProvider`
 
 ```tsx
-import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
+import { ScrollytellingProvider } from "@react-scrollytelling/grouped";
 
 <ScrollytellingProvider>
   <TrackedSection sectionID="RED" />
@@ -40,23 +40,28 @@ import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 </ScrollytellingProvider>;
 ```
 
-It is recommended to wrap the sections with one `ScrollytellingProvider` at the page level
-because `ScrollytellingProvider` is listening to the window scroll events.
+It is recommended to wrap the sections with one `ScrollytellingProvider` at the page level because `ScrollytellingProvider` is listening to the window scroll events.
 
 ### 3. Subscribe to the active section changes
 
 To get the active section information, use the `useActiveSection()` hook.
 
 ```tsx
-import { useCallback, useState } from 'react';
-import { useActiveSection } from '@react-scrollytelling/grouped';
+import { useCallback, useState } from "react";
+import { useActiveSection } from "@react-scrollytelling/grouped";
 
 export const ActiveSectionInfo = () => {
-  const [trackingId, setTrackingId] = useState<string>('');
+  const [trackingId, setTrackingId] = useState<string>("");
   const [scrolledRatio, setScrolledRatio] = useState<number>(0);
 
   const onActiveSectionChange = useCallback(
-    ({ trackingId: id, scrolledRatio: ratio }: { trackingId: string; scrolledRatio: number }) => {
+    ({
+      trackingId: id,
+      scrolledRatio: ratio,
+    }: {
+      trackingId: string;
+      scrolledRatio: number;
+    }) => {
       setTrackingId(id);
       setScrolledRatio(ratio);
     },

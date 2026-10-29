@@ -13,15 +13,9 @@ npm install @react-scrollytelling/layout
 To show the sticky background effect with a series of sections on its top, you can use `StickyContainer`:
 
 ```tsx
-import { StickyContainer } from '@react-scrollytelling/layout';
+import { StickyContainer } from "@react-scrollytelling/layout";
 
-<StickyContainer
-  overlay={
-    <>
-      {/* Put foreground sections here */}
-    </>
-  }
->
+<StickyContainer overlay={<>{/* Put foreground sections here */}</>}>
   {/* Put sticky background here */}
   <StickyBackground />
 </StickyContainer>;
@@ -37,7 +31,7 @@ In your CSS file, remember to add `@react-scrollytelling/layout` as a source so 
 @source "../node_modules/@react-scrollytelling/layout";
 ```
 
-For Tailwind CSS v3, add `./node_modules/@react-scrollytelling/layout/**/*.{js,jsx,ts,tsx}` to `content` in `tailwind.config.js`.
+For Tailwind CSS v3, add `./node_modules/@react-scrollytelling/layout/dist/**/*.{js,mjs}` to `content` in `tailwind.config.js`.
 
 ## Props
 

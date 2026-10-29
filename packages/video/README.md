@@ -13,9 +13,9 @@ npm install @react-scrollytelling/video @react-scrollytelling/core
 You could use the `<Video>` component to create a video that plays based on the scroll progress:
 
 ```tsx
-import { useRef } from 'react';
-import { Video } from '@react-scrollytelling/video';
-import { useSectionScrollState } from '@react-scrollytelling/core';
+import { useRef } from "react";
+import { Video } from "@react-scrollytelling/video";
+import { useSectionScrollState } from "@react-scrollytelling/core";
 
 export const ScrollVideo = ({ src }: { src: string }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -41,17 +41,7 @@ export const ScrollVideo = ({ src }: { src: string }) => {
 
 ## Smooth playback
 
-If the playback is not smooth, try to re-create the video with [a smaller keyframe interval](https://stackoverflow.com/questions/48304359/repeatedly-setting-html5-videos-currenttime-is-jittery-on-chrome-firefox-but-no):
-
-```
-ffmpeg -i input.mp4 -an -vf scale=1440:-2 \
-  -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 26 \
-  -g 10 -keyint_min 10 -sc_threshold 0 \
-  -movflags +faststart output.mp4
-```
-
-`-g` sets the keyframe interval. A smaller value makes seeking faster but the file larger, so you can try a few values to find what works for your video.
-
-Make sure your server supports [HTTP range requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Range_requests) to load the video.
+If the playback is not smooth, try to re-create the video with a smaller keyframe interval.
+See [Smooth playback](https://hsunpei.github.io/react-scrollytelling/video_playback#smooth-playback) in the documentation for an example.
 
 Documentation: [Video Playback](https://hsunpei.github.io/react-scrollytelling/video_playback)

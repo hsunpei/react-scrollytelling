@@ -13,8 +13,8 @@ npm install @react-scrollytelling/core
 Track whether an element is in view:
 
 ```tsx
-import { useRef } from 'react';
-import { useIntersectionObserverState } from '@react-scrollytelling/core';
+import { useRef } from "react";
+import { useIntersectionObserverState } from "@react-scrollytelling/core";
 
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -31,8 +31,8 @@ export const Section = () => {
 Track scroll progress through a section:
 
 ```tsx
-import { useRef } from 'react';
-import { useSectionScrollState } from '@react-scrollytelling/core';
+import { useRef } from "react";
+import { useSectionScrollState } from "@react-scrollytelling/core";
 
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
