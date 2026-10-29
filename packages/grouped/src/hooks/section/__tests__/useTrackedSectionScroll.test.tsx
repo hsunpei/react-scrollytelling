@@ -17,7 +17,6 @@ const mockedUseScrollytelling = useScrollytelling as jest.MockedFunction<
   typeof useScrollytelling
 >;
 
-/** The section is as tall as the viewport, like most scrollytelling layouts */
 function mountSection() {
   const ref = createRef<HTMLDivElement>();
 
@@ -34,6 +33,7 @@ function mountSection() {
   return { ref, view };
 }
 
+/** Set the viewport height. The section is as tall as the viewport, like most scrollytelling layouts. */
 function setViewportHeight(height: number, elementTop: number) {
   (window as { innerHeight: number }).innerHeight = height;
   jest
@@ -80,7 +80,7 @@ describe("a section whose viewport changes height", () => {
 
     expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(600);
 
-    // the toolbars are hidden, so the viewport and the section get taller
+    // the viewport and the section get taller when the toolbars are hidden
     setViewportHeight(660, 0);
     act(() => {
       window.visualViewport?.dispatchEvent(new Event("resize"));
@@ -106,7 +106,7 @@ describe("a section whose viewport changes height", () => {
     setViewportHeight(600, 0);
     mountSection();
 
-    // a section above got taller, so this section moved without resizing
+    // this section moved down without resizing because a section above got taller
     setViewportHeight(600, 120);
     act(() => {
       window.dispatchEvent(new Event("resize"));
@@ -119,7 +119,7 @@ describe("a section whose viewport changes height", () => {
     setViewportHeight(600, 0);
     mountSection();
 
-    // scrolled past the section, so it is removed from the sections in the viewport
+    // the section is removed from the sections in the viewport after scrolling past it
     trackedSections.untrackSection("section-1");
     expect(trackedSections.findClosestToBottomId(0, 600)).toBe("section-1");
 
@@ -128,10 +128,8 @@ describe("a section whose viewport changes height", () => {
       window.visualViewport?.dispatchEvent(new Event("resize"));
     });
 
-    // the position is updated
     expect(trackedSections.getSection("section-1")?.sectionBottom).toBe(660);
 
-    // but the section is not added back to the sections in the viewport
     const tracked = trackedSections as unknown as {
       trackedSections: Map<string, unknown>;
     };

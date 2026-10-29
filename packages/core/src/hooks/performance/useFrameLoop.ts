@@ -22,12 +22,10 @@ const MAX_DELTA = 64;
 
 /**
  * An animation frame loop that can be started and stopped.
+ * It runs from `start()` until `stop()` is called or the callback returns `false`.
  *
- * Unlike `useAnimationFrame()` of motion, it does not run for the whole lifetime of the component.
- * Call `stop()` or return `false` from the callback to stop it.
- *
- * The next frame is requested before running the callback,
- * so the loop runs before the frames requested by the callback, e.g. a map redrawing.
+ * The next frame is requested before running the callback.
+ * This keeps the loop ahead of the frames requested inside the callback, e.g. a map redrawing.
  *
  * @param callback - Called on each frame. The latest callback is always used.
  */
@@ -50,7 +48,6 @@ export function useFrameLoop(callback: FrameLoopCallback) {
     }
   }, []);
 
-  // request the next frame until the loop is stopped
   const tick = useCallback(function tickFn(timestamp: number) {
     // request the next frame before running the callback
     frameIdRef.current = requestAnimationFrame(tickFn);

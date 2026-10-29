@@ -54,6 +54,8 @@ export const ScrollytellingProvider = ({
   /** Record the distance to the bottom of the viewport */
   const activeSectionBtmDistRef = useRef<number>(Infinity);
 
+  // It is not throttled because handleScroll calls it, and scroll events already go through handleScrollThrottled.
+  // Throttling it again would delay the update by one frame.
   const onActiveSectionUpdate = useCallback(
     (
       trackingId: string,
@@ -72,8 +74,6 @@ export const ScrollytellingProvider = ({
     },
     [activeSectionObservable]
   );
-  // onActiveSectionUpdate is not throttled because handleScroll is already throttled.
-  // Throttling it again would delay the update by one frame.
 
   const handleScroll = useCallback(() => {
     const { scrollTop, windowHeight } = getScrollPosition();

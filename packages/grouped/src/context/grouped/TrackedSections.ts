@@ -44,8 +44,8 @@ export class TrackedSections {
   };
 
   /**
-   * Update the position of a section when it is resized.
-   * Unlike setSection, it does not add the section to trackedSections, and it keeps the onActiveScroll set by subscribeScroll.
+   * Update the position of a section.
+   * It does not add the section to trackedSections, and it keeps the onActiveScroll set by subscribeScroll.
    */
   updateOffsets = (
     sectionID: string,

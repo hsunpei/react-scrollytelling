@@ -21,8 +21,8 @@ const enterViewport = (isIntersecting: boolean) =>
   observed?.({ isIntersecting } as IntersectionObserverEntry);
 
 /**
- * The scroll listener used to be added and removed with two different `bind()` functions,
- * so it was never removed.
+ * The scroll listener used to be added and removed with two different `bind()` functions.
+ * It was never removed.
  */
 describe("useSectionScroll window listener", () => {
   let added: number;

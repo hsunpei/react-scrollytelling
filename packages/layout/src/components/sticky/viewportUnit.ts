@@ -1,5 +1,5 @@
 /**
- * Viewport units for the sticky range.
+ * Viewport units for the sticky range and the background height.
  * On mobile, `vh` is the height when the browser toolbars are hidden,
  * and `svh` is the height when they are shown.
  */

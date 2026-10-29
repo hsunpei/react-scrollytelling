@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
  * Use requestAnimationFrame to throttle a callback.
  * The callback is called once per frame with the latest params.
  * @param callback - The callback to throttle by rAF
- * @returns A throttled callback, which does not change between renders
+ * @returns A throttled callback that does not change between renders
  */
 export function useRafThrottle<T extends unknown[]>(
   callback: (...params: T) => void

@@ -71,7 +71,7 @@ export function useSectionScroll(
 
   /**
    * Whether the section is in the viewport.
-   * It is kept in a ref, so the scroll listener only needs to be added once.
+   * It is kept in a ref to add the scroll listener only once.
    */
   const isIntersectingRef = useRef(false);
 

@@ -102,7 +102,6 @@ describe("useRafThrottle", () => {
     const before = result.current;
     rerender({ cb: jest.fn() });
 
-    // the throttled callback should not change between renders
     expect(result.current).toBe(before);
   });
 

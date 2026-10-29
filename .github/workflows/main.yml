@@ -118,7 +118,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Use `pnpm publish` because only pnpm replaces `catalog:` with the real versions.
-      # `--no-git-checks` is needed because CI checks out a detached HEAD.
+      # `--no-git-checks` skips pnpm's checks on the git branch and the working tree.
       - name: 📢 Publish stable release
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
         run: |
@@ -127,8 +127,8 @@ jobs:
 
       # ── Canary release (non-main branches) ─────────────────────────
 
-      # `npm version` also fails on `catalog:`, so the canary version is computed from lerna.json
-      # and set with `npm pkg set`.
+      # `npm version` also fails on `catalog:`.
+      # The canary version is computed from lerna.json and set with `npm pkg set`.
       - name: 📢 Publish canary release
         if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master'
         run: |

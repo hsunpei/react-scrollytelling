@@ -68,7 +68,6 @@ describe("useFrameLoop", () => {
     expect(result.current.isRunning()).toBe(false);
     expect(frames.pending).toBe(0);
 
-    // no more frames after the loop is stopped
     frames.advance(132);
     expect(spy).toHaveBeenCalledTimes(2);
   });
@@ -97,7 +96,6 @@ describe("useFrameLoop", () => {
       result.current.start();
     });
 
-    // only one loop should be running
     expect(frames.pending).toBe(1);
   });
 
