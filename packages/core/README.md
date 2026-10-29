@@ -48,14 +48,12 @@ export const Section = () => {
 
 ## Hooks
 
-- `useIntersectionObserverState(sectionRef, options?, shouldObserve?)`: Whether the element is in view, as a state.
-- `useIntersectionObserver(sectionRef, options?, shouldObserve?, onObserve?)`: Calls `onObserve` when the element enters or leaves the viewport, without keeping a state.
-- `useIntersectionReveal(sectionRef, trackOnce?, options?)`: Whether the element is in view, for reveal effects. When `trackOnce` is true, it only observes the element once.
-- `useSectionScrollState(sectionRef, shouldObserve?, options?)`: The scroll progress of the section, from `0` to `1`, as a state.
-- `useSectionScroll(sectionRef, onScroll, shouldObserve?, options?)`: Calls `onScroll` with the scroll progress without triggering re-renders, which is useful for animation libraries.
-- `useRafThrottle(callback)`: Calls the callback at most once per animation frame, with the latest arguments.
-- `useFrameLoop(callback)`: An animation frame loop that can stop. It returns `start` and `stop`, and the callback can also stop the loop by returning `false`.
+- `useIntersectionObserverState()`: Detect whether an element is in view with the Intersection Observer API.
+- `useIntersectionObserver()`: Same as `useIntersectionObserverState()`, but calls `onObserve` instead of updating a state.
+- `useIntersectionReveal()`: Detect when an element enters the viewport to trigger animations. Set `trackOnce` to `true` to observe the element only once.
+- `useSectionScrollState()`: Provides the scroll progress of a section as a state.
+- `useSectionScroll()`: Provides a callback to update the scroll progress without triggering re-renders.
+- `useRafThrottle()`: Throttles a callback with `requestAnimationFrame`.
+- `useFrameLoop()`: An animation frame loop that can be started and stopped. Return `false` from the callback to stop it.
 
-`options` are the [options of the Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver#instance_properties).
-
-See the [documentation](https://hsunpei.github.io/react-scrollytelling/) for examples.
+Documentation: [React Scrollytelling](https://hsunpei.github.io/react-scrollytelling/)

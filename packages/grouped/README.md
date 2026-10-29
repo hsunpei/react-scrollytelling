@@ -12,7 +12,8 @@ npm install @react-scrollytelling/grouped @react-scrollytelling/core
 
 ### 1. Set up sections to track
 
-For each section you want to track, assign it with a ref and name it with a unique `sectionID`:
+For each section you want to track, assign it with a ref and name it with a unique `sectionID`.
+Then, use the `useTrackedSectionScroll` hook to track the active section based on the sectionID.
 
 ```tsx
 import { useRef } from 'react';
@@ -26,7 +27,7 @@ export const TrackedSection = ({ sectionID }: { sectionID: string }) => {
 };
 ```
 
-`useTrackedSectionScroll` also accepts an `onScroll` callback, which is called with the scroll progress of the section while it is the active section.
+You can also pass an `onScroll` callback to `useTrackedSectionScroll` to get the scroll progress of the section when it is active.
 
 ### 2. Wrap the sections with `ScrollytellingProvider`
 
@@ -39,26 +40,40 @@ import { ScrollytellingProvider } from '@react-scrollytelling/grouped';
 </ScrollytellingProvider>;
 ```
 
-It is recommended to wrap the sections with one `ScrollytellingProvider` at the page level,
+It is recommended to wrap the sections with one `ScrollytellingProvider` at the page level
 because `ScrollytellingProvider` is listening to the window scroll events.
 
-### 3. Subscribe to the active section
+### 3. Subscribe to the active section changes
+
+To get the active section information, use the `useActiveSection()` hook.
 
 ```tsx
-import { useCallback } from 'react';
-import { type ActiveSectionScrollInfo, useActiveSection } from '@react-scrollytelling/grouped';
+import { useCallback, useState } from 'react';
+import { useActiveSection } from '@react-scrollytelling/grouped';
 
-const onActiveSectionChange = useCallback(
-  ({ trackingId, scrolledRatio }: ActiveSectionScrollInfo) => {
-    // ...
-  },
-  []
-);
+export const ActiveSectionInfo = () => {
+  const [trackingId, setTrackingId] = useState<string>('');
+  const [scrolledRatio, setScrolledRatio] = useState<number>(0);
 
-useActiveSection(onActiveSectionChange);
+  const onActiveSectionChange = useCallback(
+    ({ trackingId: id, scrolledRatio: ratio }: { trackingId: string; scrolledRatio: number }) => {
+      setTrackingId(id);
+      setScrolledRatio(ratio);
+    },
+    []
+  );
+
+  useActiveSection(onActiveSectionChange);
+
+  return (
+    <p>
+      You are viewing {trackingId}, reading ratio: {scrolledRatio}
+    </p>
+  );
+};
 ```
 
-The active section is the one closest to the bottom of the viewport.
-The callback receives its `trackingId` and `scrolledRatio` as the page scrolls, and needs to be memoized.
+Note that the state changes in the callback function will trigger re-renders which add performance overheads to your animations.
+You can use `@react-scrollytelling/react-spring` or `@react-scrollytelling/framer-motion` to avoid triggering re-renders.
 
-See the [documentation](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) for more details.
+Documentation: [Track Grouped Sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections)

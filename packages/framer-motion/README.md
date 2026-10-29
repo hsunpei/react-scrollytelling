@@ -3,8 +3,11 @@
 Framer Motion integration.
 
 Using a state to do animations can be very expensive in terms of performance.
-These hooks update a [MotionValue](https://motion.dev/docs/react-motion-value) with the scroll progress instead,
-so you can animate elements without triggering re-renders.
+
+`motion` provides a way to control the styles/text without triggering re-renders.
+By using the [MotionValue](https://motion.dev/docs/react-motion-value) with [useTransform](https://motion.dev/docs/react-use-transform) and motion elements, you can update the value without triggering re-renders.
+
+react-scrollytelling provides wrappers around `useSectionScroll()` and `useActiveSection()` to update the `MotionValue`, so you can animate the element based on the scroll progress.
 
 ## Installation
 
@@ -16,7 +19,7 @@ npm install @react-scrollytelling/framer-motion @react-scrollytelling/core @reac
 
 ### Single section
 
-`useSectionScrollMotionValue()` returns `scrolledRatioMotionValue`, which is updated with the scroll progress of the section:
+You can use `useSectionScrollMotionValue()`, which returns `scrolledRatioMotionValue` updated based on the scroll progress:
 
 ```tsx
 import { useRef } from 'react';
@@ -26,10 +29,15 @@ import { motion, useTransform } from 'motion/react';
 export const Section = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrolledRatioMotionValue } = useSectionScrollMotionValue(sectionRef);
+
+  // Transform the motion value for opacity
   const opacity = useTransform(scrolledRatioMotionValue, (val) => 0.2 + 0.8 * val);
 
+  // Transform the motion value for border width
+  const borderWidth = useTransform(scrolledRatioMotionValue, (val) => `${Math.round(val * 6)}px`);
+
   return (
-    <motion.section ref={sectionRef} style={{ opacity }}>
+    <motion.section ref={sectionRef} style={{ opacity, borderWidth }}>
       {/* ... */}
     </motion.section>
   );
@@ -38,15 +46,13 @@ export const Section = () => {
 
 ### Multiple sections
 
-Inside a `ScrollytellingProvider`, `useActiveSectionMotionValue()` returns the active section and its scroll progress:
+You can follow the example in [track grouped sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) and use `useActiveSectionMotionValue()` to get the active section information and the updated `MotionValue` based on the scroll progress:
 
 ```tsx
 import { useActiveSectionMotionValue } from '@react-scrollytelling/framer-motion';
 
-const { trackingId, scrolledRatioMotionValue } = useActiveSectionMotionValue();
+const { trackingId, trackingIdMotionValue, scrolledRatioMotionValue, viewportBtmDistanceMotionValue } =
+  useActiveSectionMotionValue();
 ```
 
-It also returns `trackingIdMotionValue` and `viewportBtmDistanceMotionValue`.
-See [track grouped sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) for setting up the sections.
-
-See the [documentation](https://hsunpei.github.io/react-scrollytelling/framer-motion) for an example.
+Documentation: [Framer Motion Integration](https://hsunpei.github.io/react-scrollytelling/framer-motion)

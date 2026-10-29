@@ -3,8 +3,11 @@
 React Spring integration.
 
 Using a state to do animations can be very expensive in terms of performance.
-These hooks update a [SpringValue](https://www.react-spring.dev/docs/advanced/spring-value) with the scroll progress instead,
-so you can animate elements without triggering re-renders.
+
+`react-spring` provides a way to control the styles/text without triggering re-renders.
+By using the [SpringValue](https://www.react-spring.dev/docs/advanced/spring-value) with an animated element, you can update the value without triggering re-renders.
+
+react-scrollytelling provides wrappers around `useSectionScroll()` and `useActiveSection()` to update the `SpringValue`, so you can animate the element based on the scroll progress.
 
 ## Installation
 
@@ -16,7 +19,7 @@ npm install @react-scrollytelling/react-spring @react-scrollytelling/core @react
 
 ### Single section
 
-`useSectionScrollSpring()` returns `scrolledRatioSpring`, which is updated with the scroll progress of the section:
+You can use `useSectionScrollSpring()`, which returns `scrolledRatioSpring` updated based on the scroll progress:
 
 ```tsx
 import { useRef } from 'react';
@@ -30,7 +33,10 @@ export const Section = () => {
   return (
     <animated.section
       ref={sectionRef}
-      style={{ opacity: scrolledRatioSpring.to((val) => 0.2 + 0.8 * val) }}
+      style={{
+        opacity: scrolledRatioSpring.to((val) => 0.2 + 0.8 * val),
+        borderWidth: scrolledRatioSpring.to((val) => `${Math.round(val * 6)}px`),
+      }}
     >
       {/* ... */}
     </animated.section>
@@ -40,15 +46,12 @@ export const Section = () => {
 
 ### Multiple sections
 
-Inside a `ScrollytellingProvider`, `useActiveSectionSpring()` returns the active section and its scroll progress:
+You can follow the example in [track grouped sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) and use `useActiveSectionSpring()` to get the active section information and the updated `SpringValue` based on the scroll progress:
 
 ```tsx
 import { useActiveSectionSpring } from '@react-scrollytelling/react-spring';
 
-const { trackingId, scrolledRatioSpring } = useActiveSectionSpring();
+const { trackingId, trackingIdSpring, scrolledRatioSpring, viewportBtmDistanceSpring } = useActiveSectionSpring();
 ```
 
-It also returns `trackingIdSpring` and `viewportBtmDistanceSpring`.
-See [track grouped sections](https://hsunpei.github.io/react-scrollytelling/track_grouped_sections) for setting up the sections.
-
-See the [documentation](https://hsunpei.github.io/react-scrollytelling/react-spring) for an example.
+Documentation: [React-Spring Integration](https://hsunpei.github.io/react-scrollytelling/react-spring)
