@@ -44,14 +44,7 @@ export function useTrackedSectionScroll(
     trackedSections.subscribeScroll(sectionID, handleScroll);
   }, [onScroll, sectionID, trackedSections]);
 
-  /**
-   * Record where the section sits in the document, as of right now.
-   *
-   * The offsets are absolute, so anything that moves or resizes the section
-   * invalidates them — and the scroll ratio is computed from them against a
-   * live `window.innerHeight`. Measure at the wrong moment and the two
-   * disagree.
-   */
+  /** Get the top and bottom position of the section in the page */
   const readOffsets = useCallback(() => {
     const element = sectionRef.current;
     if (!element) return null;
@@ -65,7 +58,7 @@ export function useTrackedSectionScroll(
     };
   }, [sectionRef]);
 
-  /** Measure and register as on screen. For mount and viewport entry. */
+  /** Measure the section and add it to the sections in the viewport */
   const register = useCallback(() => {
     const offsets = readOffsets();
     if (!offsets) return;
@@ -76,7 +69,7 @@ export function useTrackedSectionScroll(
     });
   }, [onScroll, readOffsets, sectionID, trackedSections]);
 
-  /** Measure only. For resize, which says nothing about visibility. */
+  /** Measure the section without adding it to the sections in the viewport */
   const remeasure = useCallback(() => {
     const offsets = readOffsets();
     if (offsets) trackedSections.updateOffsets(sectionID, offsets);
@@ -91,21 +84,9 @@ export function useTrackedSectionScroll(
     };
   }, [register, sectionID, trackedSections]);
 
-  /**
-   * Re-measure whenever the section moves under us.
-   *
-   * A mobile browser hiding its address bar — or an in-app browser collapsing
-   * its own toolbars — changes the viewport height mid-scroll. Sections sized
-   * in viewport units grow, every offset below them shifts, and
-   * `window.innerHeight` changes in the same frame. Measured once at mount,
-   * the cached offsets are then wrong by the height of the toolbar, and the
-   * ratio jumps by that fraction of a section. `visualViewport` is the signal
-   * that actually fires for in-app browser chrome; `resize` alone can miss it.
-   *
-   * Offsets only — see `updateOffsets`. Re-measuring must not re-assert that
-   * the section is on screen, or one resize puts every section back in the
-   * viewport set and the per-frame search never shortens again.
-   */
+  // Measure the section again when it is resized or moved,
+  // e.g. when a mobile browser hides its toolbars while scrolling.
+  // In-app browsers may only fire the resize event of visualViewport.
   useEffect(() => {
     const element = sectionRef.current;
     if (!element || typeof window === "undefined") return;

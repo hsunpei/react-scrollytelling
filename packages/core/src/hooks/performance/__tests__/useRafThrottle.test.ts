@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 
 import { useRafThrottle } from "../useRafThrottle";
 
-/** Hold frames so a test can decide when one runs. */
+/** Mock requestAnimationFrame to run the frames manually */
 function captureFrames() {
   const queued: FrameRequestCallback[] = [];
   let next = 1;
@@ -36,8 +36,7 @@ describe("useRafThrottle", () => {
     const spy = jest.fn();
     const { result } = renderHook(() => useRafThrottle(spy));
 
-    // A scroll burst inside one frame. Only the newest position is true; the
-    // earlier ones describe somewhere the reader has already left.
+    // several scroll events in one frame, only the last one should be used
     act(() => {
       result.current(0);
       result.current(120);
@@ -103,7 +102,7 @@ describe("useRafThrottle", () => {
     const before = result.current;
     rerender({ cb: jest.fn() });
 
-    // An unstable identity rebuilds every observer and effect downstream.
+    // the throttled callback should not change between renders
     expect(result.current).toBe(before);
   });
 

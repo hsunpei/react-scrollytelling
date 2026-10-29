@@ -2,7 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 
 import { useFrameLoop } from "../useFrameLoop";
 
-/** Drive frames by hand so a test controls the clock. */
+/** Mock requestAnimationFrame to run the frames manually */
 function captureFrames() {
   let queued: Array<{ id: number; cb: FrameRequestCallback }> = [];
   let next = 1;
@@ -68,7 +68,7 @@ describe("useFrameLoop", () => {
     expect(result.current.isRunning()).toBe(false);
     expect(frames.pending).toBe(0);
 
-    // The point of the hook: a settled animation costs nothing per frame.
+    // no more frames after the loop is stopped
     frames.advance(132);
     expect(spy).toHaveBeenCalledTimes(2);
   });
@@ -97,7 +97,7 @@ describe("useFrameLoop", () => {
       result.current.start();
     });
 
-    // Two loops would double every callback for the component's lifetime.
+    // only one loop should be running
     expect(frames.pending).toBe(1);
   });
 

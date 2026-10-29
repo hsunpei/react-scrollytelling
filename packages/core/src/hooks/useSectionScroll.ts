@@ -70,15 +70,8 @@ export function useSectionScroll(
   const onPageScroll = useRafThrottle(handleScroll);
 
   /**
-   * Whether the section is on screen, held in a ref.
-   *
-   * The listener is registered once and reads this, rather than being
-   * re-registered per visibility change with the value bound in. `bind`
-   * returns a new function every call, so the old code's
-   * `removeEventListener(onPageScroll.bind(…))` matched nothing: every section
-   * that had ever been seen kept a listener for the life of the page, each one
-   * measuring an off-screen element every frame and reporting a frozen
-   * `isIntersecting: true`.
+   * Whether the section is in the viewport.
+   * It is kept in a ref, so the scroll listener only needs to be added once.
    */
   const isIntersectingRef = useRef(false);
 
@@ -96,7 +89,7 @@ export function useSectionScroll(
     if (!shouldObserve) return;
 
     const listener = () => {
-      // Off-screen sections cost nothing: the frame is never scheduled.
+      // track scrolling only when the section is visible in viewport
       if (isIntersectingRef.current) onPageScroll(true);
     };
 

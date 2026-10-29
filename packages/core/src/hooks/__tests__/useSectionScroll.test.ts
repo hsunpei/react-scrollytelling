@@ -21,11 +21,8 @@ const enterViewport = (isIntersecting: boolean) =>
   observed?.({ isIntersecting } as IntersectionObserverEntry);
 
 /**
- * The listener used to be added with `onPageScroll.bind(null, isIntersecting)`
- * and removed with another `bind(...)` — a different function object — so it
- * was never removed and never cleaned up on unmount. Every section that had
- * been on screen once kept measuring itself every frame for the life of the
- * page.
+ * The scroll listener used to be added and removed with two different `bind()` functions,
+ * so it was never removed.
  */
 describe("useSectionScroll window listener", () => {
   let added: number;

@@ -1,46 +1,35 @@
 import { useCallback, useEffect, useRef } from "react";
 
-/** What the loop hands its callback each frame. */
+/** The data passed to the callback on each frame */
 export interface FrameTick {
-  /** The rAF timestamp for this frame. */
+  /** The rAF timestamp of the frame */
   timestamp: number;
-  /** Milliseconds since the previous frame; 1000/60 on the first one. */
+  /** Milliseconds since the previous frame, 1000/60 on the first frame */
   delta: number;
 }
 
 /**
- * The loop callback. Runs once per animation frame while the loop is started.
- * Return `false` to stop the loop — e.g. once an animation has settled —
- * or anything else (including `undefined`) to keep running.
+ * Called on each frame while the loop is running.
+ * Return `false` to stop the loop, e.g. when an animation is finished.
  */
 export type FrameLoopCallback = (data: FrameTick) => boolean | void;
 
-/** Matches the first-frame delta animation libraries assume. */
+/** The delta of the first frame, same as most animation libraries */
 const FIRST_FRAME_DELTA = 1000 / 60;
 
-/** A backgrounded tab must not produce one huge jump on return. */
+/** Limit the delta to avoid a big jump when switching back to a background tab */
 const MAX_DELTA = 64;
 
 /**
- * An animation frame loop you can actually stop.
+ * An animation frame loop that can be started and stopped.
  *
- * Most `useAnimationFrame` implementations keep the loop alive for the
- * component's whole lifetime and leave you to no-op inside it — which still
- * costs a callback every frame forever. This exposes explicit `start`/`stop`,
- * so the loop genuinely ends when there is no work, and the callback can stop
- * it by returning `false` once an animation settles.
+ * Unlike `useAnimationFrame()` of motion, it does not run for the whole lifetime of the component.
+ * Call `stop()` or return `false` from the callback to stop it.
  *
- * **It schedules the next frame before running the callback, and that ordering
- * is deliberate.** Frame callbacks run in registration order, and one
- * registered while the frame is already running belongs to the *next* frame.
- * So if the callback's own work causes something else to schedule a paint
- * from inside this frame — a canvas or map library redrawing, say — a loop
- * that re-arms first stays ahead of it, and both land on the same frame.
- * Re-arming after the work loses that race every frame, and the only remedy
- * left is forcing a synchronous repaint, which costs a second paint.
+ * The next frame is requested before running the callback,
+ * so the loop runs before the frames requested by the callback, e.g. a map redrawing.
  *
- * The latest `callback` is always used without restarting the loop, so it can
- * close over fresh render state directly.
+ * @param callback - Called on each frame. The latest callback is always used.
  */
 export function useFrameLoop(callback: FrameLoopCallback) {
   const callbackRef = useRef(callback);
@@ -48,8 +37,7 @@ export function useFrameLoop(callback: FrameLoopCallback) {
   const frameIdRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
 
-  // Keep the newest callback so the running loop reads fresh closure values
-  // without cancelling and re-scheduling.
+  // use the latest callback without restarting the loop
   useEffect(() => {
     callbackRef.current = callback;
   });
@@ -62,9 +50,9 @@ export function useFrameLoop(callback: FrameLoopCallback) {
     }
   }, []);
 
-  // Stable identity across renders; re-arms itself until stopped.
+  // request the next frame until the loop is stopped
   const tick = useCallback(function tickFn(timestamp: number) {
-    // Before the work, never after — see the note on ordering above.
+    // request the next frame before running the callback
     frameIdRef.current = requestAnimationFrame(tickFn);
 
     const last = lastTimestampRef.current;
@@ -92,7 +80,7 @@ export function useFrameLoop(callback: FrameLoopCallback) {
 
   const isRunning = useCallback(() => runningRef.current, []);
 
-  // Never leave a loop running after the component is gone.
+  // stop the loop when the component is unmounted
   useEffect(() => stop, [stop]);
 
   return { start, stop, isRunning };
